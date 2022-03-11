@@ -24,12 +24,16 @@ public class MainWindow {
 
     private Board board;
     private JFrame frame;
+    private OptionPanel opanel;
 
     public MainWindow() {
         frame = new JFrame("League Of Towers");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Board board = new Board();
         frame.add(board, BorderLayout.CENTER);
+        OptionPanel opanel = new OptionPanel();
+        frame.add(board, BorderLayout.CENTER);
+        frame.add(opanel, BorderLayout.EAST);
 
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
