@@ -6,8 +6,6 @@
 package View;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
@@ -29,12 +27,12 @@ public class MainWindow {
     public MainWindow() {
         frame = new JFrame("League Of Towers");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600,600);
         Board board = new Board();
-        frame.add(board, BorderLayout.CENTER);
         OptionPanel opanel = new OptionPanel();
         frame.add(board, BorderLayout.CENTER);
         frame.add(opanel, BorderLayout.EAST);
-
+        
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
         JMenu menu = new JMenu("Menü");
@@ -64,7 +62,8 @@ public class MainWindow {
         JMenuItem options = new JMenuItem("Beállítások");
         jatekMenu.add(options);
 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.pack();
+        frame.setResizable(false);
         frame.setVisible(true);
     }
 }
