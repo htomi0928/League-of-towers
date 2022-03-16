@@ -8,6 +8,7 @@ package View;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,16 +23,22 @@ public class MainWindow {
 
     private Board board;
     private JFrame frame;
-    private OptionPanel opanel;
+    protected static OptionPanel opanel;
 
-    public MainWindow() {
+    public MainWindow() throws IOException {
         frame = new JFrame("League Of Towers");
+        
+        OptionPanel opanel = new OptionPanel();
+        frame.add(opanel, BorderLayout.EAST);
+        
+        
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600,600);
-        Board board = new Board();
-        OptionPanel opanel = new OptionPanel();
+        
+        Board board = new Board(opanel);
         frame.add(board, BorderLayout.CENTER);
-        frame.add(opanel, BorderLayout.EAST);
+        
         
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
