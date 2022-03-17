@@ -1,4 +1,4 @@
-package leagueoftowers;
+package Model;
 
 import java.awt.Image;
 import java.io.IOException;

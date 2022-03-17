@@ -1,4 +1,4 @@
-package leagueoftowers;
+package Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ public class Castle extends Sprite {
     
     public Castle(int x, int y) throws IOException {
         super(x, y);
-        hp = 2000;
-        money = 2000;
+        hp = 1000;
+        money = 1000;
         towers = new ArrayList<>();
         units = new ArrayList<>();
         
@@ -47,6 +47,10 @@ public class Castle extends Sprite {
     
     public ArrayList<AttackUnits> getUnits() {
         return units;
+    }
+    
+    public void addTurnGold() {
+        this.money += 500;
     }
     
 }

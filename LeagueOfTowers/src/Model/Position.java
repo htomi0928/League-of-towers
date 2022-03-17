@@ -1,4 +1,4 @@
-package leagueoftowers;
+package Model;
 
 
 public class Position {

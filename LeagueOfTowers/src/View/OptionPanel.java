@@ -7,11 +7,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import static leagueoftowers.Main.gl;
+import static Model.Main.gl;
 import java.io.IOException;
-import leagueoftowers.Tower1;
-import leagueoftowers.Tower2;
-import leagueoftowers.Tower3;
+import Model.Tower1;
+import Model.Tower2;
+import Model.Tower3;
+import java.awt.Dimension;
 
 public class OptionPanel extends JPanel {
 
@@ -21,12 +22,17 @@ public class OptionPanel extends JPanel {
 
     public OptionPanel() {
 
+        Dimension dim = new Dimension(12 * 32, 19 * 32);
+        setPreferredSize(dim);
+        setMaximumSize(dim);
+        setSize(dim);
+
         GridLayout gridLayout = new GridLayout(2, 3);
         setLayout(gridLayout);
         add(new JLabel(""));
         switch (gl.getTurn()) {
             case 1:
-                add(new JLabel("1st Player Building"));
+                add(new JLabel("<html><div style='text-align: center;'>1st Player Building</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel("Money: "));
@@ -34,7 +40,7 @@ public class OptionPanel extends JPanel {
                 add(moneyLabel);
                 break;
             case 2:
-                add(new JLabel("2nd Player Building"));
+                add(new JLabel("<html><div style='text-align: center;'>2nd Player Building</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel("Money: "));
@@ -42,7 +48,7 @@ public class OptionPanel extends JPanel {
                 add(moneyLabel);
                 break;
             case 3:
-                add(new JLabel("1st Player Trainig Units"));
+                add(new JLabel("<html><div style='text-align: center;'>1st Player Trainig Units</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel("Money: "));
@@ -50,7 +56,7 @@ public class OptionPanel extends JPanel {
                 add(moneyLabel);
                 break;
             case 4:
-                add(new JLabel("2nd Player Trainig Units"));
+                add(new JLabel("<html><div style='text-align: center;'>2nd Player Trainig Units</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel("Money: "));
@@ -58,7 +64,7 @@ public class OptionPanel extends JPanel {
                 add(moneyLabel);
                 break;
             case 5:
-                add(new JLabel("Attacking"));
+                add(new JLabel("<html><div style='text-align: center;'>Attacking</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel(""));
@@ -78,7 +84,7 @@ public class OptionPanel extends JPanel {
             add(new JLabel(""));
             switch (gl.getTurn()) {
                 case 1:
-                    add(new JLabel("1st Player Building"));
+                    add(new JLabel("<html><div style='text-align: center;'>1st Player Building</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel("Money: "));
@@ -86,7 +92,7 @@ public class OptionPanel extends JPanel {
                     add(moneyLabel);
                     break;
                 case 2:
-                    add(new JLabel("2nd Player Building"));
+                    add(new JLabel("<html><div style='text-align: center;'>2nd Player Building</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel("Money: "));
@@ -94,7 +100,7 @@ public class OptionPanel extends JPanel {
                     add(moneyLabel);
                     break;
                 case 3:
-                    add(new JLabel("1st Player Trainig Units"));
+                    add(new JLabel("<html><div style='text-align: center;'>1st Player Trainig Units</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel("Money: "));
@@ -102,7 +108,7 @@ public class OptionPanel extends JPanel {
                     add(moneyLabel);
                     break;
                 case 4:
-                    add(new JLabel("2nd Player Trainig Units"));
+                    add(new JLabel("<html><div style='text-align: center;'>2nd Player Trainig Units</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel("Money: "));
@@ -110,16 +116,118 @@ public class OptionPanel extends JPanel {
                     add(moneyLabel);
                     break;
                 case 5:
-                    add(new JLabel("Attacking"));
+                    add(new JLabel("<html><div style='text-align: center;'>Attacking</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     break;
             }
-        }
-        if ("tower".equals(todo)) {
 
+        }
+        if ("1tower".equals(todo)) {
+            int i = 0;
+            while (gl.get1pCastle().getTowers().get(i).getXc() != x && gl.get1pCastle().getTowers().get(i).getYc() != y && i < gl.get1pCastle().getTowers().size()) {
+                i += 1;
+            }
+            System.out.println(i);
+            System.out.println(gl.get1pCastle().getTowers().get(i).getLevel());
+            
+            if (gl.get1pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get1pCastle().getTowers().size() && gl.get1pCastle().getTowers().get(i).getStatus()) {
+                GridLayout gridLayout = new GridLayout(5, 3);
+                this.setLayout(gridLayout);
+                this.add(new JLabel(""));
+                this.add(new JLabel("<html><div style='text-align: center;'>1st Player Upgrade Tower</div></html>"));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel("Money: "));
+                moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
+                this.add(moneyLabel);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                JButton button = new JButton();
+                if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getUpgradeCost2()) + "$</div></html>");
+                } else {
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) + "$</div></html>");
+                }
+                /*
+                    button.addActionListener(new ActionListener() {
+                        
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            
+                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
+                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost2()) {
+                                    gl.get1pCastle().getTowers().get(i).upgrade();
+                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost2());
+                                }
+                            }
+                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
+                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) {
+                                    gl.get1pCastle().getTowers().get(i).upgrade();
+                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost3());
+                                }
+                            }
+                        }
+                    });
+                 */
+                System.out.println(i);
+                this.add(button);
+                
+            }
+
+        }
+        if ("2tower".equals(todo)) {
+            int i = 0;
+            while (gl.get2pCastle().getTowers().get(i).getXc() != x && gl.get2pCastle().getTowers().get(i).getYc() != y && i < gl.get2pCastle().getTowers().size()) {
+                i += 1;
+            }
+            if (gl.get2pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get2pCastle().getTowers().size()) {
+                GridLayout gridLayout = new GridLayout(5, 3);
+                this.setLayout(gridLayout);
+                this.add(new JLabel(""));
+                this.add(new JLabel("<html><div style='text-align: center;'>2nd Player Upgrade Tower</div></html>"));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel("Money: "));
+                moneyLabel = new JLabel(Integer.toString(gl.get2pCastle().getMoney()) + "$");
+                this.add(moneyLabel);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                JButton button = new JButton();
+                if (gl.get2pCastle().getTowers().get(i).getLevel() == 1) {
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getUpgradeCost2()) + "$</div></html>");
+                } else {
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getUpgradeCost3()) + "$</div></html>");
+                }
+                /*
+                    button.addActionListener(new ActionListener() {
+                        
+                        @Override
+                        public void actionPerformed(ActionEvent ae) {
+                            
+                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
+                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost2()) {
+                                    gl.get1pCastle().getTowers().get(i).upgrade();
+                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost2());
+                                }
+                            }
+                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
+                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) {
+                                    gl.get1pCastle().getTowers().get(i).upgrade();
+                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost3());
+                                }
+                            }
+                        }
+                    });
+                 */
+                this.add(button);
+            }
         }
         if ("barack".equals(todo)) {
 
@@ -130,9 +238,9 @@ public class OptionPanel extends JPanel {
             this.setLayout(gridLayout);
             this.add(new JLabel(""));
             if (gl.getTurn() == 1) {
-                this.add(new JLabel("1st Player Building"));
+                this.add(new JLabel("<html><div style='text-align: center;'>1st Player Building</div></html>"));
             } else {
-                this.add(new JLabel("2nd Player Building"));
+                this.add(new JLabel("<html><div style='text-align: center;'>2nd Player Building</div></html>"));
             }
             this.add(new JLabel(""));
             this.add(new JLabel(""));
@@ -177,57 +285,61 @@ public class OptionPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-            if ("Kör vége".equals(lab)) {
-                gl.nextTurn();
-                OptionPanel.this.change("nothing", x, y);
-            }
-            if ("1. Torony".equals(lab)) {
-                Tower1 nt = new Tower1(OptionPanel.this.x, OptionPanel.this.y);
-                if (gl.getTurn() == 1) {
-                    if (nt.getCost() <= gl.get1pCastle().getMoney()) {
-                        gl.get1pCastle().addTower(nt);
-                        gl.get1pCastle().pay(nt.getCost());
-                    }
-                } else {
-                    if (nt.getCost() <= gl.get2pCastle().getMoney()) {
-                        gl.get2pCastle().addTower(nt);
-                        gl.get2pCastle().pay(nt.getCost());
+                if ("Kör vége".equals(lab)) {
+                    gl.nextTurn();
+                    OptionPanel.this.change("nothing", x, y);
+                }
+                if ("1. Torony".equals(lab)) {
+                    Tower1 nt = new Tower1(OptionPanel.this.x, OptionPanel.this.y);
+                    if (gl.getTurn() == 1) {
+                        if (nt.getCost() <= gl.get1pCastle().getMoney()) {
+                            gl.get1pCastle().addTower(nt);
+                            gl.get1pCastle().pay(nt.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
+                    } else {
+                        if (nt.getCost() <= gl.get2pCastle().getMoney()) {
+                            gl.get2pCastle().addTower(nt);
+                            gl.get2pCastle().pay(nt.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
                     }
                 }
-            }
-            if ("2. Torony".equals(lab)) {
-                Tower2 nt = new Tower2(OptionPanel.this.x, OptionPanel.this.y);
-                if (gl.getTurn() == 1) {
-                    if (nt.getCost() <= gl.get1pCastle().getMoney()) {
-                        gl.get1pCastle().addTower(nt);
-                        gl.get1pCastle().pay(nt.getCost());
-                    }
-                } else {
-                    if (nt.getCost() <= gl.get2pCastle().getMoney()) {
-                        gl.get2pCastle().addTower(nt);
-                        gl.get2pCastle().pay(nt.getCost());
-                    }
-                }
-            }
-            if ("3. Torony".equals(lab)) {
-                Tower3 nt = new Tower3(OptionPanel.this.x, OptionPanel.this.y);
-                if (gl.getTurn() == 1) {
-                    if (nt.getCost() <= gl.get1pCastle().getMoney()) {
-                        gl.get1pCastle().addTower(nt);
-                        gl.get1pCastle().pay(nt.getCost());
-                    }
-                } else {
-                    if (nt.getCost() <= gl.get2pCastle().getMoney()) {
-                        gl.get2pCastle().addTower(nt);
-                        gl.get2pCastle().pay(nt.getCost());
+                if ("2. Torony".equals(lab)) {
+                    Tower2 nt = new Tower2(OptionPanel.this.x, OptionPanel.this.y);
+                    if (gl.getTurn() == 1) {
+                        if (nt.getCost() <= gl.get1pCastle().getMoney()) {
+                            gl.get1pCastle().addTower(nt);
+                            gl.get1pCastle().pay(nt.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
+                    } else {
+                        if (nt.getCost() <= gl.get2pCastle().getMoney()) {
+                            gl.get2pCastle().addTower(nt);
+                            gl.get2pCastle().pay(nt.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
                     }
                 }
+                if ("3. Torony".equals(lab)) {
+                    Tower3 nt = new Tower3(OptionPanel.this.x, OptionPanel.this.y);
+                    if (gl.getTurn() == 1) {
+                        if (nt.getCost() <= gl.get1pCastle().getMoney()) {
+                            gl.get1pCastle().addTower(nt);
+                            gl.get1pCastle().pay(nt.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
+                    } else {
+                        if (nt.getCost() <= gl.get2pCastle().getMoney()) {
+                            gl.get2pCastle().addTower(nt);
+                            gl.get2pCastle().pay(nt.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
+                    }
+                }
+            } catch (Exception e) {
             }
         }
-        catch(Exception e) {}
-        }
-       
+
     }
 }
-
-

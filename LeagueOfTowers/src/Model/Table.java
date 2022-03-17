@@ -3,18 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package leagueoftowers;
-
-import java.io.IOException;
+package Model;
 
 /**
  *
  * @author Pacza Dániel
  */
-public class Barrack extends Sprite {
-    String type;
-    public Barrack(int x, int y) throws IOException {
-        super(x, y);
-        type = "barrack";
-    }
+public class Table {
+    
 }

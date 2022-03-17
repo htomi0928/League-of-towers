@@ -18,7 +18,7 @@ import static View.MainWindow.opanel;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static leagueoftowers.Main.gl;
+import static Model.Main.gl;
 
 
 /**
@@ -75,10 +75,10 @@ public class Board extends JPanel {
                             opanel.change("empty", x, y);
                         }
                         if ("1tower".equals(isEmpty) && gl.getTurn() == 1) {
-                            opanel.change("tower", x, y);
+                            opanel.change("1tower", x, y);
                         }
                         if ("2tower".equals(isEmpty) && gl.getTurn() == 2) {
-                            opanel.change("tower", x, y);
+                            opanel.change("2tower", x, y);
                         }
                         if ("1castle".equals(isEmpty) || "2castle".equals(isEmpty) || "1unit".equals(isEmpty) || "2unit".equals(isEmpty)) {
                             opanel.change("nothing", 0, 0);

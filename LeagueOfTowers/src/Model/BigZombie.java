@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package leagueoftowers;
+package Model;
 
 import java.io.IOException;
 
@@ -11,13 +11,14 @@ import java.io.IOException;
  *
  * @author Pacza Dániel
  */
-public class Tower2 extends Tower {
-    public Tower2(int x, int y) throws IOException {
+public class BigZombie extends AttackUnits {
+    public BigZombie(int x, int y) throws IOException{
         super(x, y);
-        hp = 20;
-        level = 3;
-        damage=200;
-        distance = 2000;
-        cost = 500;
+        hp = 150;
+        speed = 3;
+        damage = 60;
+        cost = 100;
+        target = "Castle";
+
     }
 }

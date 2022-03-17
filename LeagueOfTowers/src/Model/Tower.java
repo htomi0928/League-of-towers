@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package leagueoftowers;
+package Model;
 
 import java.io.IOException;
 
@@ -13,13 +13,14 @@ import java.io.IOException;
  */
 public class Tower extends Sprite {
     
-    int hp, level, damage, distance, cost;
+    int hp, level, damage, distance, cost, upgradecost2, upgradecost3, cleanRuin, sellCost;
     boolean stillstanding;
 
     public Tower(int x, int y) throws IOException {
         super(x, y);
-        stillstanding = true;
-        level = 1;
+        this.stillstanding = true;
+        this.level = 1;
+        this.cleanRuin = 50;
     }
     
     public int getHp() {
@@ -27,7 +28,7 @@ public class Tower extends Sprite {
     }
     
     public int getLevel() {
-        return level;
+        return this.level;
     }
     
     public int getDamage() {
@@ -42,9 +43,27 @@ public class Tower extends Sprite {
         return this.cost;
     }
     
+    public int getUpgradeCost2() {
+        return this.upgradecost2;
+    }
     
+    public int getUpgradeCost3() {
+        return this.upgradecost3;
+    }
     
+    public void upgrade() {
+        this.level += 1;
+    }
     
+    public boolean getStatus() {
+        return this.stillstanding;
+    }
     
-
+    public int getCleanRuinCost() {
+        return this.cleanRuin;
+    }
+    
+    public int getSellCost() {
+        return this.sellCost;
+    }
 }
