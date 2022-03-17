@@ -7,13 +7,13 @@ package Model;
 
 import java.io.IOException;
 
-/**
- *
- * @author Pacza Dániel
- */
+/*
+* Zombi speciális típusa
+* Ha ellenséges csapat mellé ér, sebzi őket
+*/
 public class FighterZombie extends AttackUnits {
     
-    private int enemyDamage;
+    private int enemyDamage; //A sebzés, amit az ellenséges csapatoktra ad le
     
     public FighterZombie(int x, int y) throws IOException {
         super(x, y);

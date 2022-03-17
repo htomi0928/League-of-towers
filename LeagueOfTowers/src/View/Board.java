@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package View;
 
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,17 +8,16 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
-import static View.MainWindow.opanel;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static Model.Main.gl;
 
 
-/**
- *
- * @author tomih
- */
+/*
+* A játék boardjának osztálya
+* A játéktér
+*/
 public class Board extends JPanel {
 
     private int tile_size = 32;
@@ -37,7 +30,6 @@ public class Board extends JPanel {
 
     public Board(OptionPanel opanel) {
 
-        
         setBackground(new Color(32, 217, 19));
         Dimension dim = new Dimension(n * tile_size, m * tile_size);
         setPreferredSize(dim);
@@ -50,9 +42,22 @@ public class Board extends JPanel {
                 //System.out.println(e.getX() / tile_size + "," + e.getY() / tile_size);
                 //System.out.println(getSize().width + "," + getSize().height);
                 if ((gl.getTurn() == 1 && (e.getX() / tile_size) <= 14) || (gl.getTurn() == 2 && (e.getX() / tile_size) >= 15)) {
+                    /*
+                    * A jelzés, hogy éppen hol vagyunk a pályán
+                    * Nem lehet rákkatintani a saját kastélyunkra
+                    * Nem lehet rákattintani az ellenfél területére
+                    */
                     x = e.getX() / tile_size;
                     y = e.getY() / tile_size;
                     
+                    /*
+                    * Annak vizsgálata, hogy milyen mezőn állunk a táblán
+                    *   Kastély
+                    *   Torony
+                    *   Egység
+                    *   Üres
+                    * Ennek függvényében a change függvényt meghívva változtatható az oldalsó panel
+                    */
                     try {
                         String isEmpty = "";
                         if (gl.get1pCastle().getXc() == x && gl.get1pCastle().getYc() == y) {isEmpty = "1castle";}
@@ -93,7 +98,11 @@ public class Board extends JPanel {
             }
         });
     }
-
+    
+    /*
+    * A játék boardjának lefestése
+    * Kastélyok, akadályok, tornyok, egységek, barakkok megjelenítése
+    */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -101,39 +110,64 @@ public class Board extends JPanel {
         for (int j = 0; j < m; j++) {
             for (int i = 0; i < n; i++) {
                 if ((i % 2 == 0 && j % 2 == 1) || (i % 2 == 1 && j % 2 == 0)) {
+                    /*
+                    * A játéktábla kockássá tétele
+                    */
                     gr.setColor(new Color(0, 200, 0));
                     gr.fillRect(i * tile_size, j * tile_size, tile_size, tile_size);
                 }
             }
         }
+        
+        /*
+        * A játéktábla elválasztó csíkja középen
+        */
         gr.setColor(new Color(0, 0, 0));
         for (int i = 0; i < m; i++) {
             gr.fillRect(n / 2 * tile_size-1, i * tile_size, 3, tile_size);
             
         }
+        /*
+        * A mező, ahol a játékos éppen áll
+        */
         gr.setColor(new Color(0, 0, 0));
         gr.fillRect(x * tile_size, y * tile_size, tile_size, tile_size);
         
         
+        /*
+        * Kastélyok megjelenítése
+        */
         gr.setColor(new Color(255, 255, 255));
         gr.fillRect(gl.get1pCastle().getXc() * tile_size, gl.get1pCastle().getYc() * tile_size, tile_size, tile_size);
         gr.fillRect(gl.get2pCastle().getXc() * tile_size, gl.get2pCastle().getYc() * tile_size, tile_size, tile_size);
         
+        /*
+        * Első játékos tornyainak megjelenítése
+        */
         gr.setColor(new Color(255, 0, 0));
         for (int i = 0; i < gl.get1pCastle().getTowers().size(); i++) {
             gr.fillRect(gl.get1pCastle().getTowers().get(i).getXc() * tile_size, gl.get1pCastle().getTowers().get(i).getYc() * tile_size, tile_size, tile_size);
         }
         
+        /*
+        * Második játékos tornyainak megjelenítése
+        */
         gr.setColor(new Color(0, 0, 255));
         for (int i = 0; i < gl.get2pCastle().getTowers().size(); i++) {
             gr.fillRect(gl.get2pCastle().getTowers().get(i).getXc() * tile_size, gl.get2pCastle().getTowers().get(i).getYc() * tile_size, tile_size, tile_size);
         }
         
+        /*
+        * Első játékos támadó egységeinek megjelenítése
+        */
         gr.setColor(new Color(255, 255, 0));
         for (int i = 0; i < gl.get1pCastle().getUnits().size(); i++) {
             gr.fillRect(gl.get1pCastle().getTowers().get(i).getXc() * tile_size, gl.get1pCastle().getTowers().get(i).getYc() * tile_size, tile_size, tile_size);
         }
         
+        /*
+        * Második játékos támadó egységeinek megjelenítése
+        */
         gr.setColor(new Color(0, 255, 255));
         for (int i = 0; i < gl.get1pCastle().getUnits().size(); i++) {
             gr.fillRect(gl.get2pCastle().getTowers().get(i).getXc() * tile_size, gl.get2pCastle().getTowers().get(i).getYc() * tile_size, tile_size, tile_size);

@@ -2,6 +2,9 @@ package Model;
 
 import java.io.IOException;
 
+/*
+* Az első Towerből származtatott osztály
+*/
 public class Tower1 extends Tower {
     public Tower1(int x, int y) throws IOException {
         
@@ -18,6 +21,11 @@ public class Tower1 extends Tower {
     }
     
     @Override
+    /*
+    * Először is növeli az adott torony szintjét egy meghívás esetén. Ezután
+    * megnézi, hogy hanyas szintű az adott torony és ennek megfelelően kap plusz
+    * hatótávolságot és/vagy sebzést az adott torony
+    */
     public void upgrade() {
         this.level += 1;
         if (this.level == 2) {

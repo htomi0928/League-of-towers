@@ -6,13 +6,18 @@ import res.ResourceLoader;
 
 public class Sprite {
 
-    private int xc;
-    private int yc;
+    /*
+    * A position nem a Sprite koordinátáit tárolja a Boardon
+    * A position a négyzethálón elfoglalt helyet jelzi
+    */
+    private Position xy;
+    
+    
+    
     //private Image zombie, bigZombie, fighterZombie, amphibianZombie, kamikazeZombie, tower1, tower2, tower3, castle, barrack, obsticle;
 
     public Sprite(int x, int y) throws IOException {
-        xc = x;
-        yc = y;
+        xy = new Position(x, y);
         /*
         zombie = ResourceLoader.loadImage("res/zombi1");
         bigZombie = ResourceLoader.loadImage("res/zombi2");
@@ -28,11 +33,24 @@ public class Sprite {
         */
     }
     
+    /*
+    * X koordináta
+    */
     public int getXc() {
-        return this.xc;
+        return this.xy.getX();
     }
     
+    /*
+    * Y koordináta
+    */
     public int getYc() {
-        return this.yc;
+        return this.xy.getY();
+    }
+    
+    /*
+    * Egy Sprite mozgatása x, y mennyiséggel
+    */
+    public void move(int x, int y) {
+        this.xy.move(x, y);
     }
 }

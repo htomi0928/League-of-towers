@@ -14,6 +14,9 @@ import Model.Tower2;
 import Model.Tower3;
 import java.awt.Dimension;
 
+/*
+* Az oldalsó panel
+*/
 public class OptionPanel extends JPanel {
 
     private JLabel moneyLabel;
@@ -74,10 +77,17 @@ public class OptionPanel extends JPanel {
 
     }
 
+    /*
+    * Ez a függvény befolyásolja az oldalsó panel kinézetét
+    */
     public void change(String todo, int x, int y) throws IOException {
         this.x = x;
         this.y = y;
         this.removeAll();
+        
+        /*
+        * Ha illegális mezőre kattintunk (kastély, ellenfél térfele)
+        */
         if ("nothing".equals(todo)) {
             GridLayout gridLayout = new GridLayout(2, 3);
             setLayout(gridLayout);
@@ -125,6 +135,10 @@ public class OptionPanel extends JPanel {
             }
 
         }
+        
+        /*
+        * Ha az első játékos saját tornyára kattint
+        */
         if ("1tower".equals(todo)) {
             int i = 0;
             while (gl.get1pCastle().getTowers().get(i).getXc() != x && gl.get1pCastle().getTowers().get(i).getYc() != y && i < gl.get1pCastle().getTowers().size()) {
@@ -134,7 +148,7 @@ public class OptionPanel extends JPanel {
             System.out.println(gl.get1pCastle().getTowers().get(i).getLevel());
             
             if (gl.get1pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get1pCastle().getTowers().size() && gl.get1pCastle().getTowers().get(i).getStatus()) {
-                GridLayout gridLayout = new GridLayout(5, 3);
+                GridLayout gridLayout = new GridLayout(7, 3);
                 this.setLayout(gridLayout);
                 this.add(new JLabel(""));
                 this.add(new JLabel("<html><div style='text-align: center;'>1st Player Upgrade Tower</div></html>"));
@@ -174,11 +188,27 @@ public class OptionPanel extends JPanel {
                         }
                     });
                  */
-                System.out.println(i);
+                
                 this.add(button);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                JButton sellbutton = new JButton();
+                sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getSellCost()) + "$");
+                this.add(sellbutton);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
                 
             }
-
+        
+            
+        /*
+        * Ha az második játékos saját tornyára kattint
+        */
         }
         if ("2tower".equals(todo)) {
             int i = 0;
@@ -227,12 +257,30 @@ public class OptionPanel extends JPanel {
                     });
                  */
                 this.add(button);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                JButton sellbutton = new JButton();
+                sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getSellCost()) + "$");
+                this.add(sellbutton);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
             }
         }
+        
+        /*
+        * Ha barrackra kattint
+        */
         if ("barack".equals(todo)) {
 
         }
-
+        
+        /*
+        * Ha üres mezőre kattint
+        */
         if ("empty".equals(todo)) {
             GridLayout gridLayout = new GridLayout(11, 3);
             this.setLayout(gridLayout);
@@ -274,6 +322,9 @@ public class OptionPanel extends JPanel {
         this.repaint();
     }
 
+    /*
+    * A change empty paraméteres opciójának gombjainak listenerei
+    */
     private class ButtonListener implements ActionListener {
 
         String lab;

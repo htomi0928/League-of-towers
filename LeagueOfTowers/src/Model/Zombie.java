@@ -2,6 +2,9 @@ package Model;
 
 import java.io.IOException;
 
+/*
+* A zombik legegyszerűbb és olcsóbb típusa
+*/
 public class Zombie extends AttackUnits{
     public Zombie(int x, int y) throws IOException {
         super(x, y);

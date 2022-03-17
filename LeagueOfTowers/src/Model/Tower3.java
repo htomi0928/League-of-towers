@@ -2,6 +2,9 @@ package Model;
 
 import java.io.IOException;
 
+/*
+* A harmadik Towerből származtatott osztály
+*/
 public class Tower3 extends Tower {
     public Tower3(int x, int y) throws IOException {
         super(x, y);
@@ -15,7 +18,11 @@ public class Tower3 extends Tower {
         this.sellCost = 100;
     }
     
-    
+    /*
+    * Először is növeli az adott torony szintjét egy meghívás esetén. Ezután
+    * megnézi, hogy hanyas szintű az adott torony és ennek megfelelően kap plusz
+    * hatótávolságot és/vagy sebzést az adott torony
+    */
     @Override
     public void upgrade() {
         this.level += 1;

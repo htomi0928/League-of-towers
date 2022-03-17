@@ -1,16 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Model;
 
 import java.io.IOException;
 
-/**
- *
- * @author Pacza Dániel
- */
+/*
+* Zombi speciális típusa
+* Nem a kastély, hanem a tornyok az elsődleges célpontjai
+* Egy toronyhoz érve azt sebzi, majd meghal
+*/
 public class KamikazeZombie extends AttackUnits{
     public KamikazeZombie(int x, int y) throws IOException {
         super(x, y);
