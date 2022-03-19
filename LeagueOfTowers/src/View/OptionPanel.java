@@ -16,7 +16,7 @@ import java.awt.Dimension;
 
 /*
 * Az oldalsó panel
-*/
+ */
 public class OptionPanel extends JPanel {
 
     private JLabel moneyLabel;
@@ -79,15 +79,15 @@ public class OptionPanel extends JPanel {
 
     /*
     * Ez a függvény befolyásolja az oldalsó panel kinézetét
-    */
+     */
     public void change(String todo, int x, int y) throws IOException {
         this.x = x;
         this.y = y;
         this.removeAll();
-        
+
         /*
         * Ha illegális mezőre kattintunk (kastély, ellenfél térfele)
-        */
+         */
         if ("nothing".equals(todo)) {
             GridLayout gridLayout = new GridLayout(2, 3);
             setLayout(gridLayout);
@@ -135,18 +135,16 @@ public class OptionPanel extends JPanel {
             }
 
         }
-        
+
         /*
         * Ha az első játékos saját tornyára kattint
-        */
+         */
         if ("1tower".equals(todo)) {
             int i = 0;
             while (gl.get1pCastle().getTowers().get(i).getXc() != x && gl.get1pCastle().getTowers().get(i).getYc() != y && i < gl.get1pCastle().getTowers().size()) {
                 i += 1;
             }
-            System.out.println(i);
-            System.out.println(gl.get1pCastle().getTowers().get(i).getLevel());
-            
+
             if (gl.get1pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get1pCastle().getTowers().size() && gl.get1pCastle().getTowers().get(i).getStatus()) {
                 GridLayout gridLayout = new GridLayout(7, 3);
                 this.setLayout(gridLayout);
@@ -167,28 +165,8 @@ public class OptionPanel extends JPanel {
                 } else {
                     button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) + "$</div></html>");
                 }
-                /*
-                    button.addActionListener(new ActionListener() {
-                        
-                        @Override
-                        public void actionPerformed(ActionEvent ae) {
-                            
-                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
-                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost2()) {
-                                    gl.get1pCastle().getTowers().get(i).upgrade();
-                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost2());
-                                }
-                            }
-                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
-                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) {
-                                    gl.get1pCastle().getTowers().get(i).upgrade();
-                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost3());
-                                }
-                            }
-                        }
-                    });
-                 */
-                
+                button.addActionListener(new ButtonListener("upgrade", i));
+
                 this.add(button);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
@@ -197,18 +175,18 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 JButton sellbutton = new JButton();
                 sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getSellCost()) + "$");
+                sellbutton.addActionListener(new ButtonListener("sell", i));
                 this.add(sellbutton);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
-                
+
             }
-        
-            
-        /*
+
+            /*
         * Ha az második játékos saját tornyára kattint
-        */
+             */
         }
         if ("2tower".equals(todo)) {
             int i = 0;
@@ -263,6 +241,7 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 JButton sellbutton = new JButton();
                 sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getSellCost()) + "$");
+                sellbutton.addActionListener(new ButtonListener("sell", i));
                 this.add(sellbutton);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
@@ -270,17 +249,17 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
             }
         }
-        
+
         /*
         * Ha barrackra kattint
-        */
+         */
         if ("barack".equals(todo)) {
 
         }
-        
+
         /*
         * Ha üres mezőre kattint
-        */
+         */
         if ("empty".equals(todo)) {
             GridLayout gridLayout = new GridLayout(11, 3);
             this.setLayout(gridLayout);
@@ -308,7 +287,7 @@ public class OptionPanel extends JPanel {
 
                 if (i % 2 == 1) {
                     JButton button = new JButton(labs[(i - 1) / 2]);
-                    button.addActionListener(new ButtonListener(labs[(i - 1) / 2]));
+                    button.addActionListener(new ButtonListener(labs[(i - 1) / 2], 0));
                     this.add(button);
                 } else {
                     JLabel lab2 = new JLabel("");
@@ -324,13 +303,15 @@ public class OptionPanel extends JPanel {
 
     /*
     * A change empty paraméteres opciójának gombjainak listenerei
-    */
+     */
     private class ButtonListener implements ActionListener {
 
         String lab;
+        int numOfTower;
 
-        public ButtonListener(String lab) throws IOException {
+        public ButtonListener(String lab, int numOfTower) throws IOException {
             this.lab = lab;
+            this.numOfTower = numOfTower;
         }
 
         @Override
@@ -387,6 +368,34 @@ public class OptionPanel extends JPanel {
                             OptionPanel.this.change("nothing", 0, 0);
                         }
                     }
+                }
+                if ("upgrade".equals(lab)) {
+                    if (gl.get1pCastle().getTowers().get(numOfTower).getLevel() == 1) {
+                        if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost2()) {
+                            gl.get1pCastle().getTowers().get(numOfTower).upgrade();
+                            gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost2());
+                        }
+                    } else {
+                        if (gl.get1pCastle().getTowers().get(numOfTower).getLevel() == 2) {
+                            if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost3()) {
+                                gl.get1pCastle().getTowers().get(numOfTower).upgrade();
+                                gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost3());
+                            }
+                        }
+                    }
+                    OptionPanel.this.change("nothing", 0, 0);
+                }
+                if ("sell".equals(lab)) {
+                    System.out.println("perfect");
+                    if (gl.getTurn() == 1) {
+                        gl.get1pCastle().addMoney(gl.get1pCastle().getTowers().get(numOfTower).getSellCost());
+                        gl.get1pCastle().sellTower(numOfTower);
+                    }
+                    if (gl.getTurn() == 2) {
+                        gl.get2pCastle().addMoney(gl.get2pCastle().getTowers().get(numOfTower).getSellCost());
+                        gl.get2pCastle().sellTower(numOfTower);
+                    }
+                    OptionPanel.this.change("nothing", OptionPanel.this.x, OptionPanel.this.y);
                 }
             } catch (Exception e) {
             }

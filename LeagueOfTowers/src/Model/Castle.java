@@ -93,4 +93,8 @@ public class Castle extends Sprite {
         this.money += 500;
     }
     
+    public void sellTower(int n) {
+        this.towers.remove(n);
+    }
+    
 }
