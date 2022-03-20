@@ -41,6 +41,8 @@ public class GameLogic {
     public void nextTurn() {
         if (turn == 5) {
             turn = 1;
+            pl1.addTurnGold();
+            pl2.addTurnGold();
         }
         else {
             turn += 1;
