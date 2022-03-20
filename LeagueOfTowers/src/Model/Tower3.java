@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.IOException;
+import javax.swing.ImageIcon;
 
 /*
 * A harmadik Towerből származtatott osztály
@@ -16,6 +17,7 @@ public class Tower3 extends Tower {
         this.upgradecost2 = 50;
         this.upgradecost3 = 100;
         this.sellCost = 100;
+        img = new ImageIcon("src/res/torony3.png").getImage();
     }
     
     /*

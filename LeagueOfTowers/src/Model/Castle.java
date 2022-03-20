@@ -2,6 +2,7 @@ package Model;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 
 
 /*
@@ -14,13 +15,13 @@ public class Castle extends Sprite {
     private ArrayList<AttackUnits> units;
     private ArrayList<Barrack> barracks;
     
-    public Castle(int x, int y) throws IOException {
+    public Castle(int x, int y){
         super(x, y);
         hp = 1000;
         money = 1000;
         towers = new ArrayList<>();
         units = new ArrayList<>();
-        
+        img = new ImageIcon("src/res/barracks2.png").getImage(); 
     }
     
     /*

@@ -15,7 +15,7 @@ public class GameLogic {
     private int turn;
     private ArrayList<Obsticle> obsticles;
     
-    public GameLogic() throws IOException {
+    public GameLogic() {
         pl1 = new Castle(4-1, 10-1); //Az első játékos kastélya és pozíciója
         pl2 = new Castle(27-1, 10-1); //A második játékos kastélya és pozíciója
         
@@ -41,8 +41,6 @@ public class GameLogic {
     public void nextTurn() {
         if (turn == 5) {
             turn = 1;
-            pl1.addTurnGold();
-            pl2.addTurnGold();
         }
         else {
             turn += 1;
