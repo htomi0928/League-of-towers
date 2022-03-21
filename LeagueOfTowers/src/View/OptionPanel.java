@@ -287,7 +287,7 @@ public class OptionPanel extends JPanel {
                 i += 1;
             }
             if (gl.get2pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get2pCastle().getTowers().size()) {
-                GridLayout gridLayout = new GridLayout(5, 3);
+                GridLayout gridLayout = new GridLayout(7, 3);
                 this.setLayout(gridLayout);
                 this.add(new JLabel(""));
                 this.add(new JLabel("<html><div style='text-align: center;'>2nd Player Upgrade Tower</div></html>"));
@@ -328,6 +328,7 @@ public class OptionPanel extends JPanel {
                     });
                  */
                 this.add(button);
+                this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
