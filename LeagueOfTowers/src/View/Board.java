@@ -101,9 +101,10 @@ public class Board extends JPanel {
                             opanel.change("nothing", 0, 0);
                         }
 
-                    } catch (IOException ex) {
+                    } catch (Exception ex) {
                         Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    
 
                     repaint();
                 }

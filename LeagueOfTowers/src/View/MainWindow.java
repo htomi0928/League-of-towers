@@ -13,7 +13,7 @@ import javax.swing.JMenuItem;
 /*
 * A játék fóablaka
 * Itt helyezkedik el a JFrame
- */
+*/
 public class MainWindow {
 
     private Board board;
@@ -22,16 +22,19 @@ public class MainWindow {
 
     public MainWindow() {
         frame = new JFrame("League Of Towers");
-
+        
         OptionPanel opanel = new OptionPanel();
         frame.add(opanel, BorderLayout.EAST);
-
+        
+        
+        
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
-
+        frame.setSize(600,600);
+        
         Board board = new Board(opanel);
         frame.add(board, BorderLayout.CENTER);
-
+        
+        
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
         JMenu menu = new JMenu("Menü");

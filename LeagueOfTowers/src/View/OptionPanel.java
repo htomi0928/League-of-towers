@@ -51,21 +51,59 @@ public class OptionPanel extends JPanel {
                 add(moneyLabel);
                 break;
             case 3:
-                add(new JLabel("<html><div style='text-align: center;'>1st Player Trainig Units</div></html>"));
+                gridLayout = new GridLayout(15, 3);
+                this.setLayout(gridLayout);
+                add(new JLabel("<html><div style='text-align: center;'>1st Player Training Units</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel("Money: "));
                 moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
                 add(moneyLabel);
+                String[] labs1 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
+                this.setBackground(new Color(200, 200, 200));
+                for (int i = 0; i < 13; ++i) {
+                    JLabel lab1 = new JLabel("");
+                    this.add(lab1);
+
+                    if (i % 2 == 1) {
+                        JButton button = new JButton(labs1[(i - 1) / 2]);
+                        button.addActionListener(new ButtonListener(labs1[(i - 1) / 2], 0));
+                        this.add(button);
+                    } else {
+                        JLabel lab2 = new JLabel("");
+                        this.add(lab2);
+                    }
+                    JLabel lab3 = new JLabel("");
+                    this.add(lab3);
+                }
                 break;
             case 4:
-                add(new JLabel("<html><div style='text-align: center;'>2nd Player Trainig Units</div></html>"));
+                gridLayout = new GridLayout(15, 3);
+                this.setLayout(gridLayout);
+                add(new JLabel("<html><div style='text-align: center;'>1st Player Training Units</div></html>"));
                 add(new JLabel(""));
                 add(new JLabel(""));
                 add(new JLabel("Money: "));
-                moneyLabel = new JLabel(Integer.toString(gl.get2pCastle().getMoney()) + "$");
+                moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
                 add(moneyLabel);
+                this.setBackground(new Color(200, 200, 200));
+                for (int i = 0; i < 13; ++i) {
+                    JLabel lab1 = new JLabel("");
+                    this.add(lab1);
+                    String[] labs2 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
+                    if (i % 2 == 1) {
+                        JButton button = new JButton(labs2[(i - 1) / 2]);
+                        button.addActionListener(new ButtonListener(labs2[(i - 1) / 2], 0));
+                        this.add(button);
+                    } else {
+                        JLabel lab2 = new JLabel("");
+                        this.add(lab2);
+                    }
+                    JLabel lab3 = new JLabel("");
+                    this.add(lab3);
+                }
                 break;
+
             case 5:
                 add(new JLabel("<html><div style='text-align: center;'>Attacking</div></html>"));
                 add(new JLabel(""));
@@ -80,7 +118,7 @@ public class OptionPanel extends JPanel {
     /*
     * Ez a függvény befolyásolja az oldalsó panel kinézetét
      */
-    public void change(String todo, int x, int y) throws IOException {
+    public void change(String todo, int x, int y) throws IOException, InterruptedException {
         this.x = x;
         this.y = y;
         this.removeAll();
@@ -90,10 +128,11 @@ public class OptionPanel extends JPanel {
          */
         if ("nothing".equals(todo)) {
             GridLayout gridLayout = new GridLayout(2, 3);
-            setLayout(gridLayout);
-            add(new JLabel(""));
             switch (gl.getTurn()) {
                 case 1:
+                    gridLayout = new GridLayout(2, 3);
+                    setLayout(gridLayout);
+                    add(new JLabel(""));
                     add(new JLabel("<html><div style='text-align: center;'>1st Player Building</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
@@ -102,6 +141,9 @@ public class OptionPanel extends JPanel {
                     add(moneyLabel);
                     break;
                 case 2:
+                    gridLayout = new GridLayout(2, 3);
+                    setLayout(gridLayout);
+                    add(new JLabel(""));
                     add(new JLabel("<html><div style='text-align: center;'>2nd Player Building</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
@@ -110,27 +152,78 @@ public class OptionPanel extends JPanel {
                     add(moneyLabel);
                     break;
                 case 3:
-                    add(new JLabel("<html><div style='text-align: center;'>1st Player Trainig Units</div></html>"));
+                    gridLayout = new GridLayout(15, 3);
+                    this.setLayout(gridLayout);
+                    add(new JLabel(""));
+                    add(new JLabel("<html><div style='text-align: center;'>1st Player Training Units</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel("Money: "));
                     moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
                     add(moneyLabel);
+                    String[] labs1 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
+                    this.setBackground(new Color(200, 200, 200));
+                    for (int i = 0; i < 13; ++i) {
+                        JLabel lab1 = new JLabel("");
+                        this.add(lab1);
+
+                        if (i % 2 == 1) {
+                            JButton button = new JButton(labs1[(i - 1) / 2]);
+                            button.addActionListener(new ButtonListener(labs1[(i - 1) / 2], 0));
+                            this.add(button);
+                        } else {
+                            JLabel lab2 = new JLabel("");
+                            this.add(lab2);
+                        }
+                        JLabel lab3 = new JLabel("");
+                        this.add(lab3);
+                    }
                     break;
                 case 4:
-                    add(new JLabel("<html><div style='text-align: center;'>2nd Player Trainig Units</div></html>"));
+                    gridLayout = new GridLayout(15, 3);
+                    this.setLayout(gridLayout);
+                    add(new JLabel(""));
+                    add(new JLabel("<html><div style='text-align: center;'>2nd Player Training Units</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel("Money: "));
-                    moneyLabel = new JLabel(Integer.toString(gl.get2pCastle().getMoney()) + "$");
+                    moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
                     add(moneyLabel);
+                    this.setBackground(new Color(200, 200, 200));
+                    for (int i = 0; i < 13; ++i) {
+                        JLabel lab1 = new JLabel("");
+                        this.add(lab1);
+                        String[] labs2 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
+                        if (i % 2 == 1) {
+                            JButton button = new JButton(labs2[(i - 1) / 2]);
+                            button.addActionListener(new ButtonListener(labs2[(i - 1) / 2], 0));
+                            this.add(button);
+                        } else {
+                            JLabel lab2 = new JLabel("");
+                            this.add(lab2);
+                        }
+                        JLabel lab3 = new JLabel("");
+                        this.add(lab3);
+                    }
                     break;
                 case 5:
+                    gridLayout = new GridLayout(4, 3);
+                    setLayout(gridLayout);
+                    add(new JLabel(""));
                     add(new JLabel("<html><div style='text-align: center;'>Attacking</div></html>"));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel(""));
                     add(new JLabel(""));
+                    add(new JLabel(""));
+                    JButton helpb = new JButton("Kör vége");
+                    helpb.addActionListener(new ButtonListener("Kör vége", 0));
+                    add(helpb);
+                    add(new JLabel(""));
+                    add(new JLabel(""));
+                    add(new JLabel(""));
+                    add(new JLabel(""));
+
                     break;
             }
 
@@ -309,7 +402,7 @@ public class OptionPanel extends JPanel {
         String lab;
         int numOfTower;
 
-        public ButtonListener(String lab, int numOfTower) throws IOException {
+        public ButtonListener(String lab, int numOfTower) {
             this.lab = lab;
             this.numOfTower = numOfTower;
         }

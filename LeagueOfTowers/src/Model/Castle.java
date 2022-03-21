@@ -21,7 +21,7 @@ public class Castle extends Sprite {
         money = 1000;
         towers = new ArrayList<>();
         units = new ArrayList<>();
-        img = new ImageIcon("src/res/barracks2.png").getImage(); 
+        img = new ImageIcon("src/res/castle.png").getImage(); 
     }
     
     /*

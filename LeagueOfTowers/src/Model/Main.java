@@ -1,7 +1,6 @@
 package Model;
 
 import View.*;
-import java.io.IOException;
 
 /*
 * A játék főosztálya
