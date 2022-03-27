@@ -18,9 +18,9 @@ import static Model.Main.gl;
  */
 public class Board extends JPanel {
 
-    private int tile_size = 32;
-    private final int n = 29 + 1;
-    private final int m = 18 + 1;
+    protected static final int tile_size = 36;
+    protected static final int width = 29 + 1;
+    protected static final int height = 18 + 1;
 
     int x = 0;
     int y = 0;
@@ -28,7 +28,7 @@ public class Board extends JPanel {
     public Board(OptionPanel opanel) {
 
         setBackground(new Color(32, 217, 19));
-        Dimension dim = new Dimension(n * tile_size, m * tile_size);
+        Dimension dim = new Dimension(width * tile_size, height * tile_size);
         setPreferredSize(dim);
         setMaximumSize(dim);
         setSize(dim);
@@ -56,49 +56,7 @@ public class Board extends JPanel {
                     * Ennek függvényében a change függvényt meghívva változtatható az oldalsó panel
                      */
                     try {
-                        String isEmpty = "";
-                        if (gl.get1pCastle().getXc() == x && gl.get1pCastle().getYc() == y) {
-                            isEmpty = "1castle";
-                        }
-                        if (gl.get2pCastle().getXc() == x && gl.get2pCastle().getYc() == y) {
-                            isEmpty = "2castle";
-                        }
-                        int tower = 0;
-                        for (int i = 0; i < gl.get1pCastle().getTowers().size(); i++) {
-                            if (gl.get1pCastle().getTowers().get(i).getXc() == x && gl.get1pCastle().getTowers().get(i).getYc() == y) {
-                                isEmpty = "1tower";
-                                tower = i;
-                            }
-                        }
-                        for (int i = 0; i < gl.get2pCastle().getTowers().size(); i++) {
-                            if (gl.get2pCastle().getTowers().get(i).getXc() == x && gl.get2pCastle().getTowers().get(i).getYc() == y) {
-                                isEmpty = "2tower";
-                                tower = i;
-                            }
-                        }
-                        for (int i = 0; i < gl.get1pCastle().getUnits().size(); i++) {
-                            if (gl.get1pCastle().getUnits().get(i).getXc() == x && gl.get1pCastle().getUnits().get(i).getYc() == y) {
-                                isEmpty = "1unit";
-                            }
-                        }
-                        for (int i = 0; i < gl.get2pCastle().getUnits().size(); i++) {
-                            if (gl.get2pCastle().getUnits().get(i).getXc() == x && gl.get2pCastle().getUnits().get(i).getYc() == y) {
-                                isEmpty = "2unit";
-                            }
-                        }
-
-                        if ("".equals(isEmpty)) {
-                            opanel.change("empty", x, y);
-                        }
-                        if ("1tower".equals(isEmpty) && gl.getTurn() == 1) {
-                            opanel.change("1tower", x, y);
-                        }
-                        if ("2tower".equals(isEmpty) && gl.getTurn() == 2) {
-                            opanel.change("2tower", x, y);
-                        }
-                        if ("1castle".equals(isEmpty) || "2castle".equals(isEmpty) || "1unit".equals(isEmpty) || "2unit".equals(isEmpty)) {
-                            opanel.change("nothing", 0, 0);
-                        }
+                        opanel.change(gl.returnSprites(x, y), x, y);
 
                     } catch (Exception ex) {
                         Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
@@ -119,8 +77,8 @@ public class Board extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D gr = (Graphics2D) g;
-        for (int j = 0; j < m; j++) {
-            for (int i = 0; i < n; i++) {
+        for (int j = 0; j < height; j++) {
+            for (int i = 0; i < width; i++) {
                 if ((i % 2 == 0 && j % 2 == 1) || (i % 2 == 1 && j % 2 == 0)) {
                     /*
                     * A játéktábla kockássá tétele
@@ -175,8 +133,8 @@ public class Board extends JPanel {
         * A játéktábla elválasztó csíkja középen
          */
         gr.setColor(new Color(0, 0, 0));
-        for (int i = 0; i < m; i++) {
-            gr.fillRect(n / 2 * tile_size - 1, i * tile_size, 3, tile_size);
+        for (int i = 0; i < height; i++) {
+            gr.fillRect(width / 2 * tile_size - 1, i * tile_size, 3, tile_size);
 
         }
         /*

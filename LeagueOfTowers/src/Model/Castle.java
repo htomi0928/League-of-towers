@@ -94,8 +94,74 @@ public class Castle extends Sprite {
         this.money += 500;
     }
     
+    /*
+    * Törli a tornyot a listából
+    */
     public void sellTower(int n) {
         this.towers.remove(n);
     }
     
+    /*
+    * Koordináták alapján visszaad egy tornyot vagy egy null értéket
+    */
+    public Tower returnTower(int x, int y) {
+        for (int i = 0; i < towers.size(); i++) {
+            if (towers.get(i).getXc() == x && towers.get(i).getYc() == y) {
+                return towers.get(i);
+            }
+        }
+        return null;
+    }
+    
+    /*
+    * Koordináták alapján visszaadja az egységek listáját, melyek a mezőn vannak
+    */
+    public ArrayList<AttackUnits> returnUnits(int x, int y) {
+        ArrayList<AttackUnits> attun = new ArrayList();
+        for (int i = 0; i < units.size(); i++) {
+            if (units.get(i).getXc() == x && units.get(i).getYc() == y) {
+                attun.add(units.get(i));
+            }
+        }
+        return attun;
+    }
+    
+    /*
+    * Koordináták alapján visszaad egy barrackot vagy egy null értéket
+    */
+    public Barrack returnBarrack(int x, int y) {
+        for (int i = 0; i < barracks.size(); i++) {
+            if (barracks.get(i).getXc() == x && barracks.get(i).getYc() == y) {
+                return barracks.get(i);
+            }
+        }
+        return null;
+    }
+    
+    public int returnTowerCoord(int x, int y) {
+        for (int i = 0; i < towers.size(); i++) {
+            if (towers.get(i).getXc() == x && towers.get(i).getYc() == y) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+    public String SpriteCoord(int x, int y) {
+        if (returnTower(x, y) != null) {
+            return "tower";
+        }
+        /*
+        if (returnBarrack(x, y) != null) {
+            return "barrack";
+        }
+        else {
+            System.out.println("RIGHT");
+        }
+        */
+        if (!returnUnits(x, y).isEmpty()) {
+            return "units";
+        }
+        return null;
+    }
 }

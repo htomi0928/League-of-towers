@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import static Model.Main.gl;
+import static View.Board.tile_size;
+import static View.Board.height;
 import java.io.IOException;
 import Model.Tower1;
 import Model.Tower2;
@@ -25,7 +27,7 @@ public class OptionPanel extends JPanel {
 
     public OptionPanel() {
 
-        Dimension dim = new Dimension(12 * 32, 19 * 32);
+        Dimension dim = new Dimension(12 * tile_size, height * tile_size);
         setPreferredSize(dim);
         setMaximumSize(dim);
         setSize(dim);
@@ -92,7 +94,7 @@ public class OptionPanel extends JPanel {
                     this.add(lab1);
                     String[] labs2 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
                     if (i % 2 == 1) {
-                        JButton button = new JButton(labs2[(i - 1) / 2]);
+                        JButton button = new JButton("<html><div style='text-align: center;'>" + labs2[(i - 1) / 2] + "</div></html>");
                         button.addActionListener(new ButtonListener(labs2[(i - 1) / 2], 0));
                         this.add(button);
                     } else {
@@ -168,7 +170,7 @@ public class OptionPanel extends JPanel {
                         this.add(lab1);
 
                         if (i % 2 == 1) {
-                            JButton button = new JButton(labs1[(i - 1) / 2]);
+                            JButton button = new JButton("<html><div style='text-align: center;'>" + labs1[(i - 1) / 2] + "</div></html>");
                             button.addActionListener(new ButtonListener(labs1[(i - 1) / 2], 0));
                             this.add(button);
                         } else {
@@ -195,7 +197,7 @@ public class OptionPanel extends JPanel {
                         this.add(lab1);
                         String[] labs2 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
                         if (i % 2 == 1) {
-                            JButton button = new JButton(labs2[(i - 1) / 2]);
+                            JButton button = new JButton("<html><div style='text-align: center;'>" + labs2[(i - 1) / 2] + "</div></html>");
                             button.addActionListener(new ButtonListener(labs2[(i - 1) / 2], 0));
                             this.add(button);
                         } else {
@@ -233,12 +235,7 @@ public class OptionPanel extends JPanel {
         * Ha az első játékos saját tornyára kattint
          */
         if ("1tower".equals(todo)) {
-            int i = 0;
-            while (gl.get1pCastle().getTowers().get(i).getXc() != x && gl.get1pCastle().getTowers().get(i).getYc() != y && i < gl.get1pCastle().getTowers().size()) {
-                i += 1;
-            }
-
-            if (gl.get1pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get1pCastle().getTowers().size() && gl.get1pCastle().getTowers().get(i).getStatus()) {
+            if (gl.get1pCastle().returnTower(x, y).getLevel() < 3 && gl.get1pCastle().returnTower(x, y).getStatus()) {
                 GridLayout gridLayout = new GridLayout(7, 3);
                 this.setLayout(gridLayout);
                 this.add(new JLabel(""));
@@ -253,12 +250,12 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton button = new JButton();
-                if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
-                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getUpgradeCost2()) + "$</div></html>");
+                if (gl.get1pCastle().returnTower(x, y).getLevel() == 1) {
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().returnTower(x, y).getUpgradeCost2()) + "$</div></html>");
                 } else {
-                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) + "$</div></html>");
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().returnTower(x, y).getUpgradeCost3()) + "$</div></html>");
                 }
-                button.addActionListener(new ButtonListener("upgrade", i));
+                button.addActionListener(new ButtonListener("upgrade", gl.get1pCastle().returnTowerCoord(x, y)));
 
                 this.add(button);
                 this.add(new JLabel(""));
@@ -267,8 +264,8 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton sellbutton = new JButton();
-                sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get1pCastle().getTowers().get(i).getSellCost()) + "$");
-                sellbutton.addActionListener(new ButtonListener("sell", i));
+                sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get1pCastle().returnTower(x, y).getSellCost()) + "$");
+                sellbutton.addActionListener(new ButtonListener("sell", gl.get1pCastle().returnTowerCoord(x, y)));
                 this.add(sellbutton);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
@@ -282,11 +279,7 @@ public class OptionPanel extends JPanel {
              */
         }
         if ("2tower".equals(todo)) {
-            int i = 0;
-            while (gl.get2pCastle().getTowers().get(i).getXc() != x && gl.get2pCastle().getTowers().get(i).getYc() != y && i < gl.get2pCastle().getTowers().size()) {
-                i += 1;
-            }
-            if (gl.get2pCastle().getTowers().get(i).getLevel() < 3 && i < gl.get2pCastle().getTowers().size()) {
+            if (gl.get2pCastle().returnTower(x, y).getLevel() < 3 && gl.get2pCastle().returnTower(x, y).getStatus()) {
                 GridLayout gridLayout = new GridLayout(7, 3);
                 this.setLayout(gridLayout);
                 this.add(new JLabel(""));
@@ -301,32 +294,13 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton button = new JButton();
-                if (gl.get2pCastle().getTowers().get(i).getLevel() == 1) {
-                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getUpgradeCost2()) + "$</div></html>");
+                if (gl.get2pCastle().returnTower(x, y).getLevel() == 1) {
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().returnTower(x, y).getUpgradeCost2()) + "$</div></html>");
                 } else {
-                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getUpgradeCost3()) + "$</div></html>");
+                    button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().returnTower(x, y).getUpgradeCost3()) + "$</div></html>");
                 }
-                /*
-                    button.addActionListener(new ActionListener() {
-                        
-                        @Override
-                        public void actionPerformed(ActionEvent ae) {
-                            
-                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
-                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost2()) {
-                                    gl.get1pCastle().getTowers().get(i).upgrade();
-                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost2());
-                                }
-                            }
-                            if (gl.get1pCastle().getTowers().get(i).getLevel() == 1) {
-                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(i).getUpgradeCost3()) {
-                                    gl.get1pCastle().getTowers().get(i).upgrade();
-                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(i).getUpgradeCost3());
-                                }
-                            }
-                        }
-                    });
-                 */
+                button.addActionListener(new ButtonListener("upgrade", gl.get2pCastle().returnTowerCoord(x, y)));
+                
                 this.add(button);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
@@ -334,8 +308,8 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton sellbutton = new JButton();
-                sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get2pCastle().getTowers().get(i).getSellCost()) + "$");
-                sellbutton.addActionListener(new ButtonListener("sell", i));
+                sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get2pCastle().returnTower(x, y).getSellCost()) + "$");
+                sellbutton.addActionListener(new ButtonListener("sell", gl.get2pCastle().returnTowerCoord(x, y)));
                 this.add(sellbutton);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
@@ -347,7 +321,7 @@ public class OptionPanel extends JPanel {
         /*
         * Ha barrackra kattint
          */
-        if ("barack".equals(todo)) {
+        if ("barrack".equals(todo)) {
 
         }
 
