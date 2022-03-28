@@ -89,4 +89,26 @@ public class GameLogic {
         }
         return "empty";
     }
+    
+    public Castle getCurrentPlayer() {
+        if (turn == 1 || turn == 3) {return pl1;}
+        if (turn == 2 || turn == 4) {return pl2;}
+        return null;
+    }
+    
+    public String whatToDo() {
+        switch(turn) {
+            case 1:
+                return "1st Player Building";
+            case 2:
+                return "2st Player Building";
+            case 3:
+                return "1st Player Training Units";
+            case 4:
+                return "2nd Player Training Units";
+            case 5:
+                return "Attacking";
+        }
+        return "Error";
+    }
 }

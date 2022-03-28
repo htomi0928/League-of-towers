@@ -14,6 +14,7 @@ public class Tower2 extends Tower {
         distance = 2;
         cost = 150;
         
+        this.type = 2;
         this.upgradecost2 = 50;
         this.upgradecost3 = 100;
         this.sellCost = 75;

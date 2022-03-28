@@ -31,6 +31,10 @@ public class Castle extends Sprite {
         return money;
     }
     
+    public int getHp() {
+        return hp;
+    }
+    
     /*
     * Növeli a játékos pénzét m-mel
     */

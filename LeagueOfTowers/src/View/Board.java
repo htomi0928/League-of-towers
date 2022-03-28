@@ -38,12 +38,7 @@ public class Board extends JPanel {
             public void mousePressed(MouseEvent e) {
                 //System.out.println(e.getX() / tile_size + "," + e.getY() / tile_size);
                 //System.out.println(getSize().width + "," + getSize().height);
-                if ((gl.getTurn() == 1 && (e.getX() / tile_size) <= 14) || (gl.getTurn() == 2 && (e.getX() / tile_size) >= 15)) {
-                    /*
-                    * A jelzés, hogy éppen hol vagyunk a pályán
-                    * Nem lehet rákkatintani a saját kastélyunkra
-                    * Nem lehet rákattintani az ellenfél területére
-                     */
+             
                     x = e.getX() / tile_size;
                     y = e.getY() / tile_size;
 
@@ -65,7 +60,6 @@ public class Board extends JPanel {
 
                     repaint();
                 }
-            }
         });
     }
 

@@ -9,6 +9,7 @@ public class Tower extends Sprite {
     
     int hp, level, damage, distance, cost, upgradecost2, upgradecost3, cleanRuin, sellCost;
     boolean stillstanding;
+    int type;
 
     public Tower(int x, int y) throws IOException {
         super(x, y);
@@ -93,5 +94,9 @@ public class Tower extends Sprite {
     */
     public int getSellCost() {
         return this.sellCost;
+    }
+    
+    public int getType() {
+        return this.type;
     }
 }
