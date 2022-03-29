@@ -9,10 +9,11 @@ import java.io.IOException;
 public class AmphibianZombie extends AttackUnits {
     public AmphibianZombie(int x, int y) throws IOException {
         super(x, y);
-        hp = 80;
-        speed = 5;
-        damage = 50;
-        cost = 100;
-        target = "Castle";
+        this.hp = 80;
+        this.maxhp = 80;
+        this.speed = 5;
+        this.damage = 50;
+        this.cost = 100;
+        this.target = "Castle";
     }
 }

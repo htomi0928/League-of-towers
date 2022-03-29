@@ -9,16 +9,17 @@ import javax.swing.ImageIcon;
 public class Tower3 extends Tower {
     public Tower3(int x, int y) throws IOException {
         super(x, y);
+        
         this.hp = 150;
+        this.maxhp = 150;
         this.damage=15;
         this.distance = 1;
         this.cost = 200;
-        
         this.type = 3;
         this.upgradecost2 = 50;
         this.upgradecost3 = 100;
         this.sellCost = 100;
-        img = new ImageIcon("src/res/torony3.png").getImage();
+        this.img = new ImageIcon("src/res/torony3.png").getImage();
     }
     
     /*

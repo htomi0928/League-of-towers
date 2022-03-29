@@ -10,19 +10,21 @@ import java.io.IOException;
 /*
 * Zombi speciális típusa
 * Ha ellenséges csapat mellé ér, sebzi őket
-*/
+ */
 public class FighterZombie extends AttackUnits {
-    
+
     private int enemyDamage; //A sebzés, amit az ellenséges csapatoktra ad le
-    
+
     public FighterZombie(int x, int y) throws IOException {
         super(x, y);
-        hp = 100;
-        speed = 5;
-        damage = 70;
-        enemyDamage = 50;
-        cost = 150;
-        target = "Castle";
+
+        this.hp = 100;
+        this.maxhp = 100;
+        this.speed = 5;
+        this.damage = 70;
+        this.enemyDamage = 50;
+        this.cost = 150;
+        this.target = "Castle";
     }
-    
+
 }

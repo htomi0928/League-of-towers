@@ -1,8 +1,6 @@
 package Model;
 
 import java.awt.Image;
-import java.io.IOException;
-import res.ResourceLoader;
 
 public class Sprite {
 
@@ -15,7 +13,7 @@ public class Sprite {
 
     //private Image zombie, bigZombie, fighterZombie, amphibianZombie, kamikazeZombie, tower1, tower2, tower3, castle, barrack, obsticle;
     public Sprite(int x, int y) {
-        xy = new Position(x, y);
+        this.xy = new Position(x, y);
     }
 
     /*

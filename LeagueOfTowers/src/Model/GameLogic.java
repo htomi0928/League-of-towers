@@ -1,34 +1,59 @@
 package Model;
 
-import java.io.IOException;
+import static Model.Main.gl;
 import java.util.ArrayList;
 
 /*
 * A játék logikájárt felelős osztály
 * Itt tárolódik a két játékos kastélya, az akadályok
 * Ez végzi a körök lebonyolítását
-*/
+ */
 public class GameLogic {
-    
+
     private Castle pl1;
     private Castle pl2;
     private int turn;
     private ArrayList<Obsticle> obsticles;
-    
+
     public GameLogic() {
-        pl1 = new Castle(4-1, 10-1); //Az első játékos kastélya és pozíciója
-        pl2 = new Castle(27-1, 10-1); //A második játékos kastélya és pozíciója
-        
+        pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
+        pl2 = new Castle(27 - 1, 10 - 1); //A második játékos kastélya és pozíciója
+
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
     }
-    
+
+    public void damage() {
+        for (int i = 0; i < pl1.getUnits().size(); i++) {
+            int xp = pl1.getUnits().get(i).getXc();
+            int yp = pl1.getUnits().get(i).getYc();
+            for (int j = 0; j < pl2.getTowers().size(); j++) {
+                int xc = pl2.getTowers().get(j).getXc();
+                int yc = pl2.getTowers().get(j).getYc();
+                boolean inRadius = false;
+                int radius = pl2.getTowers().get(j).distance;
+                for (int k = 0; k < pl1.getUnits().get(i).speed; k++) {
+
+                    //zombi.lép()
+                    
+                    double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
+                    if (distance < radius) {
+                        inRadius = true;
+                    }
+                }
+                if (inRadius) {
+                    pl1.getUnits().get(i).loseHp(pl2.getTowers().get(j).getDamage());
+                }
+            }
+        }
+    }
+
     /*
     * Melyik kör van éppen
-    */
+     */
     public int getTurn() {
         return turn;
     }
-    
+
     /*
     * A játék során 5 kör van:
     * - 1.: Első játékos épít
@@ -37,67 +62,68 @@ public class GameLogic {
     * - 4.: Második játékos telepít támadóegységeket
     * - 5.: Támadás
     * A támadás után újból jön az első kör
-    */
+     */
     public void nextTurn() {
         if (turn == 5) {
             turn = 1;
             pl1.addTurnGold();
             pl2.addTurnGold();
-        }
-        else {
+        } else {
             turn += 1;
         }
     }
-    
+
     /*
     * Az első játékos kastélya
-    */
+     */
     public Castle get1pCastle() {
         return pl1;
     }
-    
+
     /*
     * A második játékos kastélya
-    */
+     */
     public Castle get2pCastle() {
         return pl2;
     }
-    
+
     /*
     * Visszaadja az akadályokat a pályán
-    */
+     */
     public ArrayList<Obsticle> getObsticles() {
         return this.obsticles;
     }
-    
+
     public String returnSprites(int x, int y) {
-        if (pl1.SpriteCoord(x, y) != null ) {
+        if (pl1.SpriteCoord(x, y) != null) {
             return ("1" + pl1.SpriteCoord(x, y));
-        }
-        else {
+        } else {
             if (pl1.getXc() == x && pl1.getYc() == y) {
                 return "1castle";
             }
         }
-        if (pl2.SpriteCoord(x, y) != null ) {
+        if (pl2.SpriteCoord(x, y) != null) {
             return ("2" + pl2.SpriteCoord(x, y));
-        }
-        else {
+        } else {
             if (pl2.getXc() == x && pl2.getYc() == y) {
                 return "2castle";
             }
         }
         return "empty";
     }
-    
+
     public Castle getCurrentPlayer() {
-        if (turn == 1 || turn == 3) {return pl1;}
-        if (turn == 2 || turn == 4) {return pl2;}
+        if (turn == 1 || turn == 3) {
+            return pl1;
+        }
+        if (turn == 2 || turn == 4) {
+            return pl2;
+        }
         return null;
     }
-    
+
     public String whatToDo() {
-        switch(turn) {
+        switch (turn) {
             case 1:
                 return "1st Player Building";
             case 2:
