@@ -78,7 +78,7 @@ public class Castle extends Sprite {
     * Hozzáad egy támadó egységet a játékos tornyaihoz
      */
     public void addUnit(AttackUnits au) {
-        this.units.add(au);
+        units.add(au);
     }
 
     /*

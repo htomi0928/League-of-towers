@@ -15,6 +15,12 @@ import java.io.IOException;
 import Model.Tower1;
 import Model.Tower2;
 import Model.Tower3;
+import Model.AttackUnits;
+import Model.AmphibianZombie;
+import Model.BigZombie;
+import Model.FighterZombie;
+import Model.KamikazeZombie;
+import Model.Zombie;
 import java.awt.Dimension;
 
 /*
@@ -359,7 +365,7 @@ public class OptionPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                if ("Kör vége".equals(lab)) {
+                if ("Kör vége".equals(lab)) {  //gombok kezelése a tornyok esetén
                     gl.nextTurn();
                     OptionPanel.this.change("nothing", x, y);
                 }
@@ -438,7 +444,27 @@ public class OptionPanel extends JPanel {
                         gl.get2pCastle().sellTower(numOfTower);
                     }
                     OptionPanel.this.change("nothing", OptionPanel.this.x, OptionPanel.this.y);
+                } //gombok kezelése idáig
+                //{"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"}
+                //Zombik gombjainak a kezelése
+                if ("Kétéltű zombi".equals(lab)) {
+                    AmphibianZombie az = new AmphibianZombie(5,5);
+                    
+                    if (gl.getTurn() == 3) {
+                        if (az.getCost() <= gl.get1pCastle().getMoney()) {
+                            gl.get1pCastle().addUnit(az);
+                            gl.get1pCastle().pay(az.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
+                    } else {
+                        if (az.getCost() <= gl.get2pCastle().getMoney()) {
+                            gl.get2pCastle().addUnit(az);
+                            gl.get2pCastle().pay(az.getCost());
+                            OptionPanel.this.change("nothing", 0, 0);
+                        }
+                    }
                 }
+                 
             } catch (Exception e) {
             }
         }

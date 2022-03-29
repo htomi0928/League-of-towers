@@ -115,16 +115,16 @@ public class Board extends JPanel {
          */
         gr.setColor(new Color(255, 255, 0));
         for (int i = 0; i < gl.get1pCastle().getUnits().size(); i++) {
-            gr.drawImage(gl.get1pCastle().getTowers().get(i).getImg(), gl.get1pCastle().getTowers().get(i).getXc() * tile_size, gl.get1pCastle().getTowers().get(i).getYc() * tile_size, tile_size, tile_size, this);
-            drawHealthbar(gl.get1pCastle().getTowers().get(i).getXc(), gl.get1pCastle().getTowers().get(i).getYc(), gl.get1pCastle().getTowers().get(i).getHp(), gl.get1pCastle().getTowers().get(i).getMaxhp(), gr);
+            gr.drawImage(gl.get1pCastle().getUnits().get(i).getImg(), gl.get1pCastle().getUnits().get(i).getXc() * tile_size, gl.get1pCastle().getUnits().get(i).getYc() * tile_size, tile_size, tile_size, this);
+            drawHealthbar(gl.get1pCastle().getUnits().get(i).getXc(), gl.get1pCastle().getUnits().get(i).getYc(), gl.get1pCastle().getUnits().get(i).getHp(), gl.get1pCastle().getUnits().get(i).getMaxhp(), gr);
         }
 
         /*
         * Második játékos támadó egységeinek megjelenítése
          */
         gr.setColor(new Color(0, 255, 255));
-        for (int i = 0; i < gl.get1pCastle().getUnits().size(); i++) {
-            gr.drawImage(gl.get2pCastle().getTowers().get(i).getImg(), tile_size + gl.get2pCastle().getTowers().get(i).getXc() * tile_size, gl.get2pCastle().getTowers().get(i).getYc() * tile_size, tile_size, tile_size, this);
+        for (int i = 0; i < gl.get2pCastle().getUnits().size(); i++) {
+            gr.drawImage(gl.get2pCastle().getUnits().get(i).getImg(), tile_size + gl.get2pCastle().getUnits().get(i).getXc() * tile_size, gl.get2pCastle().getUnits().get(i).getYc() * tile_size, tile_size, tile_size, this);
         }
 
         /*

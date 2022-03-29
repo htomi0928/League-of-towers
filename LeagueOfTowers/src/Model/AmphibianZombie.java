@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.IOException;
+import javax.swing.ImageIcon;
 
 /*
 * Zombi speciális típusa
@@ -15,5 +16,6 @@ public class AmphibianZombie extends AttackUnits {
         this.damage = 50;
         this.cost = 100;
         this.target = "Castle";
+        this.img = new ImageIcon("src/res/zombi1.png").getImage();
     }
 }
