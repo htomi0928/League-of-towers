@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.IOException;
+import javax.swing.ImageIcon;
 
 /*
 * Nagy Zombi, a zombik egy típusa
@@ -16,6 +17,6 @@ public class BigZombie extends AttackUnits {
         this.damage = 60;
         this.cost = 100;
         this.target = "Castle";
-
+        this.img = new ImageIcon("src/res/zombi4.png").getImage();
     }
 }

@@ -24,6 +24,7 @@ public class Castle extends Sprite {
         this.money = 1000;
         this.towers = new ArrayList<>();
         this.units = new ArrayList<>();
+        this.barracks = new ArrayList<>();
         this.img = new ImageIcon("src/res/castle.png").getImage();
 
         
@@ -81,6 +82,13 @@ public class Castle extends Sprite {
         units.add(au);
     }
 
+    /*
+    * A gamelogicban van használva hogy egy adott playerhöz barrackokat adjunk
+    */
+    public void addBarrack(Barrack b) {
+        barracks.add(b);
+    }
+    
     /*
     * Visszaadja a játékos tornyait egy listában
      */

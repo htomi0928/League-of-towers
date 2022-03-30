@@ -1,6 +1,7 @@
 package Model;
 
 import static Model.Main.gl;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /*
@@ -12,13 +13,25 @@ public class GameLogic {
 
     private Castle pl1;
     private Castle pl2;
+    private Barrack b1;
+    private Barrack b2;
+    private Barrack b3;
+    private Barrack b4;
     private int turn;
     private ArrayList<Obsticle> obsticles;
 
-    public GameLogic() {
+    public GameLogic() throws IOException {
         pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
         pl2 = new Castle(27 - 1, 10 - 1); //A második játékos kastélya és pozíciója
-
+        b1 = new Barrack(5 - 1, 5 - 1);
+        b2 = new Barrack(5 - 1, 15 - 1);
+        b3 = new Barrack(26 - 1, 5 - 1);
+        b4 = new Barrack(26 - 1, 15 - 1);
+        pl1.addBarrack(b1);
+        pl1.addBarrack(b2);
+        pl2.addBarrack(b3);
+        pl2.addBarrack(b4);
+        
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
     }
 
