@@ -1,5 +1,6 @@
 package Model;
 
+import LoTExceptions.IllegalLevelOfTowerException;
 import java.io.IOException;
 
 /*
@@ -11,7 +12,7 @@ public class Tower extends Sprite {
     boolean stillstanding;
     int type;
 
-    public Tower(int x, int y){
+    public Tower(int x, int y) {
         super(x, y);
 
         this.stillstanding = true;
@@ -71,8 +72,12 @@ public class Tower extends Sprite {
     /*
     * Növeli egyel az adott torony szintjét
      */
-    public void upgrade() {
-        this.level += 1;
+    public void upgrade() throws IllegalLevelOfTowerException {
+        if (this.level < 3) {
+            this.level += 1;
+        } else {
+            throw new IllegalLevelOfTowerException("Nem lehet egy torony 3-asnál magasabb szintű!");
+        }
     }
 
     /*

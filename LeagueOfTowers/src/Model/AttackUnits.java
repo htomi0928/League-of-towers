@@ -1,7 +1,7 @@
 package Model;
 
 import java.io.IOException;
-
+import LoTExceptions.InvalidInputException;
 
 /*
 * A zombik ősosztálya
@@ -55,7 +55,15 @@ public class AttackUnits extends Sprite {
         return target;
     }
 
-    public void loseHp(int h) {
-        this.hp -= h;
+    public void loseHp(int h) throws InvalidInputException {
+        if (h < 0) {
+            throw new InvalidInputException("The damage can't be more than 0!");
+        }
+        if (this.hp < h) {
+            this.hp = 0;
+        }
+        else {
+            this.hp -= h;
+        }
     }
 }

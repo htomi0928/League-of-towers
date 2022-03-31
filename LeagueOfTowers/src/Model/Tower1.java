@@ -2,6 +2,7 @@ package Model;
 
 import java.io.IOException;
 import javax.swing.ImageIcon;
+import LoTExceptions.IllegalLevelOfTowerException;
 
 /*
 * Az első Towerből származtatott osztály
@@ -30,7 +31,8 @@ public class Tower1 extends Tower {
     * megnézi, hogy hanyas szintű az adott torony és ennek megfelelően kap plusz
     * hatótávolságot és/vagy sebzést az adott torony
      */
-    public void upgrade() {
+    public void upgrade() throws IllegalLevelOfTowerException {
+        if (this.level < 3) {
         this.level += 1;
         if (this.level == 2) {
             this.damage = 15;
@@ -38,6 +40,10 @@ public class Tower1 extends Tower {
         if (this.level == 3) {
             this.damage = 20;
             this.distance = 2;
+        }
+        }
+        else {
+            throw new IllegalLevelOfTowerException("Level of a Tower can't be more than 3!");
         }
     }
 }
