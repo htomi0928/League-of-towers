@@ -4,8 +4,8 @@ package Model;
 * Point osztály a táblán való ábrázoláshoz
 */
 public class Position {
-    public int x;
-    public int y;
+    private int x;
+    private int y;
             
     public Position(int x, int y) {
         this.x = x;

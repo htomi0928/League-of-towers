@@ -18,9 +18,9 @@ import static Model.Main.gl;
  */
 public class Board extends JPanel {
 
-    protected static final int tile_size = 36;
-    protected static final int width = 29 + 1;
-    protected static final int height = 18 + 1;
+    public static final int tile_size = 36;
+    public static final int width = 29 + 1;
+    public static final int height = 18 + 1;
 
     int x = 0;
     int y = 0;
@@ -150,6 +150,7 @@ public class Board extends JPanel {
          */
         gr.setColor(new Color(0, 0, 0));
         gr.drawRect(x * tile_size, y * tile_size, tile_size, tile_size);
+        System.out.println(gl.canPlace(x, y));
 
         /*
         gr.fillRect(n * tile_size - 4 * tile_size, m * tile_size / 2 - tile_size / 2, tile_size, tile_size);

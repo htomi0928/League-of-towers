@@ -1,9 +1,10 @@
 package Model;
 
 import LoTExceptions.InvalidInputException;
-import static Model.Main.gl;
 import java.io.IOException;
 import java.util.ArrayList;
+import static View.Board.width;
+import static View.Board.height;
 
 /*
 * A játék logikájárt felelős osztály
@@ -32,7 +33,7 @@ public class GameLogic {
         pl1.addBarrack(b2);
         pl2.addBarrack(b3);
         pl2.addBarrack(b4);
-        
+        obsticles = new ArrayList();
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
     }
 
@@ -58,7 +59,196 @@ public class GameLogic {
             }
         }
     }
-
+    
+    
+    class DataPoint {
+        public int x;
+        public int y;
+        public int value;
+        public Position way;
+        public DataPoint(int xp, int yp) {
+            this.x = xp;
+            this.y = yp;
+            this.value = 1000;
+            this.way = new Position(-1, -1);
+        }
+        
+    }
+    
+    public DataPoint[][] getTableFilled(int xx, int yy) {
+        DataPoint[][] table = new DataPoint[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                table[i][j] = new DataPoint(i, j);
+            }
+        }
+        table[pl1.getXc()][pl1.getYc()].value = 2000;
+        table[pl2.getXc()][pl2.getYc()].value = 2000;
+        for (int i = 0; i < obsticles.size(); i++) {
+            table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 2000;
+        }
+        for (int i = 0; i < pl1.getBarracks().size(); i++) {
+            table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value = 2000;
+        }
+        for (int i = 0; i < pl2.getBarracks().size(); i++) {
+            table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].value = 2000;
+        }
+        for (int i = 0; i < pl1.getTowers().size(); i++) {
+            table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].value = 2000;
+        }
+        for (int i = 0; i < pl2.getTowers().size(); i++) {
+            table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].value = 2000;
+        }
+        
+        table[xx][yy].value = 2000;
+        return table;
+    }
+    
+    public DataPoint[][] getTableDijkstraFromPl1(int xx, int yy) {
+        DataPoint[][] table = getTableFilled(xx, yy);
+        table[pl1.getXc()][pl1.getYc()].value = 0;
+        
+        ArrayList<Position> pos = new ArrayList();
+        pos.add(new Position(table[pl1.getXc()][pl1.getYc()].x, table[pl1.getXc()][pl1.getYc()].y));
+        while (!pos.isEmpty()) {
+            Position p = pos.remove(0);
+            if (p.getX() != 0 && table[p.getX()-1][p.getY()].value <= 1000 && table[p.getX()-1][p.getY()].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()-1][p.getY()].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()-1][p.getY()].way = p;
+                pos.add(new Position(table[p.getX()-1][p.getY()].x, table[p.getX()-1][p.getY()].y));
+            }
+            if (p.getX() != width-1 && table[p.getX()+1][p.getY()].value <= 1000 && table[p.getX()+1][p.getY()].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()+1][p.getY()].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()+1][p.getY()].way = p;
+                pos.add(new Position(table[p.getX()+1][p.getY()].x, table[p.getX()+1][p.getY()].y));
+            }
+            if (p.getY() != 0 && table[p.getX()][p.getY()-1].value <= 1000 && table[p.getX()][p.getY()-1].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()][p.getY()-1].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()][p.getY()-1].way = p;
+                pos.add(new Position(table[p.getX()][p.getY()-1].x, table[p.getX()][p.getY()-1].y));
+            }
+            if (p.getY() != height-1 && table[p.getX()][p.getY()+1].value <= 1000 && table[p.getX()][p.getY()+1].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()][p.getY()+1].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()][p.getY()+1].way = p;
+                pos.add(new Position(table[p.getX()][p.getY()+1].x, table[p.getX()][p.getY()+1].y));
+            }
+        }
+        return table;
+    }
+    
+    public DataPoint[][] getTableDijkstraFromPl2(int xx, int yy) {
+        DataPoint[][] table = getTableFilled(xx, yy);
+        table[pl2.getXc()][pl2.getYc()].value = 0;
+        
+        ArrayList<Position> pos = new ArrayList();
+        pos.add(new Position(table[pl2.getXc()][pl2.getYc()].x, table[pl2.getXc()][pl2.getYc()].y));
+        while (!pos.isEmpty()) {
+            Position p = pos.remove(0);
+            if (p.getX() != 0 && table[p.getX()-1][p.getY()].value <= 1000 && table[p.getX()-1][p.getY()].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()-1][p.getY()].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()-1][p.getY()].way = p;
+                pos.add(new Position(table[p.getX()-1][p.getY()].x, table[p.getX()-1][p.getY()].y));
+            }
+            if (p.getX() != width-1 && table[p.getX()+1][p.getY()].value <= 1000 && table[p.getX()+1][p.getY()].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()+1][p.getY()].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()+1][p.getY()].way = p;
+                pos.add(new Position(table[p.getX()+1][p.getY()].x, table[p.getX()+1][p.getY()].y));
+            }
+            if (p.getY() != 0 && table[p.getX()][p.getY()-1].value <= 1000 && table[p.getX()][p.getY()-1].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()][p.getY()-1].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()][p.getY()-1].way = p;
+                pos.add(new Position(table[p.getX()][p.getY()-1].x, table[p.getX()][p.getY()-1].y));
+            }
+            if (p.getY() != height-1 && table[p.getX()][p.getY()+1].value <= 1000 && table[p.getX()][p.getY()+1].value > table[p.getX()][p.getY()].value+1) {
+                table[p.getX()][p.getY()+1].value = table[p.getX()][p.getY()].value+1;
+                table[p.getX()][p.getY()+1].way = p;
+                pos.add(new Position(table[p.getX()][p.getY()+1].x, table[p.getX()][p.getY()+1].y));
+            }
+        }
+        return table;
+    }
+    
+    
+    
+    /*
+    * A függvény megadja, hogy lehet-e adott koordinátára tornyot vagy akadályt helyezni
+    */
+    public boolean canPlace(int xx, int yy) {
+        DataPoint[][] table = getTableDijkstraFromPl1(xx, yy);
+        int badCells = 0;
+        if (pl2.getXc() != 0 && table[pl2.getXc()-1][pl2.getYc()].value >= 1000) {
+            badCells += 1;
+        }
+        if (pl2.getXc() != width-1 && table[pl2.getXc()+1][pl2.getYc()].value >= 1000) {
+            badCells += 1;
+        }
+        if (pl2.getYc() != 0 && table[pl2.getXc()][pl2.getYc()-1].value >= 1000) {
+            badCells += 1;
+        }
+        if (pl2.getYc() != height-1 && table[pl2.getXc()][pl2.getYc()+1].value >= 1000) {
+            badCells += 1;
+        }
+        if (badCells >= 4) {
+            return false;
+        }
+        
+        for (int i = 0; i < pl2.getBarracks().size(); i++) {
+            badCells = 0;
+            if (pl2.getBarracks().get(i).getXc() != 0 && table[pl2.getBarracks().get(i).getXc()-1][pl2.getBarracks().get(i).getYc()].value >= 1000) {
+                badCells += 1;
+            }
+            if (pl2.getBarracks().get(i).getXc() != width-1 && table[pl2.getBarracks().get(i).getXc()+1][pl2.getBarracks().get(i).getYc()].value >= 1000) {
+                badCells += 1;
+            }
+            if (pl2.getBarracks().get(i).getYc() != 0 && table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()-1].value >= 1000) {
+                badCells += 1;
+            }
+            if (pl2.getBarracks().get(i).getYc() != height-1 && table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()+1].value >= 1000) {
+                badCells += 1;
+            }
+            if (badCells >= 4) {
+                return false;
+            }
+        }
+        
+        table = getTableDijkstraFromPl2(xx, yy);
+        badCells = 0;
+        if (pl1.getXc() != 0 && table[pl1.getXc()-1][pl1.getYc()].value >= 1000) {
+            badCells += 1;
+        }
+        if (pl1.getXc() != width-1 && table[pl1.getXc()+1][pl1.getYc()].value >= 1000) {
+            badCells += 1;
+        }
+        if (pl1.getYc() != 0 && table[pl1.getXc()][pl1.getYc()-1].value >= 1000) {
+            badCells += 1;
+        }
+        if (pl1.getYc() != height-1 && table[pl1.getXc()][pl1.getYc()+1].value >= 1000) {
+            badCells += 1;
+        }
+        if (badCells >= 4) {
+            return false;
+        }
+        
+        for (int i = 0; i < pl1.getBarracks().size(); i++) {
+            badCells = 0;
+            if (pl1.getBarracks().get(i).getXc() != 0 && table[pl1.getBarracks().get(i).getXc()-1][pl1.getBarracks().get(i).getYc()].value >= 1000) {
+                badCells += 1;
+            }
+            if (pl1.getBarracks().get(i).getXc() != width-1 && table[pl1.getBarracks().get(i).getXc()+1][pl1.getBarracks().get(i).getYc()].value >= 1000) {
+                badCells += 1;
+            }
+            if (pl1.getBarracks().get(i).getYc() != 0 && table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()-1].value >= 1000) {
+                badCells += 1;
+            }
+            if (pl1.getBarracks().get(i).getYc() != height-1 && table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()+1].value >= 1000) {
+                badCells += 1;
+            }
+            if (badCells >= 4) {
+                return false;
+            }
+        }
+        return true;
+    }
     /*
     * Melyik kör van éppen
      */

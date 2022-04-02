@@ -11,7 +11,9 @@ import javax.swing.ImageIcon;
  */
 public class Castle extends Sprite {
 
-    private int hp, maxhp, money;
+    private int hp;
+    private final int maxhp;
+    private int money;
     private ArrayList<Tower> towers;
     private ArrayList<AttackUnits> units;
     private ArrayList<Barrack> barracks;
