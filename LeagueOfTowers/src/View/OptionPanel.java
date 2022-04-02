@@ -1,5 +1,6 @@
 package View;
 
+import LoTExceptions.InvalidInputException;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -91,7 +92,7 @@ public class OptionPanel extends JPanel {
     }
     
     //tornyokat hozzáadja az adott kastélyhoz és levonja az árát
-    public void addTower(Tower t) throws IOException, InterruptedException{
+    public void addTower(Tower t) throws IOException, InterruptedException, InvalidInputException{
         if (gl.getTurn() == 1) {
             if (t.getCost() <= gl.get1pCastle().getMoney()) {
                 gl.get1pCastle().addTower(t);
@@ -108,7 +109,7 @@ public class OptionPanel extends JPanel {
     }
     
     //zombikat hozzáadja az adott kastélyhoz és levonja az árát 
-    public void addZombie(AttackUnits z) throws IOException, InterruptedException{
+    public void addZombie(AttackUnits z) throws IOException, InterruptedException, InvalidInputException {
         if (gl.getTurn() == 3) {
             if (z.getCost() <= gl.get1pCastle().getMoney()) {
                 gl.get1pCastle().addUnit(z);

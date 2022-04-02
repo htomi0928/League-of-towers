@@ -16,7 +16,7 @@ public class FighterZombie extends AttackUnits {
 
     private int enemyDamage; //A sebzés, amit az ellenséges csapatoktra ad le
 
-    public FighterZombie(int x, int y) throws IOException {
+    public FighterZombie(int x, int y) {
         super(x, y);
 
         this.hp = 100;

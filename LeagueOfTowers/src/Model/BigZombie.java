@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
  */
 public class BigZombie extends AttackUnits {
 
-    public BigZombie(int x, int y) throws IOException {
+    public BigZombie(int x, int y) {
         super(x, y);
 
         this.hp = 150;

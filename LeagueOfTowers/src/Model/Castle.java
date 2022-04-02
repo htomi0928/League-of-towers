@@ -1,6 +1,6 @@
 package Model;
 
-import java.io.IOException;
+import LoTExceptions.InvalidInputException;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
@@ -27,7 +27,6 @@ public class Castle extends Sprite {
         this.barracks = new ArrayList<>();
         this.img = new ImageIcon("src/res/castle.png").getImage();
 
-        
         //barrakkok, majd ha meglesz a beállitások ablak, ezt át kéne tenni egy külön függvénybe
         // xd mégsem csináltam meg
     }
@@ -50,22 +49,40 @@ public class Castle extends Sprite {
     /*
     * Növeli a játékos pénzét m-mel
      */
-    public void addMoney(int m) {
+    public void addMoney(int m) throws InvalidInputException {
+        if (m < 0) {
+            throw new InvalidInputException("Can't be added negative value!");
+        }
         this.money += m;
     }
 
     /*
     * Csökkenti a játékos pénzét m-mel
      */
-    public void pay(int m) {
-        this.money -= m;
+    public void pay(int m) throws InvalidInputException {
+        if (m < 0) {
+            throw new InvalidInputException("Can't be payed negative value!");
+        }
+        if (this.money < m) {
+            this.money = 0;
+        } else {
+
+            this.money -= m;
+        }
     }
 
     /*
     * Csökkenti a kastély életerejét h-val
      */
-    public void loseHp(int h) {
-        this.hp -= h;
+    public void loseHp(int h) throws InvalidInputException {
+        if (h < 0) {
+            throw new InvalidInputException("The damage can't be negative!");
+        }
+        if (hp < h) {
+            hp = 0;
+        } else {
+            this.hp -= h;
+        }
     }
 
     /*
@@ -84,11 +101,11 @@ public class Castle extends Sprite {
 
     /*
     * A gamelogicban van használva hogy egy adott playerhöz barrackokat adjunk
-    */
+     */
     public void addBarrack(Barrack b) {
         barracks.add(b);
     }
-    
+
     /*
     * Visszaadja a játékos tornyait egy listában
      */
@@ -174,14 +191,11 @@ public class Castle extends Sprite {
         if (returnTower(x, y) != null) {
             return "tower";
         }
-        /*
+        
         if (returnBarrack(x, y) != null) {
             return "barrack";
         }
-        else {
-            System.out.println("RIGHT");
-        }
-         */
+         
         if (!returnUnits(x, y).isEmpty()) {
             return "units";
         }

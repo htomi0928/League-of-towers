@@ -8,7 +8,7 @@ public class Barrack extends Sprite {
 
     String type;
 
-    public Barrack(int x, int y) throws IOException {
+    public Barrack(int x, int y) {
         super(x, y);
 
         this.type = "barrack";

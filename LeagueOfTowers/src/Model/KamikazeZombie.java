@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
  */
 public class KamikazeZombie extends AttackUnits {
 
-    public KamikazeZombie(int x, int y) throws IOException {
+    public KamikazeZombie(int x, int y) {
         super(x, y);
 
         this.hp = 50;

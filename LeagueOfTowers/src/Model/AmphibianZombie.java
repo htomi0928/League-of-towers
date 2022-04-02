@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 * Képes áthaladni az akadályokon, nem kerüli ki őket
 */
 public class AmphibianZombie extends AttackUnits {
-    public AmphibianZombie(int x, int y) throws IOException {
+    public AmphibianZombie(int x, int y) {
         super(x, y);
         this.hp = 80;
         this.maxhp = 80;

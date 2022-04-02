@@ -32,7 +32,7 @@ public class GameLogic {
         pl1.addBarrack(b2);
         pl2.addBarrack(b3);
         pl2.addBarrack(b4);
-
+        
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
     }
 
