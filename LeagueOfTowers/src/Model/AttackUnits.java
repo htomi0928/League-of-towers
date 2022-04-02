@@ -57,7 +57,7 @@ public class AttackUnits extends Sprite {
 
     public void loseHp(int h) throws InvalidInputException {
         if (h < 0) {
-            throw new InvalidInputException("The damage can't be more than 0!");
+            throw new InvalidInputException("The damage can't be less than 0!");
         }
         if (this.hp < h) {
             this.hp = 0;

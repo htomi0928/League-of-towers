@@ -20,7 +20,7 @@ public class Tower2 extends Tower {
         this.upgradecost2 = 50;
         this.upgradecost3 = 100;
         this.sellCost = 75;
-        this.img = new ImageIcon("src/res/torony2.jpg").getImage();
+        this.img = new ImageIcon("src/res/torony2.png").getImage();
     }
 
     /*

@@ -1,5 +1,6 @@
 package Model;
 
+import LoTExceptions.InvalidInputException;
 import static Model.Main.gl;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,30 +32,28 @@ public class GameLogic {
         pl1.addBarrack(b2);
         pl2.addBarrack(b3);
         pl2.addBarrack(b4);
-        
+
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
     }
 
     public void damage() {
-        for (int i = 0; i < pl1.getUnits().size(); i++) {
-            int xp = pl1.getUnits().get(i).getXc();
-            int yp = pl1.getUnits().get(i).getYc();
-            for (int j = 0; j < pl2.getTowers().size(); j++) {
-                int xc = pl2.getTowers().get(j).getXc();
-                int yc = pl2.getTowers().get(j).getYc();
-                boolean inRadius = false;
-                int radius = pl2.getTowers().get(j).distance;
-                for (int k = 0; k < pl1.getUnits().get(i).speed; k++) {
+        for (int i = 0; i < pl2.getTowers().size(); i++) {
+            int xc = pl2.getTowers().get(i).getXc();
+            int yc = pl2.getTowers().get(i).getYc();
+            int radius = pl2.getTowers().get(i).distance;
 
-                    //zombi.lép()
-                    
-                    double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                    if (distance < radius) {
-                        inRadius = true;
+            for (int j = 0; j < pl1.getUnits().size(); j++) {
+                int xp = pl1.getUnits().get(j).getXc();
+                int yp = pl1.getUnits().get(j).getYc();
+
+                double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
+                if (distance < radius) {
+                    try {
+                        pl1.getUnits().get(j).loseHp(pl2.getTowers().get(i).getDamage());
+                    } catch (InvalidInputException exc) {
+                        System.out.println("Negative damage");
                     }
-                }
-                if (inRadius) {
-                    pl1.getUnits().get(i).loseHp(pl2.getTowers().get(j).getDamage());
+                    break;
                 }
             }
         }
