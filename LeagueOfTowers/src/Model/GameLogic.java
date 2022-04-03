@@ -38,7 +38,9 @@ public class GameLogic {
 
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
 
-        Random rand = new Random();;
+        
+        Random rand = new Random();
+        
         int barrackCount = 2;
         int barrackDist = 5;
         for (int i = 0; i < barrackCount; i++) {
@@ -59,7 +61,7 @@ public class GameLogic {
                 i--;
             }
         }
-
+        
         int obsticleCount = 10;
         int obsticleX;
         int obsticleY;
@@ -72,9 +74,10 @@ public class GameLogic {
 
         //itt az indexelésekkel lesznek még bajok
         for (int i = 0; i < obsticleCount - 1; i++) {
-            int x = rand.nextInt(2) - 1;
-            int y = rand.nextInt(2) - 1;
-            if (!(x == 0 && y == 0) && obsticleX + x > 0 && obsticleX + y < (width / 2) && obsticleY + y > 0 && obsticleX + x < height && canPlace(obsticleX, obsticleY)) {
+            int x = rand.nextInt(3) - 1;
+            int y = rand.nextInt(3) - 1;
+            //System.out.println(obsticleX + " : " + x + " ; " + obsticleY + " : " + y);
+            if (!(x == 0 && y == 0) && obsticleX + x > 0 && obsticleX + x < (width / 2) && obsticleY + y > 0 && obsticleY + y < height && canPlace(obsticleX+x, obsticleY+y)) {
                 obsticleX += x;
                 obsticleY += y;
                 obsticles.add(new Obsticle(obsticleX, obsticleY));
@@ -82,7 +85,9 @@ public class GameLogic {
             } else {
                 i--;
             }
+            
         }
+        
     }
 
     public void damage() {
@@ -148,12 +153,16 @@ public class GameLogic {
         for (int i = 0; i < pl2.getTowers().size(); i++) {
             table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].value = 2000;
         }
-
+        if (table[xx][yy].value != 1000) {
+            return null;
+        }
         table[xx][yy].value = 2000;
         return table;
     }
 
     public DataPoint[][] getTableDijkstraFromPl1(int xx, int yy) {
+        if (getTableFilled(xx, yy) == null) {return null;}
+        
         DataPoint[][] table = getTableFilled(xx, yy);
         table[pl1.getXc()][pl1.getYc()].value = 0;
 
@@ -186,6 +195,8 @@ public class GameLogic {
     }
 
     public DataPoint[][] getTableDijkstraFromPl2(int xx, int yy) {
+        if (getTableFilled(xx, yy) == null) {return null;}
+        
         DataPoint[][] table = getTableFilled(xx, yy);
         table[pl2.getXc()][pl2.getYc()].value = 0;
 
@@ -221,6 +232,7 @@ public class GameLogic {
     * A függvény megadja, hogy lehet-e adott koordinátára tornyot vagy akadályt helyezni
      */
     public boolean canPlace(int xx, int yy) {
+        if (getTableFilled(xx, yy) == null) {return false;}
         DataPoint[][] table = getTableDijkstraFromPl1(xx, yy);
         int badCells = 0;
         if (pl2.getXc() != 0 && table[pl2.getXc() - 1][pl2.getYc()].value >= 1000) {
