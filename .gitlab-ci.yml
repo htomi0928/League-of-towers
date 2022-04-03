@@ -17,5 +17,6 @@ build_program:
 test_program:
  stage: test
  script:
+  - cd LeagueOfTowers
   - ant compile-test
   - ant test
