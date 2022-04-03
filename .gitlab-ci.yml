@@ -20,7 +20,7 @@ test_program:
  stage: test
  script:
   - cd LeagueOfTowers
-  - ant compile-test
-  - ant test
   - Dlibs.junit.classpath=/usr/share/java/junit4.jar
   - Dlibs.hamcrest.classpath=/usr/share/java/hamcrest-core.java
+  - ant compile-test
+  - ant test
