@@ -7,7 +7,7 @@ stages:
  - test
 before_script:
  - apt-get update
- - apt-get install –yqq openjdk-11-jdk ant junit
+ - apt-get install openjdk-11-jdk ant junit
 build_program:
  stage: build
  script:
