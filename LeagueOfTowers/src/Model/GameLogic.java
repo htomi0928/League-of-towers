@@ -88,7 +88,10 @@ public class GameLogic {
         }
 
     }
-
+    
+    /*
+    * A függvény a tornyok sebzését írja le
+    */
     public void damage() {
         for (int i = 0; i < pl2.getTowers().size(); i++) {
             int xc = pl2.getTowers().get(i).getXc();
@@ -112,7 +115,7 @@ public class GameLogic {
         }
     }
 
-    class DataPoint {
+    public class DataPoint {
 
         public int x;
         public int y;
@@ -129,7 +132,9 @@ public class GameLogic {
         }
 
     }
-
+    /*
+    * Táblázat létrehozása a Dijkstra algoritmushoz
+    */
     public DataPoint[][] getTableFilled(int xx, int yy) {
         DataPoint[][] table = new DataPoint[width][height];
         for (int i = 0; i < width; i++) {
@@ -174,6 +179,11 @@ public class GameLogic {
         return table;
     }
 
+    /*
+    * Dijkstra algoritmus a PL1 kasélyból indulva
+    * Azt adja vissza, hogy ha letennénk egy objektumot xx, yy helyre, akkor el tudnának-e jutni
+    * az egységek a kastélyig
+    */
     public DataPoint[][] getTableDijkstraFromPl1(int xx, int yy) {
         if (getTableFilled(xx, yy) == null) {
             return null;
@@ -217,7 +227,12 @@ public class GameLogic {
         }
         return table;
     }
-
+    
+    /*
+    * Dijkstra algoritmus a PL2 kasélyból indulva
+    * Azt adja vissza, hogy ha letennénk egy objektumot xx, yy helyre, akkor el tudnának-e jutni
+    * az egységek a kastélyig
+    */
     public DataPoint[][] getTableDijkstraFromPl2(int xx, int yy) {
         if (getTableFilled(xx, yy) == null) {
             return null;
@@ -290,7 +305,9 @@ public class GameLogic {
         }
         return true;
     }
-
+    /*
+    * A függvény megadja a legrövidebb utat xx, yy koordinátáktól a Pl1 kastélyig
+    */
     public ArrayList<Position> wayToCastleP1(int xx, int yy) {
         ArrayList<Position> pos = new ArrayList();
         DataPoint[][] table = getTableDijkstraFromPl1(-1, -1);
@@ -302,7 +319,10 @@ public class GameLogic {
 
         return pos;
     }
-
+    
+    /*
+    * A függvény megadja a legrövidebb utat xx, yy koordinátáktól a Pl2 kastélyig
+    */
     public ArrayList<Position> wayToCastleP2(int xx, int yy) {
         ArrayList<Position> pos = new ArrayList();
         DataPoint[][] table = getTableDijkstraFromPl2(-1, -1);
@@ -404,5 +424,11 @@ public class GameLogic {
                 return "Attacking";
         }
         return "Error";
+    }
+    
+    public void clearObjectsToTest() {
+        pl1.clearBarracks();
+        pl2.clearBarracks();
+        this.obsticles = new ArrayList();
     }
 }

@@ -203,4 +203,8 @@ public class Castle extends Sprite {
         }
         return null;
     }
+    
+    public void clearBarracks() {
+        this.barracks = new ArrayList();
+    }
 }
