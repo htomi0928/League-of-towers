@@ -38,9 +38,8 @@ public class GameLogic {
 
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
 
-        
         Random rand = new Random();
-        
+
         int barrackCount = 2;
         int barrackDist = 5;
         for (int i = 0; i < barrackCount; i++) {
@@ -61,7 +60,7 @@ public class GameLogic {
                 i--;
             }
         }
-        
+
         int obsticleCount = 10;
         int obsticleX;
         int obsticleY;
@@ -77,7 +76,7 @@ public class GameLogic {
             int x = rand.nextInt(3) - 1;
             int y = rand.nextInt(3) - 1;
             //System.out.println(obsticleX + " : " + x + " ; " + obsticleY + " : " + y);
-            if (!(x == 0 && y == 0) && obsticleX + x > 0 && obsticleX + x < (width / 2) && obsticleY + y > 0 && obsticleY + y < height && canPlace(obsticleX+x, obsticleY+y)) {
+            if (!(x == 0 && y == 0) && obsticleX + x > 0 && obsticleX + x < (width / 2) && obsticleY + y > 0 && obsticleY + y < height && canPlace(obsticleX + x, obsticleY + y)) {
                 obsticleX += x;
                 obsticleY += y;
                 obsticles.add(new Obsticle(obsticleX, obsticleY));
@@ -85,9 +84,9 @@ public class GameLogic {
             } else {
                 i--;
             }
-            
+
         }
-        
+
     }
 
     public void damage() {
@@ -117,6 +116,7 @@ public class GameLogic {
 
         public int x;
         public int y;
+        public int special;
         public int value;
         public Position way;
 
@@ -125,6 +125,7 @@ public class GameLogic {
             this.y = yp;
             this.value = 1000;
             this.way = new Position(-1, -1);
+            this.special = 0;
         }
 
     }
@@ -136,22 +137,30 @@ public class GameLogic {
                 table[i][j] = new DataPoint(i, j);
             }
         }
-        table[pl1.getXc()][pl1.getYc()].value = 2000;
-        table[pl2.getXc()][pl2.getYc()].value = 2000;
+        table[pl1.getXc()][pl1.getYc()].value = 1000;
+        table[pl1.getXc()][pl1.getYc()].special = 1;
+        table[pl2.getXc()][pl2.getYc()].value = 1000;
+        table[pl2.getXc()][pl2.getYc()].special = 1;
+
         for (int i = 0; i < obsticles.size(); i++) {
             table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 2000;
+            table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].special = 3;
         }
         for (int i = 0; i < pl1.getBarracks().size(); i++) {
-            table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value = 2000;
+            table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value = 1000;
+            table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].special = 1;
         }
         for (int i = 0; i < pl2.getBarracks().size(); i++) {
-            table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].value = 2000;
+            table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].value = 1000;
+            table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].special = 1;
         }
         for (int i = 0; i < pl1.getTowers().size(); i++) {
             table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].value = 2000;
+            table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].special = 2;
         }
         for (int i = 0; i < pl2.getTowers().size(); i++) {
             table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].value = 2000;
+            table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].special = 2;
         }
         if (table[xx][yy].value != 1000) {
             return null;
@@ -161,8 +170,10 @@ public class GameLogic {
     }
 
     public DataPoint[][] getTableDijkstraFromPl1(int xx, int yy) {
-        if (getTableFilled(xx, yy) == null) {return null;}
-        
+        if (getTableFilled(xx, yy) == null) {
+            return null;
+        }
+
         DataPoint[][] table = getTableFilled(xx, yy);
         table[pl1.getXc()][pl1.getYc()].value = 0;
 
@@ -173,30 +184,40 @@ public class GameLogic {
             if (p.getX() != 0 && table[p.getX() - 1][p.getY()].value <= 1000 && table[p.getX() - 1][p.getY()].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX() - 1][p.getY()].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX() - 1][p.getY()].way = p;
-                pos.add(new Position(table[p.getX() - 1][p.getY()].x, table[p.getX() - 1][p.getY()].y));
+                if (table[p.getX() - 1][p.getY()].special == 0) {
+                    pos.add(new Position(table[p.getX() - 1][p.getY()].x, table[p.getX() - 1][p.getY()].y));
+                }
             }
             if (p.getX() != width - 1 && table[p.getX() + 1][p.getY()].value <= 1000 && table[p.getX() + 1][p.getY()].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX() + 1][p.getY()].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX() + 1][p.getY()].way = p;
-                pos.add(new Position(table[p.getX() + 1][p.getY()].x, table[p.getX() + 1][p.getY()].y));
+                if (table[p.getX() - 1][p.getY()].special == 0) {
+                    pos.add(new Position(table[p.getX() + 1][p.getY()].x, table[p.getX() + 1][p.getY()].y));
+                }
             }
             if (p.getY() != 0 && table[p.getX()][p.getY() - 1].value <= 1000 && table[p.getX()][p.getY() - 1].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX()][p.getY() - 1].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX()][p.getY() - 1].way = p;
-                pos.add(new Position(table[p.getX()][p.getY() - 1].x, table[p.getX()][p.getY() - 1].y));
+                if (table[p.getX()][p.getY() - 1].special == 0) {
+                    pos.add(new Position(table[p.getX()][p.getY() - 1].x, table[p.getX()][p.getY() - 1].y));
+                }
             }
             if (p.getY() != height - 1 && table[p.getX()][p.getY() + 1].value <= 1000 && table[p.getX()][p.getY() + 1].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX()][p.getY() + 1].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX()][p.getY() + 1].way = p;
-                pos.add(new Position(table[p.getX()][p.getY() + 1].x, table[p.getX()][p.getY() + 1].y));
+                if (table[p.getX()][p.getY() + 1].special == 0) {
+                    pos.add(new Position(table[p.getX()][p.getY() + 1].x, table[p.getX()][p.getY() + 1].y));
+                }
             }
         }
         return table;
     }
 
     public DataPoint[][] getTableDijkstraFromPl2(int xx, int yy) {
-        if (getTableFilled(xx, yy) == null) {return null;}
-        
+        if (getTableFilled(xx, yy) == null) {
+            return null;
+        }
+
         DataPoint[][] table = getTableFilled(xx, yy);
         table[pl2.getXc()][pl2.getYc()].value = 0;
 
@@ -207,22 +228,30 @@ public class GameLogic {
             if (p.getX() != 0 && table[p.getX() - 1][p.getY()].value <= 1000 && table[p.getX() - 1][p.getY()].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX() - 1][p.getY()].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX() - 1][p.getY()].way = p;
-                pos.add(new Position(table[p.getX() - 1][p.getY()].x, table[p.getX() - 1][p.getY()].y));
+                if (table[p.getX() - 1][p.getY()].special == 0) {
+                    pos.add(new Position(table[p.getX() - 1][p.getY()].x, table[p.getX() - 1][p.getY()].y));
+                }
             }
             if (p.getX() != width - 1 && table[p.getX() + 1][p.getY()].value <= 1000 && table[p.getX() + 1][p.getY()].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX() + 1][p.getY()].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX() + 1][p.getY()].way = p;
-                pos.add(new Position(table[p.getX() + 1][p.getY()].x, table[p.getX() + 1][p.getY()].y));
+                if (table[p.getX() + 1][p.getY()].special == 0) {
+                    pos.add(new Position(table[p.getX() + 1][p.getY()].x, table[p.getX() + 1][p.getY()].y));
+                }
             }
             if (p.getY() != 0 && table[p.getX()][p.getY() - 1].value <= 1000 && table[p.getX()][p.getY() - 1].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX()][p.getY() - 1].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX()][p.getY() - 1].way = p;
-                pos.add(new Position(table[p.getX()][p.getY() - 1].x, table[p.getX()][p.getY() - 1].y));
+                if (table[p.getX()][p.getY() - 1].special == 0) {
+                    pos.add(new Position(table[p.getX()][p.getY() - 1].x, table[p.getX()][p.getY() - 1].y));
+                }
             }
             if (p.getY() != height - 1 && table[p.getX()][p.getY() + 1].value <= 1000 && table[p.getX()][p.getY() + 1].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX()][p.getY() + 1].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX()][p.getY() + 1].way = p;
-                pos.add(new Position(table[p.getX()][p.getY() + 1].x, table[p.getX()][p.getY() + 1].y));
+                if (table[p.getX()][p.getY() + 1].special == 0) {
+                    pos.add(new Position(table[p.getX()][p.getY() + 1].x, table[p.getX()][p.getY() + 1].y));
+                }
             }
         }
         return table;
@@ -232,77 +261,21 @@ public class GameLogic {
     * A függvény megadja, hogy lehet-e adott koordinátára tornyot vagy akadályt helyezni
      */
     public boolean canPlace(int xx, int yy) {
-        if (getTableFilled(xx, yy) == null) {return false;}
-        DataPoint[][] table = getTableDijkstraFromPl1(xx, yy);
-        int badCells = 0;
-        if (pl2.getXc() != 0 && table[pl2.getXc() - 1][pl2.getYc()].value >= 1000) {
-            badCells += 1;
-        }
-        if (pl2.getXc() != width - 1 && table[pl2.getXc() + 1][pl2.getYc()].value >= 1000) {
-            badCells += 1;
-        }
-        if (pl2.getYc() != 0 && table[pl2.getXc()][pl2.getYc() - 1].value >= 1000) {
-            badCells += 1;
-        }
-        if (pl2.getYc() != height - 1 && table[pl2.getXc()][pl2.getYc() + 1].value >= 1000) {
-            badCells += 1;
-        }
-        if (badCells >= 4) {
+        if (getTableFilled(xx, yy) == null) {
             return false;
         }
-
+        DataPoint[][] table = getTableDijkstraFromPl1(xx, yy);
+        if (table[pl2.getXc()][pl2.getYc()].value >= 1000) {return false;}
         for (int i = 0; i < pl2.getBarracks().size(); i++) {
-            badCells = 0;
-            if (pl2.getBarracks().get(i).getXc() != 0 && table[pl2.getBarracks().get(i).getXc() - 1][pl2.getBarracks().get(i).getYc()].value >= 1000) {
-                badCells += 1;
-            }
-            if (pl2.getBarracks().get(i).getXc() != width - 1 && table[pl2.getBarracks().get(i).getXc() + 1][pl2.getBarracks().get(i).getYc()].value >= 1000) {
-                badCells += 1;
-            }
-            if (pl2.getBarracks().get(i).getYc() != 0 && table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc() - 1].value >= 1000) {
-                badCells += 1;
-            }
-            if (pl2.getBarracks().get(i).getYc() != height - 1 && table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc() + 1].value >= 1000) {
-                badCells += 1;
-            }
-            if (badCells >= 4) {
+            if (table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].value >= 1000) {
                 return false;
             }
         }
 
         table = getTableDijkstraFromPl2(xx, yy);
-        badCells = 0;
-        if (pl1.getXc() != 0 && table[pl1.getXc() - 1][pl1.getYc()].value >= 1000) {
-            badCells += 1;
-        }
-        if (pl1.getXc() != width - 1 && table[pl1.getXc() + 1][pl1.getYc()].value >= 1000) {
-            badCells += 1;
-        }
-        if (pl1.getYc() != 0 && table[pl1.getXc()][pl1.getYc() - 1].value >= 1000) {
-            badCells += 1;
-        }
-        if (pl1.getYc() != height - 1 && table[pl1.getXc()][pl1.getYc() + 1].value >= 1000) {
-            badCells += 1;
-        }
-        if (badCells >= 4) {
-            return false;
-        }
-
+        if (table[pl1.getXc()][pl1.getYc()].value >= 1000) {return false;}
         for (int i = 0; i < pl1.getBarracks().size(); i++) {
-            badCells = 0;
-            if (pl1.getBarracks().get(i).getXc() != 0 && table[pl1.getBarracks().get(i).getXc() - 1][pl1.getBarracks().get(i).getYc()].value >= 1000) {
-                badCells += 1;
-            }
-            if (pl1.getBarracks().get(i).getXc() != width - 1 && table[pl1.getBarracks().get(i).getXc() + 1][pl1.getBarracks().get(i).getYc()].value >= 1000) {
-                badCells += 1;
-            }
-            if (pl1.getBarracks().get(i).getYc() != 0 && table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc() - 1].value >= 1000) {
-                badCells += 1;
-            }
-            if (pl1.getBarracks().get(i).getYc() != height - 1 && table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc() + 1].value >= 1000) {
-                badCells += 1;
-            }
-            if (badCells >= 4) {
+            if (table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value >= 1000) {
                 return false;
             }
         }
