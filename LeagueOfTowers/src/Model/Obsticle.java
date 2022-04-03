@@ -14,6 +14,6 @@ public class Obsticle extends Sprite {
         super(x, y);
         
         this.type = "river";
-        this.img = new ImageIcon("src/res/folyó.png").getImage();
+        this.img = new ImageIcon("src/res/folyo.png").getImage();
     }
 }

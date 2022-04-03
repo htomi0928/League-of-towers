@@ -1,5 +1,6 @@
 package View;
 
+import Model.GameLogic;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,28 +14,30 @@ import javax.swing.JMenuItem;
 /*
 * A játék fóablaka
 * Itt helyezkedik el a JFrame
-*/
+ */
 public class MainWindow {
 
     private Board board;
     private JFrame frame;
     protected static OptionPanel opanel;
+    public static GameLogic gl;
 
     public MainWindow() {
         frame = new JFrame("League Of Towers");
-        
+
+        try {
+            gl = new GameLogic();
+        } catch (IOException e) {
+            System.out.println("GameLogic hiba");
+        }
         OptionPanel opanel = new OptionPanel();
         frame.add(opanel, BorderLayout.EAST);
-        
-        
-        
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600,600);
-        
-        Board board = new Board(opanel);
+        frame.setSize(600, 600);
+
+        board = new Board(opanel);
         frame.add(board, BorderLayout.CENTER);
-        
-        
         JMenuBar menuBar = new JMenuBar();
         frame.setJMenuBar(menuBar);
         JMenu menu = new JMenu("Menü");
@@ -49,11 +52,14 @@ public class MainWindow {
         newGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                /* 
-                    frame.getContentPane().remove(table);
-                    table = new Table();
-                    frame.getContentPane().add(boardGUI.getBoardPanel(), BorderLayout.CENTER);
-                 */
+                frame.getContentPane().remove(board);
+                board = new Board(opanel);
+                frame.add(board, BorderLayout.CENTER);
+                try {
+                    gl = new GameLogic();
+                } catch (IOException a) {
+                    System.out.println("GameLogic hiba");
+                }
             }
         });
         menu.add(newGame);

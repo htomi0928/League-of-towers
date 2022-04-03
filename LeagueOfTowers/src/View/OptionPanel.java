@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import static Model.Main.gl;
+import static View.MainWindow.gl;
 import Model.Tower;
 import static View.Board.tile_size;
 import static View.Board.height;
@@ -90,9 +90,9 @@ public class OptionPanel extends JPanel {
         }
 
     }
-    
+
     //tornyokat hozzáadja az adott kastélyhoz és levonja az árát
-    public void addTower(Tower t) throws IOException, InterruptedException, InvalidInputException{
+    public void addTower(Tower t) throws IOException, InterruptedException, InvalidInputException {
         if (gl.getTurn() == 1) {
             if (t.getCost() <= gl.get1pCastle().getMoney()) {
                 gl.get1pCastle().addTower(t);
@@ -107,7 +107,7 @@ public class OptionPanel extends JPanel {
             }
         }
     }
-    
+
     //zombikat hozzáadja az adott kastélyhoz és levonja az árát 
     public void addZombie(AttackUnits z) throws IOException, InterruptedException, InvalidInputException {
         if (gl.getTurn() == 3) {
@@ -124,7 +124,7 @@ public class OptionPanel extends JPanel {
             }
         }
     }
-    
+
     //Zombi pozícióját adja meg, random választ ki a barakkok listájából egy
     //barakkot és oda teszi le a zombit ahol a barakk van
     public String zombiePosition(/*int x, int y*/) {
@@ -138,19 +138,20 @@ public class OptionPanel extends JPanel {
             Barrack b = gl.get1pCastle().getBarracks().get(random);
             x = b.getXc();
             y = b.getYc();
-            r = x+","+y;
-            System.out.println(x+" "+y);
+            r = x + "," + y;
+            System.out.println(x + " " + y);
         } else {
             barracksListLength = gl.get1pCastle().getBarracks().size();
             int random = rand.nextInt(barracksListLength);
             Barrack b = gl.get2pCastle().getBarracks().get(random);
             x = b.getXc();
             y = b.getYc();
-            r = x+","+y;
-            System.out.println(x+" "+y);
+            r = x + "," + y;
+            System.out.println(x + " " + y);
         }
         return r;
     }
+
     /*
     * Ez a függvény befolyásolja az oldalsó panel kinézetét
      */
@@ -428,10 +429,9 @@ public class OptionPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                
+
                 //Tornyok gombjainak kezelése
-                
-                if ("Kör vége".equals(lab)) {  
+                if ("Kör vége".equals(lab)) {
                     gl.nextTurn();
                     OptionPanel.this.change("nothing", x, y);
                 }
@@ -475,14 +475,13 @@ public class OptionPanel extends JPanel {
                     }
                     OptionPanel.this.change("nothing", OptionPanel.this.x, OptionPanel.this.y);
                 }
-                
+
                 //Zombik gombjainak a kezelése
-                
                 if ("Kétéltű zombi".equals(lab)) {
                     String p = zombiePosition();
                     int x = Integer.parseInt(p.split(",")[0]);
                     int y = Integer.parseInt(p.split(",")[1]);
-                    System.out.println(x+ " " + y);
+                    System.out.println(x + " " + y);
                     AmphibianZombie z = new AmphibianZombie(x, y);
                     addZombie(z);
                 }
@@ -490,7 +489,7 @@ public class OptionPanel extends JPanel {
                     String p = zombiePosition();
                     int x = Integer.parseInt(p.split(",")[0]);
                     int y = Integer.parseInt(p.split(",")[1]);
-                    BigZombie z = new BigZombie(x,y);
+                    BigZombie z = new BigZombie(x, y);
                     addZombie(z);
                 }
                 if ("Harcoló zombi".equals(lab)) {
@@ -514,7 +513,7 @@ public class OptionPanel extends JPanel {
                     Zombie z = new Zombie(x, y);
                     addZombie(z);
                 }
-                 
+
             } catch (Exception e) {
             }
         }

@@ -1,21 +1,18 @@
 package Model;
 
 import View.*;
-import java.io.IOException;
 
 /*
 * A játék főosztálya
-*/
+ */
 public class Main {
 
     private static MainWindow mw;
-    public static GameLogic gl;
-    
-    public static void main(String[] args) throws IOException {
-        
-        gl = new GameLogic();
+
+    public static void main(String[] args) {
+
         mw = new MainWindow();
 
     }
-    
+
 }
