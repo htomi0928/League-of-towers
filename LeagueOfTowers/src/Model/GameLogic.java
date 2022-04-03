@@ -162,10 +162,15 @@ public class GameLogic {
             table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].value = 2000;
             table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].special = 2;
         }
-        if (table[xx][yy].value != 1000) {
-            return null;
+
+        if (xx == -1 && yy == -1) {
+        } else {
+            if (table[xx][yy].value != 1000) {
+                return null;
+            }
+            table[xx][yy].value = 2000;
         }
-        table[xx][yy].value = 2000;
+
         return table;
     }
 
@@ -191,7 +196,7 @@ public class GameLogic {
             if (p.getX() != width - 1 && table[p.getX() + 1][p.getY()].value <= 1000 && table[p.getX() + 1][p.getY()].value > table[p.getX()][p.getY()].value + 1) {
                 table[p.getX() + 1][p.getY()].value = table[p.getX()][p.getY()].value + 1;
                 table[p.getX() + 1][p.getY()].way = p;
-                if (table[p.getX() - 1][p.getY()].special == 0) {
+                if (table[p.getX() + 1][p.getY()].special == 0) {
                     pos.add(new Position(table[p.getX() + 1][p.getY()].x, table[p.getX() + 1][p.getY()].y));
                 }
             }
@@ -265,7 +270,9 @@ public class GameLogic {
             return false;
         }
         DataPoint[][] table = getTableDijkstraFromPl1(xx, yy);
-        if (table[pl2.getXc()][pl2.getYc()].value >= 1000) {return false;}
+        if (table[pl2.getXc()][pl2.getYc()].value >= 1000) {
+            return false;
+        }
         for (int i = 0; i < pl2.getBarracks().size(); i++) {
             if (table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].value >= 1000) {
                 return false;
@@ -273,13 +280,39 @@ public class GameLogic {
         }
 
         table = getTableDijkstraFromPl2(xx, yy);
-        if (table[pl1.getXc()][pl1.getYc()].value >= 1000) {return false;}
+        if (table[pl1.getXc()][pl1.getYc()].value >= 1000) {
+            return false;
+        }
         for (int i = 0; i < pl1.getBarracks().size(); i++) {
             if (table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value >= 1000) {
                 return false;
             }
         }
         return true;
+    }
+
+    public ArrayList<Position> wayToCastleP1(int xx, int yy) {
+        ArrayList<Position> pos = new ArrayList();
+        DataPoint[][] table = getTableDijkstraFromPl1(-1, -1);
+        DataPoint unitData = table[xx][yy];
+        while (unitData.value != 0) {
+            unitData = table[unitData.way.getX()][unitData.way.getY()];
+            pos.add(new Position(unitData.x, unitData.y));
+        }
+
+        return pos;
+    }
+
+    public ArrayList<Position> wayToCastleP2(int xx, int yy) {
+        ArrayList<Position> pos = new ArrayList();
+        DataPoint[][] table = getTableDijkstraFromPl2(-1, -1);
+        DataPoint unitData = table[xx][yy];
+        while (unitData.value != 0) {
+            unitData = table[unitData.way.getX()][unitData.way.getY()];
+            pos.add(new Position(unitData.x, unitData.y));
+        }
+
+        return pos;
     }
 
     /*
