@@ -11,6 +11,7 @@ before_script:
 build_program:
  stage: build
  script:
+  - cd LeagueOfTowers
   - ant compile
   - ant jar
 test_program:
