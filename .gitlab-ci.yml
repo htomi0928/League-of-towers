@@ -7,7 +7,9 @@ stages:
  - test
 before_script:
  - apt-get update
- - apt-get install -y openjdk-11-jdk ant junit
+ - apt-get install -y openjdk-11-jdk ant
+ - apt-get install junit
+ - apt-get install -y junit4
 build_program:
  stage: build
  script:
@@ -18,6 +20,5 @@ test_program:
  stage: test
  script:
   - cd LeagueOfTowers
-  - apt-get install junit
   - ant compile-test
   - ant test
