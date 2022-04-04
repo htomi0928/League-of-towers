@@ -5,7 +5,7 @@ image: ubuntu:20.04
 stages:
  - build
  - test
- - deploy
+
 before_script:
  - apt-get update
  - apt-get install -y openjdk-16-jdk ant
@@ -24,16 +24,3 @@ test_program:
     ant test
     -Dlibs.junit_4.classpath=/usr/share/java/junit4.jar
     -Dlibs.hamcrest.classpath=/usr/share/java/hamcrest-core.jar
-
-pages:
-  stage: deploy
-  script:
-    - cd LeagueOfTowers
-    - ant javadoc
-    - cp -r dist/javadoc/. public/
-  artifacts:
-    paths:
-      - public
-    expire_in: 1 day
-  only:
-    - master
