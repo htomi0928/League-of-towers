@@ -5,6 +5,7 @@ image: ubuntu:20.04
 stages:
  - build
  - test
+ - deploy
 before_script:
  - apt-get update
  - apt-get install -y openjdk-16-jdk ant
