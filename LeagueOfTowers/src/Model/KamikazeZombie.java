@@ -19,6 +19,7 @@ public class KamikazeZombie extends AttackUnits {
         this.damage = 50;
         this.cost = 120;
         this.target = "Tower";
+        this.type = "Öngyilkos zombi";
         this.img = new ImageIcon("src/res/zombi5.png").getImage();
     }
 }

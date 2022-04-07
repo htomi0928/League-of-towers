@@ -16,6 +16,7 @@ public class AmphibianZombie extends AttackUnits {
         this.damage = 50;
         this.cost = 100;
         this.target = "Castle";
+        this.type = "Kétéltű zombi";
         this.img = new ImageIcon("src/res/zombi3.png").getImage();
     }
 }

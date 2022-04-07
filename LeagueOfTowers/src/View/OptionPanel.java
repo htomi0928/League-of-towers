@@ -25,6 +25,7 @@ import Model.Zombie;
 import java.awt.Dimension;
 import java.util.Random;
 import Model.Barrack;
+import java.util.ArrayList;
 
 /*
 * Az oldalsó panel
@@ -362,6 +363,42 @@ public class OptionPanel extends JPanel {
             add(new JLabel(""));
             add(new JLabel("<html><div style='text-align: center;'>Health: " + gl.get2pCastle().getHp() + "</div></html>"));
             add(new JLabel(""));
+        }
+        
+        /*
+        *Ha az első játékos a támadó egységeire kattint
+        */
+        
+        if ("1units".equals(todo)) {
+        ArrayList<AttackUnits> au = gl.get1pCastle().returnUnits(x, y);
+        GridLayout gridLayout = new GridLayout(8, 3);
+        this.setLayout(gridLayout);
+        this.add(new JLabel(""));
+        moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
+        this.add(moneyLabel);
+            for (int i = 0; i < au.size(); i++) {
+            this.add(new JLabel(""));
+            this.add(new JLabel("<html><div style='text-align: center;'>Támadó egység adatai: " + au.get(i).getType()
+                    + "<br>Zombi max életereje: " + au.get(i).getMaxhp() + "<br>Zombi sebzése: " + au.get(i).getDamage() + "<br>Zombi sebessége: "
+                    + au.get(i).getSpeed() + "<br>Zombi jelenlegi életereje: " + au.get(i).getHp() + "</div></html>"));
+            this.add(new JLabel(""));
+            }
+        }
+        
+        if ("2units".equals(todo)) {
+        ArrayList<AttackUnits> au = gl.get2pCastle().returnUnits(x, y);
+        GridLayout gridLayout = new GridLayout(8, 3);
+        this.setLayout(gridLayout);
+        this.add(new JLabel(""));
+        moneyLabel = new JLabel(Integer.toString(gl.get2pCastle().getMoney()) + "$");
+        this.add(moneyLabel);
+            for (int i = 0; i < au.size(); i++) {
+            this.add(new JLabel(""));
+            this.add(new JLabel("<html><div style='text-align: center;'>Támadó egység adatai: " + au.get(i).getType()
+                    + "<br>Zombi max életereje: " + au.get(i).getMaxhp() + "<br>Zombi sebzése: " + au.get(i).getDamage() + "<br>Zombi sebessége: "
+                    + au.get(i).getSpeed() + "<br>Zombi jelenlegi életereje: " + au.get(i).getHp() + "</div></html>"));
+            this.add(new JLabel(""));
+            }
         }
 
         /*

@@ -10,6 +10,7 @@ public class AttackUnits extends Sprite {
 
     int hp, maxhp, speed, damage, cost;
     String target;
+    String type;
 
     public AttackUnits(int x, int y){
         super(x, y);
@@ -53,6 +54,10 @@ public class AttackUnits extends Sprite {
      */
     public String getTarget() {
         return target;
+    }
+    
+    public String getType() {
+        return this.type;
     }
 
     public void loseHp(int h) throws InvalidInputException {

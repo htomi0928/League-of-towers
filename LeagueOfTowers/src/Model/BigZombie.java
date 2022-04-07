@@ -17,6 +17,7 @@ public class BigZombie extends AttackUnits {
         this.damage = 60;
         this.cost = 100;
         this.target = "Castle";
+        this.type = "Nagy zombi";
         this.img = new ImageIcon("src/res/zombi4.png").getImage();
     }
 }

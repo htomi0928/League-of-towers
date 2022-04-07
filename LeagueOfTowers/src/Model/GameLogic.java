@@ -384,6 +384,7 @@ public class GameLogic {
 
     public String returnSprites(int x, int y) {
         if (pl1.SpriteCoord(x, y) != null) {
+            System.out.println(pl1.SpriteCoord(x, y));
             return ("1" + pl1.SpriteCoord(x, y));
         } else {
             if (pl1.getXc() == x && pl1.getYc() == y) {
@@ -391,12 +392,14 @@ public class GameLogic {
             }
         }
         if (pl2.SpriteCoord(x, y) != null) {
+            System.out.println(pl2.SpriteCoord(x, y));
             return ("2" + pl2.SpriteCoord(x, y));
         } else {
             if (pl2.getXc() == x && pl2.getYc() == y) {
                 return "2castle";
             }
         }
+        
         return "empty";
     }
 

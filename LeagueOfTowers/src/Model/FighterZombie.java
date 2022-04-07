@@ -26,6 +26,7 @@ public class FighterZombie extends AttackUnits {
         this.enemyDamage = 50;
         this.cost = 150;
         this.target = "Castle";
+        this.type = "Harcoló zombi";
         this.img = new ImageIcon("src/res/zombi2.png").getImage();
     }
 

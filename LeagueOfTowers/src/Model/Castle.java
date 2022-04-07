@@ -197,7 +197,7 @@ public class Castle extends Sprite {
         if (returnBarrack(x, y) != null) {
             return "barrack";
         }
-         
+        
         if (!returnUnits(x, y).isEmpty()) {
             return "units";
         }
