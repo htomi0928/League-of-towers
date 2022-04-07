@@ -319,6 +319,14 @@ public class GameLogic {
 
         return pos;
     }
+    public Position zombieMovePositionP1(int x, int y) {
+        ArrayList<Position> pos = wayToCastleP1(x, y);
+        if(pos.size() > 1) {
+            return pos.get(1);
+        } else {
+            return pos.get(0);
+        }
+    }
     
     /*
     * A függvény megadja a legrövidebb utat xx, yy koordinátáktól a Pl2 kastélyig
@@ -333,6 +341,15 @@ public class GameLogic {
         }
 
         return pos;
+    }
+    
+    public Position zombieMovePositionP2(int x, int y) {
+        ArrayList<Position> pos = wayToCastleP2(x, y);
+        if(pos.size() > 1) {
+            return pos.get(1);
+        } else {
+            return pos.get(0);
+        }
     }
 
     /*

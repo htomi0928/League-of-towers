@@ -26,6 +26,7 @@ import java.awt.Dimension;
 import java.util.Random;
 import Model.Barrack;
 import java.util.ArrayList;
+import Model.Position;
 
 /*
 * Az oldalsó panel
@@ -127,11 +128,12 @@ public class OptionPanel extends JPanel {
     }
 
     //Zombi pozícióját adja meg, random választ ki a barakkok listájából egy
-    //barakkot és oda teszi le a zombit ahol a barakk van
-    public String zombiePosition(/*int x, int y*/) {
+    //barakkot és oda teszi le a zombit ahol a barakk van    
+    public Position zombiePosition() {
         int barracksListLength = 0;
-        int x, y;
-        String r = "";
+        int x = 0;
+        int y = 0;
+        Position p = new Position(x,y);
         Random rand = new Random();
         if (gl.getTurn() == 3) {
             barracksListLength = gl.get1pCastle().getBarracks().size();
@@ -139,7 +141,8 @@ public class OptionPanel extends JPanel {
             Barrack b = gl.get1pCastle().getBarracks().get(random);
             x = b.getXc();
             y = b.getYc();
-            r = x + "," + y;
+            p.setX(x);
+            p.setY(y);
             System.out.println(x + " " + y);
         } else {
             barracksListLength = gl.get1pCastle().getBarracks().size();
@@ -147,12 +150,13 @@ public class OptionPanel extends JPanel {
             Barrack b = gl.get2pCastle().getBarracks().get(random);
             x = b.getXc();
             y = b.getYc();
-            r = x + "," + y;
+            p.setX(x);
+            p.setY(y);
             System.out.println(x + " " + y);
         }
-        return r;
+        return p;
     }
-
+    
     /*
     * Ez a függvény befolyásolja az oldalsó panel kinézetét
      */
@@ -515,39 +519,29 @@ public class OptionPanel extends JPanel {
 
                 //Zombik gombjainak a kezelése
                 if ("Kétéltű zombi".equals(lab)) {
-                    String p = zombiePosition();
-                    int x = Integer.parseInt(p.split(",")[0]);
-                    int y = Integer.parseInt(p.split(",")[1]);
-                    System.out.println(x + " " + y);
-                    AmphibianZombie z = new AmphibianZombie(x, y);
+                    Position p = zombiePosition();
+                    System.out.println(p.getX() + " " + p.getY());
+                    AmphibianZombie z = new AmphibianZombie(p.getX(), p.getY());
                     addZombie(z);
                 }
                 if ("Nagy zombi".equals(lab)) {
-                    String p = zombiePosition();
-                    int x = Integer.parseInt(p.split(",")[0]);
-                    int y = Integer.parseInt(p.split(",")[1]);
-                    BigZombie z = new BigZombie(x, y);
+                    Position p = zombiePosition();
+                    BigZombie z = new BigZombie(p.getX(), p.getY());
                     addZombie(z);
                 }
                 if ("Harcoló zombi".equals(lab)) {
-                    String p = zombiePosition();
-                    int x = Integer.parseInt(p.split(",")[0]);
-                    int y = Integer.parseInt(p.split(",")[1]);
-                    FighterZombie z = new FighterZombie(x, y);
+                    Position p = zombiePosition();
+                    FighterZombie z = new FighterZombie(p.getX(), p.getY());
                     addZombie(z);
                 }
                 if ("Öngyilkos zombi".equals(lab)) {
-                    String p = zombiePosition();
-                    int x = Integer.parseInt(p.split(",")[0]);
-                    int y = Integer.parseInt(p.split(",")[1]);
-                    KamikazeZombie z = new KamikazeZombie(x, y);
+                    Position p = zombiePosition();
+                    KamikazeZombie z = new KamikazeZombie(p.getX(), p.getY());
                     addZombie(z);
                 }
                 if ("Zombi".equals(lab)) {
-                    String p = zombiePosition();
-                    int x = Integer.parseInt(p.split(",")[0]);
-                    int y = Integer.parseInt(p.split(",")[1]);
-                    Zombie z = new Zombie(x, y);
+                    Position p = zombiePosition();
+                    Zombie z = new Zombie(p.getX(), p.getY());
                     addZombie(z);
                 }
 
