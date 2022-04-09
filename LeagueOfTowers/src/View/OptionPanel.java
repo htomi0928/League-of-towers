@@ -25,6 +25,7 @@ import Model.Zombie;
 import java.awt.Dimension;
 import java.util.Random;
 import Model.Barrack;
+import Model.Castle;
 import java.util.ArrayList;
 import Model.Position;
 
@@ -131,32 +132,46 @@ public class OptionPanel extends JPanel {
     //barakkot és oda teszi le a zombit ahol a barakk van    
     public Position zombiePosition() {
         int barracksListLength = 0;
-        int x = 0;
-        int y = 0;
-        Position p = new Position(x,y);
+        Position p = new Position(0, 0);
         Random rand = new Random();
         if (gl.getTurn() == 3) {
+            int xb = 0;
+            int yb = 0;
             barracksListLength = gl.get1pCastle().getBarracks().size();
-            int random = rand.nextInt(barracksListLength);
-            Barrack b = gl.get1pCastle().getBarracks().get(random);
-            x = b.getXc();
-            y = b.getYc();
-            p.setX(x);
-            p.setY(y);
-            System.out.println(x + " " + y);
+            int random = rand.nextInt(barracksListLength + 1);
+            if (random == barracksListLength) {
+                Castle b = gl.get1pCastle();
+                xb = b.getXc();
+                yb = b.getYc();
+            } else {
+                Barrack b = gl.get1pCastle().getBarracks().get(random);
+                xb = b.getXc();
+                yb = b.getYc();
+            }
+
+            p.setX(xb);
+            p.setY(yb);
         } else {
-            barracksListLength = gl.get1pCastle().getBarracks().size();
-            int random = rand.nextInt(barracksListLength);
-            Barrack b = gl.get2pCastle().getBarracks().get(random);
-            x = b.getXc();
-            y = b.getYc();
-            p.setX(x);
-            p.setY(y);
-            System.out.println(x + " " + y);
+            int xb = 0;
+            int yb = 0;
+            barracksListLength = gl.get2pCastle().getBarracks().size();
+            int random = rand.nextInt(barracksListLength + 1);
+            if (random == barracksListLength) {
+                Castle b = gl.get2pCastle();
+                xb = b.getXc();
+                yb = b.getYc();
+            } else {
+                Barrack b = gl.get2pCastle().getBarracks().get(random);
+                xb = b.getXc();
+                yb = b.getYc();
+            }
+            p.setX(xb);
+            p.setY(yb);
         }
+        
         return p;
     }
-    
+
     /*
     * Ez a függvény befolyásolja az oldalsó panel kinézetét
      */
@@ -326,7 +341,7 @@ public class OptionPanel extends JPanel {
         * Ha barrackra kattint
          */
         if ("barrack".equals(todo)) {
-
+            change("nothing", x, y);
         }
         if ("1castle".equals(todo)) {
             GridLayout gridLayout = new GridLayout(5, 3);
@@ -368,40 +383,35 @@ public class OptionPanel extends JPanel {
             add(new JLabel("<html><div style='text-align: center;'>Health: " + gl.get2pCastle().getHp() + "</div></html>"));
             add(new JLabel(""));
         }
-        
+
         /*
         *Ha az első játékos a támadó egységeire kattint
-        */
-        
-        if ("1units".equals(todo)) {
-        ArrayList<AttackUnits> au = gl.get1pCastle().returnUnits(x, y);
-        GridLayout gridLayout = new GridLayout(8, 3);
-        this.setLayout(gridLayout);
-        this.add(new JLabel(""));
-        moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
-        this.add(moneyLabel);
-            for (int i = 0; i < au.size(); i++) {
+         */
+        if ("1units".equals(todo) || "2units".equals(todo)) {
+            ArrayList<AttackUnits> au1 = gl.get1pCastle().returnUnits(x, y);
+            ArrayList<AttackUnits> au2 = gl.get2pCastle().returnUnits(x, y);
+            GridLayout gridLayout = new GridLayout(au1.size()+au2.size()+2, 3);
+            this.setLayout(gridLayout);
+            add(new JLabel(""));
+            add(new JLabel("<html><div style='text-align: center;'>" + gl.whatToDo() + "</div></html>"));
+            add(new JLabel(""));
             this.add(new JLabel(""));
-            this.add(new JLabel("<html><div style='text-align: center;'>Támadó egység adatai: " + au.get(i).getType()
-                    + "<br>Zombi max életereje: " + au.get(i).getMaxhp() + "<br>Zombi sebzése: " + au.get(i).getDamage() + "<br>Zombi sebessége: "
-                    + au.get(i).getSpeed() + "<br>Zombi jelenlegi életereje: " + au.get(i).getHp() + "</div></html>"));
-            this.add(new JLabel(""));
+            add(new JLabel("Money: "));
+            moneyLabel = new JLabel(Integer.toString(gl.getCurrentPlayer().getMoney()) + "$");
+            this.add(moneyLabel);
+            for (int i = 0; i < au1.size(); i++) {
+                this.add(new JLabel(""));
+                this.add(new JLabel("<html><div style='text-align: center;'>Első Játékos Zombija<br>Támadó egység adatai: " + au1.get(i).getType()
+                        + "<br>Zombi max életereje: " + au1.get(i).getMaxhp() + "<br>Zombi sebzése: " + au1.get(i).getDamage() + "<br>Zombi sebessége: "
+                        + au1.get(i).getSpeed() + "<br>Zombi jelenlegi életereje: " + au1.get(i).getHp() + "</div></html>"));
+                this.add(new JLabel(""));
             }
-        }
-        
-        if ("2units".equals(todo)) {
-        ArrayList<AttackUnits> au = gl.get2pCastle().returnUnits(x, y);
-        GridLayout gridLayout = new GridLayout(8, 3);
-        this.setLayout(gridLayout);
-        this.add(new JLabel(""));
-        moneyLabel = new JLabel(Integer.toString(gl.get2pCastle().getMoney()) + "$");
-        this.add(moneyLabel);
-            for (int i = 0; i < au.size(); i++) {
-            this.add(new JLabel(""));
-            this.add(new JLabel("<html><div style='text-align: center;'>Támadó egység adatai: " + au.get(i).getType()
-                    + "<br>Zombi max életereje: " + au.get(i).getMaxhp() + "<br>Zombi sebzése: " + au.get(i).getDamage() + "<br>Zombi sebessége: "
-                    + au.get(i).getSpeed() + "<br>Zombi jelenlegi életereje: " + au.get(i).getHp() + "</div></html>"));
-            this.add(new JLabel(""));
+            for (int i = 0; i < au2.size(); i++) {
+                this.add(new JLabel(""));
+                this.add(new JLabel("<html><div style='text-align: center;'>Második Játékos Zombija<br>Támadó egység adatai: " + au2.get(i).getType()
+                        + "<br>Zombi max életereje: " + au2.get(i).getMaxhp() + "<br>Zombi sebzése: " + au2.get(i).getDamage() + "<br>Zombi sebessége: "
+                        + au2.get(i).getSpeed() + "<br>Zombi jelenlegi életereje: " + au2.get(i).getHp() + "</div></html>"));
+                this.add(new JLabel(""));
             }
         }
 
@@ -409,7 +419,7 @@ public class OptionPanel extends JPanel {
         * Ha üres mezőre kattint
          */
         if ("empty".equals(todo)) {
-            if (((gl.getTurn() == 1 && x >= 15) || (gl.getTurn() == 2 && x <= 14)) || gl.getTurn() >= 3) {
+            if (((gl.getTurn() == 1 && x >= 15) || (gl.getTurn() == 2 && x <= 14)) || gl.getTurn() >= 3 || !gl.canPlace(x, y)) {
                 this.change("nothing", x, y);
             } else {
                 GridLayout gridLayout = new GridLayout(11, 3);
@@ -475,6 +485,11 @@ public class OptionPanel extends JPanel {
                 if ("Kör vége".equals(lab)) {
                     gl.nextTurn();
                     OptionPanel.this.change("nothing", x, y);
+                    if (gl.getTurn() == 5) {
+                        gl.AttackSimulation();
+                        gl.nextTurn();
+                        OptionPanel.this.change("nothing", 0, 0);
+                    }
                 }
                 if ("1. Torony".equals(lab)) {
                     Tower1 nt = new Tower1(OptionPanel.this.x, OptionPanel.this.y);
@@ -505,7 +520,6 @@ public class OptionPanel extends JPanel {
                     OptionPanel.this.change("nothing", 0, 0);
                 }
                 if ("sell".equals(lab)) {
-                    System.out.println("perfect");
                     if (gl.getTurn() == 1) {
                         gl.get1pCastle().addMoney(gl.get1pCastle().getTowers().get(numOfTower).getSellCost());
                         gl.get1pCastle().sellTower(numOfTower);
@@ -520,7 +534,6 @@ public class OptionPanel extends JPanel {
                 //Zombik gombjainak a kezelése
                 if ("Kétéltű zombi".equals(lab)) {
                     Position p = zombiePosition();
-                    System.out.println(p.getX() + " " + p.getY());
                     AmphibianZombie z = new AmphibianZombie(p.getX(), p.getY());
                     addZombie(z);
                 }

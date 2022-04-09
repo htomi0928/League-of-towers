@@ -11,9 +11,12 @@ public class AttackUnits extends Sprite {
     int hp, maxhp, speed, damage, cost;
     String target;
     String type;
+    public int wayX, wayY;
 
     public AttackUnits(int x, int y){
         super(x, y);
+        wayX = 0;
+        wayY = 0;
     }
 
     /*

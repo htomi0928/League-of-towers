@@ -51,6 +51,7 @@ public class GameLogicTester {
         assertEquals("Place next to castle (x+1, y-2)", true, gl.canPlace(gl.get1pCastle().getXc()+1, gl.get1pCastle().getYc()-2));
     }
     
+    @Test
     public void ShortestWayTest() throws IOException {
         GameLogic gl = new GameLogic();
         gl.clearObjectsToTest();
@@ -63,6 +64,39 @@ public class GameLogicTester {
         gl.get1pCastle().addTower(new Tower(3, 8));
         assertEquals("Castle is in (3, 9), unit is in (5, 9)", 8, gl.wayToCastleP1(5, 9));
     }
+    
+    
+    @Test
+    public void TowerDamageTest() throws IOException {
+       GameLogic gl = new GameLogic();
+       gl.clearObjectsToTest();
+       gl.get1pCastle().addTower(new Tower1(2, 2));
+       gl.get1pCastle().addUnit(new Zombie(2, 3));
+       gl.get1pCastle().addUnit(new Zombie(2, 4));
+       gl.get1pCastle().addUnit(new Zombie(3, 3));
+       assertEquals("Zombie (2, 3) has 50hp", 50, gl.get1pCastle().getUnits().get(0).getHp());
+       assertEquals("Zombie (2, 4) has 50hp", 50, gl.get1pCastle().getUnits().get(1).getHp());
+       assertEquals("Zombie (3, 3) has 50hp", 50, gl.get1pCastle().getUnits().get(1).getHp());
+       gl.damage(0);
+       assertEquals("Zombie (2, 3) has 40hp after damage", 40, gl.get1pCastle().getUnits().get(0).getHp());
+       assertEquals("Zombie (2, 4) has still 50hp", 50, gl.get1pCastle().getUnits().get(1).getHp());
+       assertEquals("Zombie (3, 3) has still 50hp", 50, gl.get1pCastle().getUnits().get(2).getHp());
+       gl.damage(5);
+       assertEquals("Zombie (2, 3) has 40hp after round 5", 40, gl.get1pCastle().getUnits().get(0).getHp());
+    }
+    
+    @Test
+    public void moveZombieTest() throws InterruptedException, IOException {
+        GameLogic gl = new GameLogic();
+        gl.clearObjectsToTest();
+        gl.get1pCastle().addUnit(new Zombie(23, 9));
+        assertEquals("Castle is in (3, 9), unit is in (23X, 9)", 23, gl.get1pCastle().getUnits().get(0).getXc());
+        assertEquals("Castle is in (3, 9), unit is in (23, 9Y)", 9, gl.get1pCastle().getUnits().get(0).getYc());
+        gl.moveZombiesPl1(0);
+        assertEquals("Castle is in (3, 9), unit is in (22X, 9)", 23, gl.get1pCastle().getUnits().get(0).getXc());
+        assertEquals("Castle is in (3, 9), unit is in (22, 9Y)", 13, gl.get1pCastle().getUnits().get(0).getYc());
+    }
+    
     
     
 }

@@ -37,6 +37,10 @@ public class Sprite {
         this.xy.move(x, y);
     }
 
+    public void setPosition(int x, int y) {
+        xy.setPosition(x, y);
+    }
+
     public Image getImg() {
         return this.img;
     }

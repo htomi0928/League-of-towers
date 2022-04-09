@@ -1,5 +1,8 @@
 package View;
 
+import LoTExceptions.InvalidInputException;
+import Model.AttackUnits;
+import Model.Position;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -10,6 +13,10 @@ import javax.swing.JPanel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static View.MainWindow.gl;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import javax.swing.Timer;
 
 
 /*
@@ -60,6 +67,17 @@ public class Board extends JPanel {
                 repaint();
             }
         });
+
+        Timer timer = new Timer(50, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //I have a list of packages to animate
+                repaint();
+                
+        }}
+        );
+
+        timer.start();
     }
 
     /*
@@ -117,19 +135,21 @@ public class Board extends JPanel {
         }
 
         /*
-        * Első játékos támadó egységeinek megjelenítése
+            * Első játékos támadó egységeinek megjelenítése
          */
         for (int i = 0; i < gl.get1pCastle().getUnits().size(); i++) {
-            gr.drawImage(gl.get1pCastle().getUnits().get(i).getImg(), tile_size + gl.get1pCastle().getUnits().get(i).getXc() * tile_size, gl.get1pCastle().getUnits().get(i).getYc() * tile_size, -tile_size, tile_size, this);
-            drawHealthbar(gl.get1pCastle().getUnits().get(i).getXc(), gl.get1pCastle().getUnits().get(i).getYc(), gl.get1pCastle().getUnits().get(i).getHp(), gl.get1pCastle().getUnits().get(i).getMaxhp(), gr);
+            AttackUnits u = gl.get1pCastle().getUnits().get(i);
+            gr.drawImage(u.getImg(), tile_size + u.getXc() * tile_size + u.wayX, u.getYc() * tile_size + u.wayY, -tile_size, tile_size, this);
+            drawHealthbar(u.getXc(), u.getYc(), u.getHp(), u.getMaxhp(), gr);
         }
 
         /*
-        * Második játékos támadó egységeinek megjelenítése
+            * Második játékos támadó egységeinek megjelenítése
          */
         for (int i = 0; i < gl.get2pCastle().getUnits().size(); i++) {
-            gr.drawImage(gl.get2pCastle().getUnits().get(i).getImg(), gl.get2pCastle().getUnits().get(i).getXc() * tile_size, gl.get2pCastle().getUnits().get(i).getYc() * tile_size, tile_size, tile_size, this);
-            drawHealthbar(gl.get2pCastle().getUnits().get(i).getXc(), gl.get2pCastle().getUnits().get(i).getYc(), gl.get2pCastle().getUnits().get(i).getHp(), gl.get2pCastle().getUnits().get(i).getMaxhp(), gr);
+            AttackUnits u = gl.get2pCastle().getUnits().get(i);
+            gr.drawImage(u.getImg(), u.getXc() * tile_size + u.wayX, u.getYc() * tile_size + u.wayY, tile_size, tile_size, this);
+            drawHealthbar(u.getXc(), u.getYc(), u.getHp(), u.getMaxhp(), gr);
         }
 
         /*
@@ -152,7 +172,6 @@ public class Board extends JPanel {
          */
         gr.setColor(new Color(0, 0, 0));
         gr.drawRect(x * tile_size, y * tile_size, tile_size, tile_size);
-        System.out.println(gl.canPlace(x, y));
 
         /*
         gr.fillRect(n * tile_size - 4 * tile_size, m * tile_size / 2 - tile_size / 2, tile_size, tile_size);
@@ -176,4 +195,5 @@ public class Board extends JPanel {
         gr.drawRect(barposX, barposY, hpbarWidth, hpbarHeight);
 
     }
+
 }
