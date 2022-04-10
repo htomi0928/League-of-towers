@@ -6,8 +6,11 @@ import java.util.ArrayList;
 import static View.Board.width;
 import static View.Board.height;
 import static View.Board.tile_size;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import javax.swing.Timer;
 
 /*
 * A játék logikájárt felelős osztály
@@ -16,6 +19,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class GameLogic {
 
+    private static int a = 0;
     private Castle pl1;
     private Castle pl2;
     private Barrack b1;
@@ -24,6 +28,7 @@ public class GameLogic {
     private Barrack b4;
     private int turn;
     private ArrayList<Obsticle> obsticles;
+    private Timer timer;
 
     public GameLogic() throws IOException {
         pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
@@ -138,31 +143,34 @@ public class GameLogic {
     }
 
     public void AttackSimulation() throws InterruptedException, InvalidInputException {
+        a = 0;
+        timer = new Timer(500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    moveZombiesPl1(a);
+                    //System.out.println("Pl1Zombies");
+                    moveZombiesPl2(a);
+                    //System.out.println("Pl2Zombies");
+                    damage(a);
+                    //System.out.println("damage");
+                    removeDeadUnits();
+                    //System.out.println("Removed dead units");
+                    dealDamageToCastle();
+                    //System.out.println("Castle got damaged");
+                    a++;
+                    if (a > 7) {
+                        timer.stop();
+                    }
+                } catch (Exception y) {
+                    System.out.println("Hiba");
+                }
+            }
+        }
+        );
 
-        
-        for (int i = 0; i < 7; i++) {
-            this.moveZombiesPl1(i);
-            System.out.println("Pl1Zombies");
-            this.moveZombiesPl2(i);
-            System.out.println("Pl2Zombies");
-            this.damage(i);
-            System.out.println("damage");
-            this.removeDeadUnits();
-            System.out.println("Removed dead units");
-            this.dealDamageToCastle();
-            System.out.println("Castle got damaged");
-        }
-        /*
-        System.out.println("Units:");
-        for (int i = 0; i < pl1.getUnits().size(); i++) {
-            AttackUnits u = pl1.getUnits().get(i);
-            System.out.println((i+1) + u.getXc() + " " + u.getYc());
-        }
-        for (int i = 0; i < pl2.getUnits().size(); i++) {
-            AttackUnits u = pl2.getUnits().get(i);
-            System.out.println((i+1) + u.getXc() + " " + u.getYc());
-        }
-        */
+        timer.start();
+
     }
 
     public class DataPoint {
@@ -428,7 +436,7 @@ public class GameLogic {
                 }
                  */
 
-                delay(100L);
+                //delay(100L);
                 this.get1pCastle().getUnits().get(i).wayX = 0;
                 this.get1pCastle().getUnits().get(i).wayY = 0;
                 this.get1pCastle().getUnits().get(i).setPosition(target.getX(), target.getY());
@@ -450,7 +458,7 @@ public class GameLogic {
                     //wait(100);
                 }
                  */
-                delay(100L);
+                //delay(100L);
                 this.get2pCastle().getUnits().get(i).wayX = 0;
                 this.get2pCastle().getUnits().get(i).wayY = 0;
                 this.get2pCastle().getUnits().get(i).setPosition(target.getX(), target.getY());
@@ -564,11 +572,11 @@ public class GameLogic {
         pl2.clearBarracks();
         this.obsticles = new ArrayList();
     }
-    
-    void delay(Long ms){
-       Long dietime = System.currentTimeMillis()+ms;
-       while(System.currentTimeMillis()<dietime){
-           //do nothing
-       }
-   }
+
+    void delay(Long ms) {
+        Long dietime = System.currentTimeMillis() + ms;
+        while (System.currentTimeMillis() < dietime) {
+            //do nothing
+        }
+    }
 }
