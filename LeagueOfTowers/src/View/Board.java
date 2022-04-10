@@ -167,7 +167,7 @@ public class Board extends JPanel {
          */
         gr.setColor(new Color(255, 0, 0));
         if (drawCircle) {
-            gr.drawOval((circleX - circleR) * tile_size + tile_size/2, (circleY - circleR) * tile_size+tile_size/2, circleR * tile_size * 2, circleR * tile_size * 2);
+            gr.drawOval((circleX-circleR) * tile_size, (circleY-circleR) * tile_size, circleR * tile_size * 2 + tile_size, circleR * tile_size * 2 + tile_size);
         }
     }
 

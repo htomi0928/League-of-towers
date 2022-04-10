@@ -514,16 +514,33 @@ public class OptionPanel extends JPanel {
                     addTower(nt);
                 }
                 if ("upgrade".equals(lab)) {
-                    if (gl.get1pCastle().getTowers().get(numOfTower).getLevel() == 1) {
-                        if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost2()) {
-                            gl.get1pCastle().getTowers().get(numOfTower).upgrade();
-                            gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost2());
-                        }
-                    } else {
-                        if (gl.get1pCastle().getTowers().get(numOfTower).getLevel() == 2) {
-                            if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost3()) {
+                    if (gl.getTurn() == 1) {
+                        if (gl.get1pCastle().getTowers().get(numOfTower).getLevel() == 1) {
+                            if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost2()) {
                                 gl.get1pCastle().getTowers().get(numOfTower).upgrade();
-                                gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost3());
+                                gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost2());
+                            }
+                        } else {
+                            if (gl.get1pCastle().getTowers().get(numOfTower).getLevel() == 2) {
+                                if (gl.get1pCastle().getMoney() >= gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost3()) {
+                                    gl.get1pCastle().getTowers().get(numOfTower).upgrade();
+                                    gl.get1pCastle().pay(gl.get1pCastle().getTowers().get(numOfTower).getUpgradeCost3());
+                                }
+                            }
+                        }
+                    }
+                    if (gl.getTurn() == 2) {
+                        if (gl.get2pCastle().getTowers().get(numOfTower).getLevel() == 1) {
+                            if (gl.get2pCastle().getMoney() >= gl.get2pCastle().getTowers().get(numOfTower).getUpgradeCost2()) {
+                                gl.get2pCastle().getTowers().get(numOfTower).upgrade();
+                                gl.get2pCastle().pay(gl.get2pCastle().getTowers().get(numOfTower).getUpgradeCost2());
+                            }
+                        } else {
+                            if (gl.get2pCastle().getTowers().get(numOfTower).getLevel() == 2) {
+                                if (gl.get2pCastle().getMoney() >= gl.get2pCastle().getTowers().get(numOfTower).getUpgradeCost3()) {
+                                    gl.get2pCastle().getTowers().get(numOfTower).upgrade();
+                                    gl.get2pCastle().pay(gl.get2pCastle().getTowers().get(numOfTower).getUpgradeCost3());
+                                }
                             }
                         }
                     }

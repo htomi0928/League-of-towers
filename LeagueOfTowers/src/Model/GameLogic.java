@@ -32,7 +32,6 @@ public class GameLogic {
     public GameLogic() throws IOException {
         pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
         pl2 = new Castle(27 - 1, 10 - 1); //A második játékos kastélya és pozíciója
-        pl1.addUnit(new Zombie(15, 5));
         obsticles = new ArrayList();
 
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
@@ -102,8 +101,8 @@ public class GameLogic {
                 int yp = pl1.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                System.out.println("distance: " + distance + ", d: " + radius * 2);
-                if (distance <= radius * 2 && pl1.getUnits().get(j).getSpeed() < round) {
+                System.out.println("distance: " + distance + ", d: " + radius);
+                if (distance <= radius && pl1.getUnits().get(j).getSpeed() > round) {
                     try {
                         pl1.getUnits().get(j).loseHp(pl2.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
@@ -123,8 +122,8 @@ public class GameLogic {
                 int yp = pl2.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                if (distance <= radius * 2 && pl2.getUnits().get(j).getSpeed() < round) {
-                    System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
+                System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
+                if (distance <= radius && pl2.getUnits().get(j).getSpeed() > round) {
                     try {
                         pl2.getUnits().get(j).loseHp(pl1.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
@@ -463,14 +462,16 @@ public class GameLogic {
     /*
     * Törli a halott egységeket a listából
      */
-    public void removeDeadUnits() {
+    public void removeDeadUnits() throws InvalidInputException {
         for (int i = 0; i < pl1.getUnits().size(); i++) {
             if (pl1.getUnits().get(i).getHp() <= 0) {
+                pl2.addMoney(50);
                 pl1.getUnits().remove(i);
             }
         }
         for (int i = 0; i < pl2.getUnits().size(); i++) {
             if (pl2.getUnits().get(i).getHp() <= 0) {
+                pl1.addMoney(50);
                 pl2.getUnits().remove(i);
             }
         }
