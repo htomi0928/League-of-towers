@@ -1,8 +1,6 @@
 package View;
 
-import LoTExceptions.InvalidInputException;
 import Model.AttackUnits;
-import Model.Position;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -13,10 +11,6 @@ import javax.swing.JPanel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static View.MainWindow.gl;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import javax.swing.Timer;
 
 
 /*
@@ -29,8 +23,13 @@ public class Board extends JPanel {
     public static final int width = 29 + 1;
     public static final int height = 18 + 1;
 
-    int x = 0;
-    int y = 0;
+    private int circleX;
+    private int circleY;
+    private int circleR;
+    private boolean drawCircle = false;
+
+    int x = -1;
+    int y = -1;
 
     public Board(OptionPanel opanel) {
 
@@ -67,17 +66,6 @@ public class Board extends JPanel {
                 repaint();
             }
         });
-
-        Timer timer = new Timer(50, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //I have a list of packages to animate
-                repaint();
-                
-        }}
-        );
-
-        timer.start();
     }
 
     /*
@@ -177,6 +165,10 @@ public class Board extends JPanel {
         gr.fillRect(n * tile_size - 4 * tile_size, m * tile_size / 2 - tile_size / 2, tile_size, tile_size);
         gr.fillRect(3 * tile_size, m * tile_size / 2 - tile_size / 2, tile_size, tile_size);
          */
+        gr.setColor(new Color(255, 0, 0));
+        if (drawCircle) {
+            gr.drawOval((circleX - circleR) * tile_size + tile_size/2, (circleY - circleR) * tile_size+tile_size/2, circleR * tile_size * 2, circleR * tile_size * 2);
+        }
     }
 
     public void drawHealthbar(int x, int y, int currentHp, int maxHp, Graphics2D gr) {
@@ -194,6 +186,22 @@ public class Board extends JPanel {
         gr.setColor(Color.black);
         gr.drawRect(barposX, barposY, hpbarWidth, hpbarHeight);
 
+    }
+
+    public void setCircleX(int circleX) {
+        this.circleX = circleX;
+    }
+
+    public void setCircleY(int circleY) {
+        this.circleY = circleY;
+    }
+
+    public void setCircleR(int circleR) {
+        this.circleR = circleR;
+    }
+
+    public void setDrawCircle(boolean drawCircle) {
+        this.drawCircle = drawCircle;
     }
 
 }

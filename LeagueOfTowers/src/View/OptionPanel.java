@@ -28,6 +28,7 @@ import Model.Barrack;
 import Model.Castle;
 import java.util.ArrayList;
 import Model.Position;
+import static View.MainWindow.board;
 
 /*
 * Az oldalsó panel
@@ -168,7 +169,7 @@ public class OptionPanel extends JPanel {
             p.setX(xb);
             p.setY(yb);
         }
-        
+
         return p;
     }
 
@@ -180,6 +181,7 @@ public class OptionPanel extends JPanel {
         this.y = y;
         this.removeAll();
 
+        board.setDrawCircle(false);
         /*
         * Ha illegális mezőre kattintunk (kastély, ellenfél térfele)
          */
@@ -241,6 +243,10 @@ public class OptionPanel extends JPanel {
                 gridLayout = new GridLayout(8, 3);
             }
             Tower t = gl.get1pCastle().returnTower(x, y);
+            board.setCircleX(t.getXc());
+            board.setCircleR(t.getDistance());
+            board.setCircleY(t.getYc());
+            board.setDrawCircle(true);
             this.setLayout(gridLayout);
             this.add(new JLabel(""));
             this.add(new JLabel("<html><div style='text-align: center;'>1st Player Upgrade Tower</div></html>"));
@@ -290,6 +296,10 @@ public class OptionPanel extends JPanel {
         }
         if ("2tower".equals(todo)) {
             Tower t = gl.get2pCastle().returnTower(x, y);
+            board.setCircleX(t.getXc());
+            board.setCircleR(t.getDistance());
+            board.setCircleY(t.getYc());
+            board.setDrawCircle(true);
             GridLayout gridLayout = new GridLayout(3, 3);
             if (gl.getTurn() == 2 && gl.get2pCastle().returnTower(x, y).getLevel() < 3 && gl.get2pCastle().returnTower(x, y).getStatus()) {
                 gridLayout = new GridLayout(8, 3);
@@ -390,7 +400,7 @@ public class OptionPanel extends JPanel {
         if ("1units".equals(todo) || "2units".equals(todo)) {
             ArrayList<AttackUnits> au1 = gl.get1pCastle().returnUnits(x, y);
             ArrayList<AttackUnits> au2 = gl.get2pCastle().returnUnits(x, y);
-            GridLayout gridLayout = new GridLayout(au1.size()+au2.size()+2, 3);
+            GridLayout gridLayout = new GridLayout(au1.size() + au2.size() + 2, 3);
             this.setLayout(gridLayout);
             add(new JLabel(""));
             add(new JLabel("<html><div style='text-align: center;'>" + gl.whatToDo() + "</div></html>"));
@@ -461,7 +471,7 @@ public class OptionPanel extends JPanel {
         }
         this.revalidate();
         this.repaint();
-
+        board.repaint();
     }
 
     /*

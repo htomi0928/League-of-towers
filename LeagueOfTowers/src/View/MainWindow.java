@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
  */
 public class MainWindow {
 
-    private Board board;
+    public static Board board;
     private JFrame frame;
     protected static OptionPanel opanel;
     public static GameLogic gl;
@@ -55,6 +55,7 @@ public class MainWindow {
                 frame.getContentPane().remove(board);
                 board = new Board(opanel);
                 frame.add(board, BorderLayout.CENTER);
+                board.repaint();
                 try {
                     gl = new GameLogic();
                 } catch (IOException a) {

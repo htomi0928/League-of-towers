@@ -5,12 +5,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import static View.Board.width;
 import static View.Board.height;
-import static View.Board.tile_size;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import javax.swing.Timer;
+import static View.MainWindow.board;
 
 /*
 * A játék logikájárt felelős osztály
@@ -33,14 +32,7 @@ public class GameLogic {
     public GameLogic() throws IOException {
         pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
         pl2 = new Castle(27 - 1, 10 - 1); //A második játékos kastélya és pozíciója
-        /*b1 = new Barrack(5 - 1, 5 - 1);
-        b2 = new Barrack(5 - 1, 15 - 1);
-        b3 = new Barrack(26 - 1, 5 - 1);
-        b4 = new Barrack(26 - 1, 15 - 1);
-        pl1.addBarrack(b1);
-        pl1.addBarrack(b2);
-        pl2.addBarrack(b3);
-        pl2.addBarrack(b4);*/
+        pl1.addUnit(new Zombie(15, 5));
         obsticles = new ArrayList();
 
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
@@ -110,7 +102,8 @@ public class GameLogic {
                 int yp = pl1.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                if (distance <= radius && pl1.getUnits().get(j).getSpeed() < round) {
+                System.out.println("distance: " + distance + ", d: " + radius * 2);
+                if (distance <= radius * 2 && pl1.getUnits().get(j).getSpeed() < round) {
                     try {
                         pl1.getUnits().get(j).loseHp(pl2.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
@@ -130,7 +123,8 @@ public class GameLogic {
                 int yp = pl2.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                if (distance <= radius && pl2.getUnits().get(j).getSpeed() < round) {
+                if (distance <= radius * 2 && pl2.getUnits().get(j).getSpeed() < round) {
+                    System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
                     try {
                         pl2.getUnits().get(j).loseHp(pl1.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
@@ -144,7 +138,7 @@ public class GameLogic {
 
     public void AttackSimulation() throws InterruptedException, InvalidInputException {
         a = 0;
-        timer = new Timer(500, new ActionListener() {
+        timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
@@ -162,6 +156,7 @@ public class GameLogic {
                     if (a > 7) {
                         timer.stop();
                     }
+                    board.repaint();
                 } catch (Exception y) {
                     System.out.println("Hiba");
                 }
@@ -426,9 +421,8 @@ public class GameLogic {
             AttackUnits u = this.get1pCastle().getUnits().get(i);
             if (u.getSpeed() > round) {
                 Position target = this.wayToCastleP2(u.getXc(), u.getYc()).get(0);
-                System.out.println(u.getXc() + " " + u.getYc());
+                /*System.out.println(u.getXc() + " " + u.getYc());
                 System.out.println(target.getX() + " " + target.getY());
-                /*
                 for (int j = 0; j < tile_size; j++) {
                     this.get1pCastle().getUnits().get(i).wayX = (target.getX() - u.getXc()) * j;
                     this.get1pCastle().getUnits().get(i).wayY = (target.getY() - u.getYc()) * j;
@@ -571,12 +565,5 @@ public class GameLogic {
         pl1.clearBarracks();
         pl2.clearBarracks();
         this.obsticles = new ArrayList();
-    }
-
-    void delay(Long ms) {
-        Long dietime = System.currentTimeMillis() + ms;
-        while (System.currentTimeMillis() < dietime) {
-            //do nothing
-        }
     }
 }
