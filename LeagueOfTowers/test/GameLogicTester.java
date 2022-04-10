@@ -71,24 +71,21 @@ public class GameLogicTester {
        GameLogic gl = new GameLogic();
        gl.clearObjectsToTest();
        gl.get1pCastle().addTower(new Tower1(2, 2));
-       gl.get1pCastle().addUnit(new Zombie(2, 3));
-       gl.get1pCastle().addUnit(new Zombie(2, 4));
-       gl.get1pCastle().addUnit(new Zombie(3, 3));
-       gl.get1pCastle().addUnit(new Zombie(2, 1));
-       gl.get1pCastle().addUnit(new Zombie(1, 2));
-       gl.get1pCastle().addUnit(new Zombie(3, 2));
-       assertEquals("Zombie (2, 3) has 50hp", 50, gl.get1pCastle().getUnits().get(0).getHp());
-       assertEquals("Zombie (2, 4) has 50hp", 50, gl.get1pCastle().getUnits().get(1).getHp());
-       assertEquals("Zombie (3, 3) has 50hp", 50, gl.get1pCastle().getUnits().get(1).getHp());
+       gl.get2pCastle().addUnit(new Zombie(2, 3));
+       gl.get2pCastle().addUnit(new Zombie(2, 4));
+       gl.get2pCastle().addUnit(new Zombie(3, 3));
+
+       assertEquals("Zombie (2, 3) has 50hp", 50, gl.get2pCastle().getUnits().get(0).getHp());
+       assertEquals("Zombie (2, 4) has 50hp", 50, gl.get2pCastle().getUnits().get(1).getHp());
+       assertEquals("Zombie (3, 3) has 50hp", 50, gl.get2pCastle().getUnits().get(2).getHp());
+
        gl.damage(0);
-       assertEquals("Zombie (2, 3) has 40hp after damage", 40, gl.get1pCastle().getUnits().get(0).getHp());
-       assertEquals("Zombie (2, 1) has 40hp after damage", 40, gl.get1pCastle().getUnits().get(3).getHp());
-       assertEquals("Zombie (1, 2) has 40hp after damage", 40, gl.get1pCastle().getUnits().get(4).getHp());
-       assertEquals("Zombie (3, 2) has 40hp after damage", 40, gl.get1pCastle().getUnits().get(5).getHp());
-       assertEquals("Zombie (2, 4) has still 50hp", 50, gl.get1pCastle().getUnits().get(1).getHp());
-       assertEquals("Zombie (3, 3) has still 50hp", 50, gl.get1pCastle().getUnits().get(2).getHp());
+       assertEquals("Zombie (2, 3) has 40hp after damage", 40, gl.get2pCastle().getUnits().get(0).getHp());
+
+       assertEquals("Zombie (2, 4) has still 50hp", 50, gl.get2pCastle().getUnits().get(1).getHp());
+       assertEquals("Zombie (3, 3) has still 50hp", 50, gl.get2pCastle().getUnits().get(2).getHp());
        gl.damage(5);
-       assertEquals("Zombie (2, 3) has 40hp after round 5", 40, gl.get1pCastle().getUnits().get(0).getHp());
+       assertEquals("Zombie (2, 3) has 40hp after round 5", 40, gl.get2pCastle().getUnits().get(0).getHp());
     }
     
     @Test
