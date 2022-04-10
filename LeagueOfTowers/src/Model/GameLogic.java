@@ -128,7 +128,7 @@ public class GameLogic {
                     try {
                         pl2.getUnits().get(j).loseHp(pl1.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
-                        System.out.println("Negative damagee");
+                        System.out.println("Negative damage");
                     }
                     break;
                 }
