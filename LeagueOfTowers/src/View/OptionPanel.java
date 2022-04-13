@@ -29,11 +29,22 @@ import Model.Castle;
 import java.util.ArrayList;
 import Model.Position;
 import static View.MainWindow.board;
+import javax.swing.ImageIcon;
 
 /*
 * Az oldalsó panel
  */
 public class OptionPanel extends JPanel {
+    
+    public static void rounded(JButton button) {
+        //Round the button with radius = 15
+        button.setBorder(new RoundBtn(40)); 
+        button.setOpaque(true);
+        button.setFocusPainted(true);
+        button.setBorderPainted(true);
+        button.setContentAreaFilled(false);
+//        setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+    }
 
     private JLabel moneyLabel;
     public int x;
@@ -68,6 +79,14 @@ public class OptionPanel extends JPanel {
             moneyLabel = new JLabel(Integer.toString(gl.getCurrentPlayer().getMoney()) + "$");
             add(moneyLabel);
             String[] labs1 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
+//            ImageIcon[] labs1 = new ImageIcon[6];
+//            labs1[0] = new ImageIcon("src/res/zombi3.png");
+//            labs1[1] = new ImageIcon("src/res/zombi4.png");
+//            labs1[2] = new ImageIcon("src/res/zombi2.png");
+//            labs1[3] = new ImageIcon("src/res/zombi5.png");
+//            labs1[4] = new ImageIcon("src/res/zombi1.png");
+//            labs1[5] = new ImageIcon("src/res/zombi1.png");
+            
             this.setBackground(new Color(200, 200, 200));
             for (int i = 0; i < 13; ++i) {
                 JLabel lab1 = new JLabel("");
@@ -76,6 +95,7 @@ public class OptionPanel extends JPanel {
                 if (i % 2 == 1) {
                     JButton button = new JButton(labs1[(i - 1) / 2]);
                     button.addActionListener(new ButtonListener(labs1[(i - 1) / 2], 0));
+                    rounded(button);
                     this.add(button);
                 } else {
                     JLabel lab2 = new JLabel("");
@@ -94,6 +114,8 @@ public class OptionPanel extends JPanel {
         }
 
     }
+    
+    
 
     //tornyokat hozzáadja az adott kastélyhoz és levonja az árát
     public void addTower(Tower t) throws IOException, InterruptedException, InvalidInputException {
@@ -208,6 +230,13 @@ public class OptionPanel extends JPanel {
                 moneyLabel = new JLabel(Integer.toString(gl.getCurrentPlayer().getMoney()) + "$");
                 add(moneyLabel);
                 String[] labs1 = {"Kétéltű zombi", "Nagy zombi", "Harcoló zombi", "Öngyilkos zombi", "Zombi", "Kör vége"};
+//                ImageIcon[] labs1 = new ImageIcon[6];
+//                labs1[0] = new ImageIcon("src/res/zombi3.png");
+//                labs1[1] = new ImageIcon("src/res/zombi4.png");
+//                labs1[2] = new ImageIcon("src/res/zombi2.png");
+//                labs1[3] = new ImageIcon("src/res/zombi5.png");
+//                labs1[4] = new ImageIcon("src/res/zombi1.png");
+//                labs1[5] = new ImageIcon("src/res/zombi1.png");
                 this.setBackground(new Color(200, 200, 200));
                 for (int i = 0; i < 13; ++i) {
                     JLabel lab1 = new JLabel("");
@@ -216,6 +245,7 @@ public class OptionPanel extends JPanel {
                     if (i % 2 == 1) {
                         JButton button = new JButton(labs1[(i - 1) / 2]);
                         button.addActionListener(new ButtonListener(labs1[(i - 1) / 2], 0));
+                        rounded(button);
                         this.add(button);
                     } else {
                         JLabel lab2 = new JLabel("");
@@ -273,7 +303,7 @@ public class OptionPanel extends JPanel {
                     button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get1pCastle().returnTower(x, y).getUpgradeCost3()) + "$</div></html>");
                 }
                 button.addActionListener(new ButtonListener("upgrade", gl.get1pCastle().returnTowerCoord(x, y)));
-
+                rounded(button);
                 this.add(button);
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
@@ -281,6 +311,7 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton sellbutton = new JButton();
+                rounded(sellbutton);
                 sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get1pCastle().returnTower(x, y).getSellCost()) + "$");
                 sellbutton.addActionListener(new ButtonListener("sell", gl.get1pCastle().returnTowerCoord(x, y)));
                 this.add(sellbutton);
@@ -323,6 +354,7 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton button = new JButton();
+                rounded(button);
                 if (gl.get2pCastle().returnTower(x, y).getLevel() == 1) {
                     button.setText("<html><div style='text-align: center;'>Upgrade<br>" + Integer.toString(gl.get2pCastle().returnTower(x, y).getUpgradeCost2()) + "$</div></html>");
                 } else {
@@ -337,6 +369,7 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
                 JButton sellbutton = new JButton();
+                rounded(button);
                 sellbutton.setText("<html><div style='text-align: center;'>Sell<br>" + Integer.toString(gl.get2pCastle().returnTower(x, y).getSellCost()) + "$");
                 sellbutton.addActionListener(new ButtonListener("sell", gl.get2pCastle().returnTowerCoord(x, y)));
                 this.add(sellbutton);
@@ -458,6 +491,7 @@ public class OptionPanel extends JPanel {
 
                     if (i % 2 == 1) {
                         JButton button = new JButton(labs[(i - 1) / 2]);
+                        rounded(button);
                         button.addActionListener(new ButtonListener(labs[(i - 1) / 2], 0));
                         this.add(button);
                     } else {
