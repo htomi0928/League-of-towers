@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.prefs.BackingStoreException;
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,6 +22,7 @@ public class MainWindow {
     private JFrame frame;
     protected static OptionPanel opanel;
     public static GameLogic gl;
+    public BackgroundMusic bm;
 
     public MainWindow() {
         frame = new JFrame("League Of Towers");
@@ -74,5 +76,8 @@ public class MainWindow {
         frame.pack();
         frame.setResizable(false);
         frame.setVisible(true);
+        
+        bm = new BackgroundMusic("../LeagueOfTowers/src/res/PvP.mp3");
+        bm.start();
     }
 }

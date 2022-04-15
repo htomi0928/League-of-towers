@@ -156,8 +156,8 @@ public class GameLogic {
                         timer.stop();
                     }
                     board.repaint();
-                } catch (Exception y) {
-                    System.out.println("Hiba");
+                } catch (Exception exc) {
+                    System.out.println("Hiba: " + exc);
                 }
             }
         }
@@ -402,13 +402,13 @@ public class GameLogic {
      */
     public void dealDamageToCastle() throws InvalidInputException {
         for (int i = 0; i < pl1.getUnits().size(); i++) {
-            if (pl1.getUnits().get(i).getXc() == pl2.getXc() & pl1.getUnits().get(i).getYc() == pl2.getYc()) {
+            if (pl1.getUnits().get(i).getXc() == pl2.getXc() && pl1.getUnits().get(i).getYc() == pl2.getYc()) {
                 pl2.loseHp(pl1.getUnits().get(i).getDamage());
                 pl1.getUnits().remove(i);
             }
         }
         for (int i = 0; i < pl2.getUnits().size(); i++) {
-            if (pl2.getUnits().get(i).getXc() == pl1.getXc() & pl2.getUnits().get(i).getYc() == pl1.getYc()) {
+            if (pl2.getUnits().get(i).getXc() == pl1.getXc() && pl2.getUnits().get(i).getYc() == pl1.getYc()) {
                 pl1.loseHp(pl2.getUnits().get(i).getDamage());
                 pl2.getUnits().remove(i);
             }
@@ -418,7 +418,7 @@ public class GameLogic {
     public void moveZombiesPl1(int round) throws InterruptedException {
         for (int i = 0; i < this.get1pCastle().getUnits().size(); i++) {
             AttackUnits u = this.get1pCastle().getUnits().get(i);
-            if (u.getSpeed() > round) {
+            if (u.getSpeed() > round  && !(pl1.getUnits().get(i).getXc() == pl2.getXc() && pl1.getUnits().get(i).getYc() == pl2.getYc())) {
                 Position target = this.wayToCastleP2(u.getXc(), u.getYc()).get(0);
                 /*System.out.println(u.getXc() + " " + u.getYc());
                 System.out.println(target.getX() + " " + target.getY());
@@ -440,7 +440,7 @@ public class GameLogic {
     public void moveZombiesPl2(int round) throws InterruptedException {
         for (int i = 0; i < this.get2pCastle().getUnits().size(); i++) {
             AttackUnits u = this.get2pCastle().getUnits().get(i);
-            if (u.getSpeed() > round) {
+            if (u.getSpeed() > round && !(pl2.getUnits().get(i).getXc() == pl1.getXc() && pl2.getUnits().get(i).getYc() == pl1.getYc())) {
                 Position target = this.wayToCastleP1(u.getXc(), u.getYc()).get(0);
                 System.out.println(u.getXc() + " " + u.getYc());
                 System.out.println(target.getX() + " " + target.getY());
