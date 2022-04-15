@@ -207,4 +207,17 @@ public class Castle extends Sprite {
     public void clearBarracks() {
         this.barracks = new ArrayList();
     }
+    
+    /*
+    * Visszaadja a torony számát
+    */
+    public int returnTowersNum(int x, int y) {
+        for (int i = 0; i < towers.size(); i++) {
+            if (towers.get(i).getXc() == x && towers.get(i).getYc() == y) {
+                return i;
+            }
+        }
+        return -1;
+    }
+    
 }

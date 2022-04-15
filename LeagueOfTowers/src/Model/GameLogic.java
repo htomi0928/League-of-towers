@@ -147,6 +147,8 @@ public class GameLogic {
                     //System.out.println("Pl2Zombies");
                     damage(a);
                     //System.out.println("damage");
+                    checkKamikazeZombies();
+                    //
                     removeDeadUnits();
                     //System.out.println("Removed dead units");
                     dealDamageToCastle();
@@ -184,11 +186,12 @@ public class GameLogic {
         }
 
     }
+    
 
     /*
     * Táblázat létrehozása a Dijkstra algoritmushoz
      */
-    public DataPoint[][] getTableFilled(int xx, int yy) {
+    public DataPoint[][] getTableFilled(int xx, int yy, String type) {
         DataPoint[][] table = new DataPoint[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -201,8 +204,15 @@ public class GameLogic {
         table[pl2.getXc()][pl2.getYc()].special = 1;
 
         for (int i = 0; i < obsticles.size(); i++) {
-            table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 2000;
-            table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].special = 3;
+            
+            if ("amph".equals(type)) {
+                table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 1000;
+                table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].special = 0;
+            }
+            else {
+                table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 2000;
+                table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].special = 3;
+            }
         }
         for (int i = 0; i < pl1.getBarracks().size(); i++) {
             table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value = 1000;
@@ -237,12 +247,12 @@ public class GameLogic {
     * Azt adja vissza, hogy ha letennénk egy objektumot xx, yy helyre, akkor el tudnának-e jutni
     * az egységek a kastélyig
      */
-    private DataPoint[][] getTableDijkstraFromPl1(int xx, int yy) {
-        if (getTableFilled(xx, yy) == null) {
+    private DataPoint[][] getTableDijkstraFromPl1(int xx, int yy, String type) {
+        if (getTableFilled(xx, yy, type) == null) {
             return null;
         }
 
-        DataPoint[][] table = getTableFilled(xx, yy);
+        DataPoint[][] table = getTableFilled(xx, yy, type);
         table[pl1.getXc()][pl1.getYc()].value = 0;
 
         ArrayList<Position> pos = new ArrayList();
@@ -286,12 +296,12 @@ public class GameLogic {
     * Azt adja vissza, hogy ha letennénk egy objektumot xx, yy helyre, akkor el tudnának-e jutni
     * az egységek a kastélyig
      */
-    private DataPoint[][] getTableDijkstraFromPl2(int xx, int yy) {
-        if (getTableFilled(xx, yy) == null) {
+    private DataPoint[][] getTableDijkstraFromPl2(int xx, int yy, String type) {
+        if (getTableFilled(xx, yy, type) == null) {
             return null;
         }
 
-        DataPoint[][] table = getTableFilled(xx, yy);
+        DataPoint[][] table = getTableFilled(xx, yy, type);
         table[pl2.getXc()][pl2.getYc()].value = 0;
 
         ArrayList<Position> pos = new ArrayList();
@@ -334,10 +344,10 @@ public class GameLogic {
     * A függvény megadja, hogy lehet-e adott koordinátára tornyot vagy akadályt helyezni
      */
     public boolean canPlace(int xx, int yy) {
-        if (getTableFilled(xx, yy) == null) {
+        if (getTableFilled(xx, yy, "null") == null) {
             return false;
         }
-        DataPoint[][] table = getTableDijkstraFromPl1(xx, yy);
+        DataPoint[][] table = getTableDijkstraFromPl1(xx, yy, "null");
         if (table[pl2.getXc()][pl2.getYc()].value >= 1000) {
             return false;
         }
@@ -347,7 +357,7 @@ public class GameLogic {
             }
         }
 
-        table = getTableDijkstraFromPl2(xx, yy);
+        table = getTableDijkstraFromPl2(xx, yy, "null");
         if (table[pl1.getXc()][pl1.getYc()].value >= 1000) {
             return false;
         }
@@ -362,9 +372,9 @@ public class GameLogic {
     /*
     * A függvény megadja a legrövidebb utat xx, yy koordinátáktól a Pl1 kastélyig
      */
-    public ArrayList<Position> wayToCastleP1(int xx, int yy) {
+    public ArrayList<Position> wayToCastleP1(int xx, int yy, String type) {
         ArrayList<Position> pos = new ArrayList();
-        DataPoint[][] table = getTableDijkstraFromPl1(-1, -1);
+        DataPoint[][] table = getTableDijkstraFromPl1(-1, -1, type);
         DataPoint unitData = table[xx][yy];
         while (unitData.value != 0) {
             unitData = table[unitData.way.getX()][unitData.way.getY()];
@@ -377,9 +387,9 @@ public class GameLogic {
     /*
     * A függvény megadja a legrövidebb utat xx, yy koordinátáktól a Pl2 kastélyig
      */
-    public ArrayList<Position> wayToCastleP2(int xx, int yy) {
+    public ArrayList<Position> wayToCastleP2(int xx, int yy, String type) {
         ArrayList<Position> pos = new ArrayList();
-        DataPoint[][] table = getTableDijkstraFromPl2(-1, -1);
+        DataPoint[][] table = getTableDijkstraFromPl2(-1, -1, type);
         DataPoint unitData = table[xx][yy];
         while (unitData.value != 0) {
             unitData = table[unitData.way.getX()][unitData.way.getY()];
@@ -419,7 +429,7 @@ public class GameLogic {
         for (int i = 0; i < this.get1pCastle().getUnits().size(); i++) {
             AttackUnits u = this.get1pCastle().getUnits().get(i);
             if (u.getSpeed() > round  && !(pl1.getUnits().get(i).getXc() == pl2.getXc() && pl1.getUnits().get(i).getYc() == pl2.getYc())) {
-                Position target = this.wayToCastleP2(u.getXc(), u.getYc()).get(0);
+                Position target = this.wayToCastleP2(u.getXc(), u.getYc(), u.getType()).get(0);
                 /*System.out.println(u.getXc() + " " + u.getYc());
                 System.out.println(target.getX() + " " + target.getY());
                 for (int j = 0; j < tile_size; j++) {
@@ -441,7 +451,7 @@ public class GameLogic {
         for (int i = 0; i < this.get2pCastle().getUnits().size(); i++) {
             AttackUnits u = this.get2pCastle().getUnits().get(i);
             if (u.getSpeed() > round && !(pl2.getUnits().get(i).getXc() == pl1.getXc() && pl2.getUnits().get(i).getYc() == pl1.getYc())) {
-                Position target = this.wayToCastleP1(u.getXc(), u.getYc()).get(0);
+                Position target = this.wayToCastleP1(u.getXc(), u.getYc(), u.getType()).get(0);
                 System.out.println(u.getXc() + " " + u.getYc());
                 System.out.println(target.getX() + " " + target.getY());
                 /*
@@ -455,6 +465,70 @@ public class GameLogic {
                 this.get2pCastle().getUnits().get(i).wayX = 0;
                 this.get2pCastle().getUnits().get(i).wayY = 0;
                 this.get2pCastle().getUnits().get(i).setPosition(target.getX(), target.getY());
+            }
+        }
+    }
+    
+    public void checkKamikazeZombies() {
+        Random rand = new Random();
+        for (int i = 0; i < pl1.getUnits().size(); i++) {
+            AttackUnits u = pl1.getUnits().get(i);
+            if ("kami".equals(u.getType())) {
+                int random = rand.nextInt(2);
+                if (random == 1) {
+                    if (u.getXc() > 0 && "2tower".equals(returnSprites(u.getXc()-1, u.getYc()))) {
+                        pl2.getTowers().get(pl2.returnTowersNum(u.getXc()-1, u.getYc())).loseHp(u.getDamage());
+                        pl1.getUnits().remove(i);
+                    }
+                    else {
+                        if (u.getXc() < width-1 && "2tower".equals(returnSprites(u.getXc()+1, u.getYc()))) {
+                            pl2.getTowers().get(pl2.returnTowersNum(u.getXc()+1, u.getYc())).loseHp(u.getDamage());
+                            pl1.getUnits().remove(i);
+                        }
+                        else {
+                            if (u.getYc() > 0 && "2tower".equals(returnSprites(u.getXc(), u.getYc()-1))) {
+                                pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc()-1)).loseHp(u.getDamage());
+                                pl1.getUnits().remove(i);
+                            }
+                            else {
+                                if (u.getYc() < height-1 && "2tower".equals(returnSprites(u.getXc(), u.getYc()+1))) {
+                                    pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc()+1)).loseHp(u.getDamage());
+                                    pl1.getUnits().remove(i);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < pl2.getUnits().size(); i++) {
+            AttackUnits u = pl2.getUnits().get(i);
+            if ("kami".equals(u.getType())) {
+                int random = rand.nextInt(2);
+                if (random == 1) {
+                    if (u.getXc() > 0 && "1tower".equals(returnSprites(u.getXc()-1, u.getYc()))) {
+                        pl1.getTowers().get(pl1.returnTowersNum(u.getXc()-1, u.getYc())).loseHp(u.getDamage());
+                        pl2.getUnits().remove(i);
+                    }
+                    else {
+                        if (u.getXc() < width-1 && "1tower".equals(returnSprites(u.getXc()+1, u.getYc()))) {
+                            pl1.getTowers().get(pl1.returnTowersNum(u.getXc()+1, u.getYc())).loseHp(u.getDamage());
+                            pl2.getUnits().remove(i);
+                        }
+                        else {
+                            if (u.getYc() > 0 && "1tower".equals(returnSprites(u.getXc(), u.getYc()-1))) {
+                                pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc()-1)).loseHp(u.getDamage());
+                                pl2.getUnits().remove(i);
+                            }
+                            else {
+                                if (u.getYc() < height-1 && "1tower".equals(returnSprites(u.getXc(), u.getYc()+1))) {
+                                    pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc()+1)).loseHp(u.getDamage());
+                                    pl2.getUnits().remove(i);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

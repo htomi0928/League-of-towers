@@ -109,5 +109,15 @@ public class Tower extends Sprite {
     public int getMaxhp() {
         return maxhp;
     }
+    
+    public void loseHp(int h) {
+        if (h > this.hp) {
+            this.hp = 0;
+            this.stillstanding = false;
+        }
+        else {
+            this.hp -= h;
+        }
+    }
 
 }

@@ -96,7 +96,14 @@ public class Board extends JPanel {
         gr.drawImage(gl.get2pCastle().getImg(), tile_size + gl.get2pCastle().getXc() * tile_size, gl.get2pCastle().getYc() * tile_size, -tile_size, tile_size, this);
         drawHealthbar(gl.get1pCastle().getXc(), gl.get1pCastle().getYc(), gl.get1pCastle().getHp(), gl.get1pCastle().getMaxhp(), gr);
         drawHealthbar(gl.get2pCastle().getXc(), gl.get2pCastle().getYc(), gl.get2pCastle().getHp(), gl.get2pCastle().getMaxhp(), gr);
-
+        
+        /*
+        * Akadályok megjelenítése
+         */
+        for (int i = 0; i < gl.getObsticles().size(); i++) {
+            gr.drawImage(gl.getObsticles().get(i).getImg(), gl.getObsticles().get(i).getXc() * tile_size, gl.getObsticles().get(i).getYc() * tile_size, tile_size, tile_size, this);
+        }
+        
         /*
         *Barrackok megjelenítése
          */
@@ -140,12 +147,7 @@ public class Board extends JPanel {
             drawHealthbar(u.getXc(), u.getYc(), u.getHp(), u.getMaxhp(), gr);
         }
 
-        /*
-        * Akadályok megjelenítése
-         */
-        for (int i = 0; i < gl.getObsticles().size(); i++) {
-            gr.drawImage(gl.getObsticles().get(i).getImg(), gl.getObsticles().get(i).getXc() * tile_size, gl.getObsticles().get(i).getYc() * tile_size, tile_size, tile_size, this);
-        }
+        
 
         /*
         * A játéktábla elválasztó csíkja középen

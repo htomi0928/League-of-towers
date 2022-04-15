@@ -77,7 +77,9 @@ public class MainWindow {
         frame.setResizable(false);
         frame.setVisible(true);
         
+        /*
         bm = new BackgroundMusic("../LeagueOfTowers/src/res/PvP.mp3");
         bm.start();
+        */
     }
 }
