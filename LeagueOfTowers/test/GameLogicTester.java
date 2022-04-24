@@ -19,7 +19,7 @@ public class GameLogicTester {
     public void getTableFilledTest() throws IOException {
         GameLogic gl = new GameLogic();
         gl.get1pCastle().addTower(new Tower1(0, 0));
-        DataPoint[][] pd = gl.getTableFilled(-1, -1);
+        DataPoint[][] pd = gl.getTableFilled(-1, -1, "zombie");
         assertEquals("The castle's  special is 1", 1, pd[gl.get1pCastle().getXc()][gl.get1pCastle().getYc()].special);
         assertEquals("The castle's  special is 1", 1, pd[gl.get2pCastle().getXc()][gl.get2pCastle().getYc()].special);
         for (int i = 0; i < gl.get1pCastle().getBarracks().size(); i++) {
@@ -55,14 +55,14 @@ public class GameLogicTester {
     public void ShortestWayTest() throws IOException {
         GameLogic gl = new GameLogic();
         gl.clearObjectsToTest();
-        assertEquals("Castle is in (3, 9), unit is in (10, 9)", 7, (gl.wayToCastleP1(10, 9)).size());
-        assertEquals("Castle is in (3, 9), unit is in (23, 13)", 24, (gl.wayToCastleP1(23, 13)).size());
+        assertEquals("Castle is in (3, 9), unit is in (10, 9)", 7, (gl.wayToCastleP1(10, 9, "zombie")).size());
+        assertEquals("Castle is in (3, 9), unit is in (23, 13)", 24, (gl.wayToCastleP1(23, 13, "zombie")).size());
         gl.get1pCastle().addTower(new Tower(4, 9));
-        assertEquals("Castle is in (3, 9), unit is in (5, 9)", 4, (gl.wayToCastleP1(5, 9)).size());
+        assertEquals("Castle is in (3, 9), unit is in (5, 9)", 4, (gl.wayToCastleP1(5, 9, "zombie")).size());
         gl.get1pCastle().addTower(new Tower(3, 10));
-        assertEquals("Castle is in (3, 9), unit is in (4, 10)", 6, (gl.wayToCastleP1(4, 10)).size());
+        assertEquals("Castle is in (3, 9), unit is in (4, 10)", 6, (gl.wayToCastleP1(4, 10, "zombie")).size());
         gl.get1pCastle().addTower(new Tower(3, 8));
-        assertEquals("Castle is in (3, 9), unit is in (5, 9)", 8, (gl.wayToCastleP1(5, 9)).size());
+        assertEquals("Castle is in (3, 9), unit is in (5, 9)", 8, (gl.wayToCastleP1(5, 9, "zombie")).size());
     }
     
     
