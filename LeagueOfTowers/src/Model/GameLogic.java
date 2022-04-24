@@ -21,13 +21,10 @@ public class GameLogic {
     private static int a = 0;
     private Castle pl1;
     private Castle pl2;
-    private Barrack b1;
-    private Barrack b2;
-    private Barrack b3;
-    private Barrack b4;
     private int turn;
     private ArrayList<Obsticle> obsticles;
     private Timer timer;
+    private int round;
 
     public GameLogic() throws IOException {
         pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
@@ -35,6 +32,7 @@ public class GameLogic {
         obsticles = new ArrayList();
 
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
+        round = 0;
 
         Random rand = new Random();
 
@@ -101,7 +99,7 @@ public class GameLogic {
                 int yp = pl1.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                System.out.println("distance: " + distance + ", d: " + radius);
+                //System.out.println("distance: " + distance + ", d: " + radius);
                 if (distance <= radius && pl1.getUnits().get(j).getSpeed() > round) {
                     try {
                         pl1.getUnits().get(j).loseHp(pl2.getTowers().get(i).getDamage());
@@ -122,7 +120,7 @@ public class GameLogic {
                 int yp = pl2.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
+                //System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
                 if (distance <= radius && pl2.getUnits().get(j).getSpeed() > round) {
                     try {
                         pl2.getUnits().get(j).loseHp(pl1.getTowers().get(i).getDamage());
@@ -137,10 +135,12 @@ public class GameLogic {
 
     public void AttackSimulation() throws InterruptedException, InvalidInputException {
         a = 0;
+        removeTombstones();
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+
                     moveZombiesPl1(a);
                     //System.out.println("Pl1Zombies");
                     moveZombiesPl2(a);
@@ -148,8 +148,11 @@ public class GameLogic {
                     damage(a);
                     //System.out.println("damage");
                     checkKamikazeZombies();
+
                     //
+                    checkTombstones();
                     removeDeadUnits();
+
                     //System.out.println("Removed dead units");
                     dealDamageToCastle();
                     //System.out.println("Castle got damaged");
@@ -186,7 +189,7 @@ public class GameLogic {
         }
 
     }
-    
+
 
     /*
     * Táblázat létrehozása a Dijkstra algoritmushoz
@@ -204,12 +207,11 @@ public class GameLogic {
         table[pl2.getXc()][pl2.getYc()].special = 1;
 
         for (int i = 0; i < obsticles.size(); i++) {
-            
+
             if ("amph".equals(type)) {
                 table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 1000;
                 table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].special = 0;
-            }
-            else {
+            } else {
                 table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].value = 2000;
                 table[obsticles.get(i).getXc()][obsticles.get(i).getYc()].special = 3;
             }
@@ -428,7 +430,7 @@ public class GameLogic {
     public void moveZombiesPl1(int round) throws InterruptedException {
         for (int i = 0; i < this.get1pCastle().getUnits().size(); i++) {
             AttackUnits u = this.get1pCastle().getUnits().get(i);
-            if (u.getSpeed() > round  && !(pl1.getUnits().get(i).getXc() == pl2.getXc() && pl1.getUnits().get(i).getYc() == pl2.getYc())) {
+            if (u.getSpeed() > round && !(pl1.getUnits().get(i).getXc() == pl2.getXc() && pl1.getUnits().get(i).getYc() == pl2.getYc())) {
                 Position target = this.wayToCastleP2(u.getXc(), u.getYc(), u.getType()).get(0);
                 /*System.out.println(u.getXc() + " " + u.getYc());
                 System.out.println(target.getX() + " " + target.getY());
@@ -452,8 +454,8 @@ public class GameLogic {
             AttackUnits u = this.get2pCastle().getUnits().get(i);
             if (u.getSpeed() > round && !(pl2.getUnits().get(i).getXc() == pl1.getXc() && pl2.getUnits().get(i).getYc() == pl1.getYc())) {
                 Position target = this.wayToCastleP1(u.getXc(), u.getYc(), u.getType()).get(0);
-                System.out.println(u.getXc() + " " + u.getYc());
-                System.out.println(target.getX() + " " + target.getY());
+                //System.out.println(u.getXc() + " " + u.getYc());
+                //System.out.println(target.getX() + " " + target.getY());
                 /*
                 for (int j = 0; j < tile_size; j++) {
                     this.get2pCastle().getUnits().get(i).wayX = (target.getX() - u.getXc()) * j;
@@ -468,7 +470,7 @@ public class GameLogic {
             }
         }
     }
-    
+
     public void checkKamikazeZombies() {
         Random rand = new Random();
         for (int i = 0; i < pl1.getUnits().size(); i++) {
@@ -476,23 +478,20 @@ public class GameLogic {
             if ("kami".equals(u.getType())) {
                 int random = rand.nextInt(2);
                 if (random == 1) {
-                    if (u.getXc() > 0 && "2tower".equals(returnSprites(u.getXc()-1, u.getYc()))) {
-                        pl2.getTowers().get(pl2.returnTowersNum(u.getXc()-1, u.getYc())).loseHp(u.getDamage());
+                    if (u.getXc() > 0 && "2tower".equals(returnSprites(u.getXc() - 1, u.getYc()))) {
+                        pl2.getTowers().get(pl2.returnTowersNum(u.getXc() - 1, u.getYc())).loseHp(u.getDamage());
                         pl1.getUnits().remove(i);
-                    }
-                    else {
-                        if (u.getXc() < width-1 && "2tower".equals(returnSprites(u.getXc()+1, u.getYc()))) {
-                            pl2.getTowers().get(pl2.returnTowersNum(u.getXc()+1, u.getYc())).loseHp(u.getDamage());
+                    } else {
+                        if (u.getXc() < width - 1 && "2tower".equals(returnSprites(u.getXc() + 1, u.getYc()))) {
+                            pl2.getTowers().get(pl2.returnTowersNum(u.getXc() + 1, u.getYc())).loseHp(u.getDamage());
                             pl1.getUnits().remove(i);
-                        }
-                        else {
-                            if (u.getYc() > 0 && "2tower".equals(returnSprites(u.getXc(), u.getYc()-1))) {
-                                pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc()-1)).loseHp(u.getDamage());
+                        } else {
+                            if (u.getYc() > 0 && "2tower".equals(returnSprites(u.getXc(), u.getYc() - 1))) {
+                                pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() - 1)).loseHp(u.getDamage());
                                 pl1.getUnits().remove(i);
-                            }
-                            else {
-                                if (u.getYc() < height-1 && "2tower".equals(returnSprites(u.getXc(), u.getYc()+1))) {
-                                    pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc()+1)).loseHp(u.getDamage());
+                            } else {
+                                if (u.getYc() < height - 1 && "2tower".equals(returnSprites(u.getXc(), u.getYc() + 1))) {
+                                    pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() + 1)).loseHp(u.getDamage());
                                     pl1.getUnits().remove(i);
                                 }
                             }
@@ -506,29 +505,54 @@ public class GameLogic {
             if ("kami".equals(u.getType())) {
                 int random = rand.nextInt(2);
                 if (random == 1) {
-                    if (u.getXc() > 0 && "1tower".equals(returnSprites(u.getXc()-1, u.getYc()))) {
-                        pl1.getTowers().get(pl1.returnTowersNum(u.getXc()-1, u.getYc())).loseHp(u.getDamage());
+                    if (u.getXc() > 0 && "1tower".equals(returnSprites(u.getXc() - 1, u.getYc()))) {
+                        pl1.getTowers().get(pl1.returnTowersNum(u.getXc() - 1, u.getYc())).loseHp(u.getDamage());
                         pl2.getUnits().remove(i);
-                    }
-                    else {
-                        if (u.getXc() < width-1 && "1tower".equals(returnSprites(u.getXc()+1, u.getYc()))) {
-                            pl1.getTowers().get(pl1.returnTowersNum(u.getXc()+1, u.getYc())).loseHp(u.getDamage());
+                    } else {
+                        if (u.getXc() < width - 1 && "1tower".equals(returnSprites(u.getXc() + 1, u.getYc()))) {
+                            pl1.getTowers().get(pl1.returnTowersNum(u.getXc() + 1, u.getYc())).loseHp(u.getDamage());
                             pl2.getUnits().remove(i);
-                        }
-                        else {
-                            if (u.getYc() > 0 && "1tower".equals(returnSprites(u.getXc(), u.getYc()-1))) {
-                                pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc()-1)).loseHp(u.getDamage());
+                        } else {
+                            if (u.getYc() > 0 && "1tower".equals(returnSprites(u.getXc(), u.getYc() - 1))) {
+                                pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() - 1)).loseHp(u.getDamage());
                                 pl2.getUnits().remove(i);
-                            }
-                            else {
-                                if (u.getYc() < height-1 && "1tower".equals(returnSprites(u.getXc(), u.getYc()+1))) {
-                                    pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc()+1)).loseHp(u.getDamage());
+                            } else {
+                                if (u.getYc() < height - 1 && "1tower".equals(returnSprites(u.getXc(), u.getYc() + 1))) {
+                                    pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() + 1)).loseHp(u.getDamage());
                                     pl2.getUnits().remove(i);
                                 }
                             }
                         }
                     }
                 }
+            }
+        }
+    }
+
+    public void checkTombstones() {
+        for (int i = 0; i < pl1.getTowers().size(); i++) {
+            if (!pl1.getTowers().get(i).getStatus()) {
+                pl1.getTowers().get(i).changeToTombstone();
+                pl1.getTowers().get(i).setTombstoneRound(this.round-1);
+            }
+        }
+        for (int i = 0; i < pl2.getTowers().size(); i++) {
+            if (!pl2.getTowers().get(i).getStatus()) {
+                pl2.getTowers().get(i).changeToTombstone();
+                pl2.getTowers().get(i).setTombstoneRound(this.round-1);
+            }
+        }
+    }
+
+    public void removeTombstones() {
+        for (int i = 0; i < pl1.getTowers().size(); i++) {
+            if (!pl1.getTowers().get(i).getStatus() && pl1.getTowers().get(i).getTombstoneRound() + 1 == this.round) {
+                pl1.getTowers().remove(i);
+            }
+        }
+        for (int i = 0; i < pl2.getTowers().size(); i++) {
+            if (!pl2.getTowers().get(i).getStatus() && pl2.getTowers().get(i).getTombstoneRound() + 1 == this.round) {
+                pl2.getTowers().remove(i);
             }
         }
     }
@@ -565,6 +589,7 @@ public class GameLogic {
             turn = 1;
             pl1.addTurnGold();
             pl2.addTurnGold();
+            round++;
         } else {
             turn += 1;
         }
