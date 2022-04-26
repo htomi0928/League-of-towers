@@ -2,13 +2,14 @@ package Model;
 
 import LoTExceptions.IllegalLevelOfTowerException;
 import java.io.IOException;
+import javax.swing.ImageIcon;
 
 /*
 * Védekező egységek ősosztálya
  */
 public class Tower extends Sprite {
 
-    int hp, maxhp, level, damage, distance, cost, upgradecost2, upgradecost3, cleanRuin, sellCost;
+    int hp, maxhp, level, damage, distance, cost, upgradecost2, upgradecost3, cleanRuin, sellCost, tombstoneRound;
     boolean stillstanding;
     int type;
 
@@ -111,13 +112,26 @@ public class Tower extends Sprite {
     }
     
     public void loseHp(int h) {
-        if (h > this.hp) {
+        if (h >= this.hp) {
             this.hp = 0;
             this.stillstanding = false;
+            
         }
         else {
             this.hp -= h;
         }
     }
 
+    public int getTombstoneRound() {
+        return tombstoneRound;
+    }
+
+    public void setTombstoneRound(int tombstoneRound) {
+        this.tombstoneRound = tombstoneRound;
+    }
+    
+    public void changeToTombstone(){
+        this.img = new ImageIcon("src/res/tombstone.png").getImage();
+        this.damage = 0;
+    }
 }
