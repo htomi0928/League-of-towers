@@ -22,6 +22,7 @@ public class MainWindow {
     private JFrame frame;
     protected static OptionPanel opanel;
     public static GameLogic gl;
+    
     public BackgroundMusic bm;
 
     public MainWindow() {
@@ -77,9 +78,9 @@ public class MainWindow {
         frame.setResizable(false);
         frame.setVisible(true);
         
-        /*
-        bm = new BackgroundMusic("../LeagueOfTowers/src/res/PvP.mp3");
+        
+        bm = new BackgroundMusic("../LeagueOfTowers/src/res/bgmusic.mp3");
         bm.start();
-        */
+        
     }
 }
