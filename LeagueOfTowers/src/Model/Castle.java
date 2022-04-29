@@ -139,7 +139,7 @@ public class Castle extends Sprite {
     /*
     * Törli a tornyot a listából
      */
-    public void sellTower(int n) {
+    public void removeTower(int n) {
         this.towers.remove(n);
     }
 

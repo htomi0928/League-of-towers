@@ -80,7 +80,7 @@ public class MainWindow {
         
         
         bm = new BackgroundMusic("../LeagueOfTowers/src/res/bgmusic.mp3");
-        bm.start();
+        //bm.start();
         
     }
 }

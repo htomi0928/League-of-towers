@@ -9,9 +9,10 @@ import javax.swing.ImageIcon;
  */
 public class Tower extends Sprite {
 
-    int hp, maxhp, level, damage, distance, cost, upgradecost2, upgradecost3, cleanRuin, sellCost, tombstoneRound;
+    int hp, maxhp, level, damage, distance, cost, upgradecost2, upgradecost3, cleanRuin, sellCost;
     boolean stillstanding;
     int type;
+    int turnWhenDied;
 
     public Tower(int x, int y) {
         super(x, y);
@@ -19,6 +20,7 @@ public class Tower extends Sprite {
         this.stillstanding = true;
         this.level = 1;
         this.cleanRuin = 50;
+        turnWhenDied = 0;
     }
 
     /*
@@ -106,9 +108,17 @@ public class Tower extends Sprite {
     public int getType() {
         return this.type;
     }
+    
+    public int getWhenDied() {
+        return turnWhenDied;
+    }
 
     public int getMaxhp() {
         return maxhp;
+    }
+    
+    public void setWhenDied(int twd) {
+        this.turnWhenDied = twd;
     }
     
     public void loseHp(int h) {
@@ -120,14 +130,6 @@ public class Tower extends Sprite {
         else {
             this.hp -= h;
         }
-    }
-
-    public int getTombstoneRound() {
-        return tombstoneRound;
-    }
-
-    public void setTombstoneRound(int tombstoneRound) {
-        this.tombstoneRound = tombstoneRound;
     }
     
     public void changeToTombstone(){

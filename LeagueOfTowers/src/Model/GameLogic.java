@@ -25,6 +25,7 @@ public class GameLogic {
     private ArrayList<Obsticle> obsticles;
     private Timer timer;
     private int round;
+    public int turnCounter;
 
     public GameLogic() throws IOException {
         pl1 = new Castle(4 - 1, 10 - 1); //Az első játékos kastélya és pozíciója
@@ -33,6 +34,7 @@ public class GameLogic {
 
         turn = 1; //A körök ennek az értéknek a változásával fordulnak a játékosok között
         round = 0;
+        turnCounter = 1;
 
         Random rand = new Random();
 
@@ -100,7 +102,7 @@ public class GameLogic {
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
                 //System.out.println("distance: " + distance + ", d: " + radius);
-                if (distance <= radius && pl1.getUnits().get(j).getSpeed() > round) {
+                if (distance <= radius && pl1.getUnits().get(j).getSpeed() > round && pl2.getTowers().get(i).getStatus()) {
                     try {
                         pl1.getUnits().get(j).loseHp(pl2.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
@@ -121,7 +123,7 @@ public class GameLogic {
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
                 //System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
-                if (distance <= radius && pl2.getUnits().get(j).getSpeed() > round) {
+                if (distance <= radius && pl2.getUnits().get(j).getSpeed() > round && pl1.getTowers().get(i).getStatus()) {
                     try {
                         pl2.getUnits().get(j).loseHp(pl1.getTowers().get(i).getDamage());
                     } catch (InvalidInputException exc) {
@@ -135,7 +137,6 @@ public class GameLogic {
 
     public void AttackSimulation() throws InterruptedException, InvalidInputException {
         a = 0;
-        removeTombstones();
         timer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -150,9 +151,8 @@ public class GameLogic {
                     checkKamikazeZombies();
 
                     //
-                    checkTombstones();
                     removeDeadUnits();
-
+                    checkTombstones();
                     //System.out.println("Removed dead units");
                     dealDamageToCastle();
                     //System.out.println("Castle got damaged");
@@ -161,6 +161,7 @@ public class GameLogic {
                         timer.stop();
                     }
                     board.repaint();
+
                 } catch (Exception exc) {
                     System.out.println("Hiba: " + exc);
                 }
@@ -169,7 +170,7 @@ public class GameLogic {
         );
 
         timer.start();
-
+        turnCounter += 1;
     }
 
     public class DataPoint {
@@ -225,12 +226,16 @@ public class GameLogic {
             table[pl2.getBarracks().get(i).getXc()][pl2.getBarracks().get(i).getYc()].special = 1;
         }
         for (int i = 0; i < pl1.getTowers().size(); i++) {
-            table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].value = 2000;
-            table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].special = 2;
+            if (pl1.getTowers().get(i).getStatus()) {
+                table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].value = 2000;
+                table[pl1.getTowers().get(i).getXc()][pl1.getTowers().get(i).getYc()].special = 2;
+            }
         }
         for (int i = 0; i < pl2.getTowers().size(); i++) {
-            table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].value = 2000;
-            table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].special = 2;
+            if (pl2.getTowers().get(i).getStatus()) {
+                table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].value = 2000;
+                table[pl2.getTowers().get(i).getXc()][pl2.getTowers().get(i).getYc()].special = 2;
+            }
         }
 
         if (xx == -1 && yy == -1) {
@@ -358,6 +363,11 @@ public class GameLogic {
                 return false;
             }
         }
+        for (int i = 0; i < pl2.getUnits().size(); i++) {
+            if (table[pl2.getUnits().get(i).getXc()][pl2.getUnits().get(i).getYc()].value >= 1000) {
+                return false;
+            }
+        }
 
         table = getTableDijkstraFromPl2(xx, yy, "null");
         if (table[pl1.getXc()][pl1.getYc()].value >= 1000) {
@@ -365,6 +375,11 @@ public class GameLogic {
         }
         for (int i = 0; i < pl1.getBarracks().size(); i++) {
             if (table[pl1.getBarracks().get(i).getXc()][pl1.getBarracks().get(i).getYc()].value >= 1000) {
+                return false;
+            }
+        }
+        for (int i = 0; i < pl1.getUnits().size(); i++) {
+            if (table[pl1.getUnits().get(i).getXc()][pl1.getUnits().get(i).getYc()].value >= 1000) {
                 return false;
             }
         }
@@ -479,20 +494,28 @@ public class GameLogic {
                 int random = rand.nextInt(2);
                 if (random == 1) {
                     if (u.getXc() > 0 && "2tower".equals(returnSprites(u.getXc() - 1, u.getYc()))) {
-                        pl2.getTowers().get(pl2.returnTowersNum(u.getXc() - 1, u.getYc())).loseHp(u.getDamage());
-                        pl1.getUnits().remove(i);
+                        if (pl2.getTowers().get(pl2.returnTowersNum(u.getXc() - 1, u.getYc())).getStatus()) {
+                            pl2.getTowers().get(pl2.returnTowersNum(u.getXc() - 1, u.getYc())).loseHp(u.getDamage());
+                            pl1.getUnits().remove(i);
+                        }
                     } else {
                         if (u.getXc() < width - 1 && "2tower".equals(returnSprites(u.getXc() + 1, u.getYc()))) {
-                            pl2.getTowers().get(pl2.returnTowersNum(u.getXc() + 1, u.getYc())).loseHp(u.getDamage());
-                            pl1.getUnits().remove(i);
+                            if (pl2.getTowers().get(pl2.returnTowersNum(u.getXc() + 1, u.getYc())).getStatus()) {
+                                pl2.getTowers().get(pl2.returnTowersNum(u.getXc() + 1, u.getYc())).loseHp(u.getDamage());
+                                pl1.getUnits().remove(i);
+                            }
                         } else {
                             if (u.getYc() > 0 && "2tower".equals(returnSprites(u.getXc(), u.getYc() - 1))) {
-                                pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() - 1)).loseHp(u.getDamage());
-                                pl1.getUnits().remove(i);
+                                if (pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() - 1)).getStatus()) {
+                                    pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() - 1)).loseHp(u.getDamage());
+                                    pl1.getUnits().remove(i);
+                                }
                             } else {
                                 if (u.getYc() < height - 1 && "2tower".equals(returnSprites(u.getXc(), u.getYc() + 1))) {
-                                    pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() + 1)).loseHp(u.getDamage());
-                                    pl1.getUnits().remove(i);
+                                    if (pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc()) + 1).getStatus()) {
+                                        pl2.getTowers().get(pl2.returnTowersNum(u.getXc(), u.getYc() + 1)).loseHp(u.getDamage());
+                                        pl1.getUnits().remove(i);
+                                    }
                                 }
                             }
                         }
@@ -506,20 +529,28 @@ public class GameLogic {
                 int random = rand.nextInt(2);
                 if (random == 1) {
                     if (u.getXc() > 0 && "1tower".equals(returnSprites(u.getXc() - 1, u.getYc()))) {
-                        pl1.getTowers().get(pl1.returnTowersNum(u.getXc() - 1, u.getYc())).loseHp(u.getDamage());
-                        pl2.getUnits().remove(i);
+                        if (pl1.getTowers().get(pl1.returnTowersNum(u.getXc() - 1, u.getYc())).getStatus()) {
+                            pl1.getTowers().get(pl1.returnTowersNum(u.getXc() - 1, u.getYc())).loseHp(u.getDamage());
+                            pl2.getUnits().remove(i);
+                        }
                     } else {
                         if (u.getXc() < width - 1 && "1tower".equals(returnSprites(u.getXc() + 1, u.getYc()))) {
-                            pl1.getTowers().get(pl1.returnTowersNum(u.getXc() + 1, u.getYc())).loseHp(u.getDamage());
-                            pl2.getUnits().remove(i);
+                            if (pl1.getTowers().get(pl1.returnTowersNum(u.getXc() + 1, u.getYc())).getStatus()) {
+                                pl1.getTowers().get(pl1.returnTowersNum(u.getXc() + 1, u.getYc())).loseHp(u.getDamage());
+                                pl2.getUnits().remove(i);
+                            }
                         } else {
                             if (u.getYc() > 0 && "1tower".equals(returnSprites(u.getXc(), u.getYc() - 1))) {
-                                pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() - 1)).loseHp(u.getDamage());
-                                pl2.getUnits().remove(i);
+                                if (pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() - 1)).getStatus()) {
+                                    pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() - 1)).loseHp(u.getDamage());
+                                    pl2.getUnits().remove(i);
+                                }
                             } else {
                                 if (u.getYc() < height - 1 && "1tower".equals(returnSprites(u.getXc(), u.getYc() + 1))) {
-                                    pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() + 1)).loseHp(u.getDamage());
-                                    pl2.getUnits().remove(i);
+                                    if (pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() + 1)).getStatus()) {
+                                        pl1.getTowers().get(pl1.returnTowersNum(u.getXc(), u.getYc() + 1)).loseHp(u.getDamage());
+                                        pl2.getUnits().remove(i);
+                                    }
                                 }
                             }
                         }
@@ -531,31 +562,24 @@ public class GameLogic {
 
     public void checkTombstones() {
         for (int i = 0; i < pl1.getTowers().size(); i++) {
+            if (!pl1.getTowers().get(i).getStatus() && pl1.getTowers().get(i).getWhenDied() == 0) {
+                pl1.getTowers().get(i).setWhenDied(turnCounter);
+            }
             if (!pl1.getTowers().get(i).getStatus()) {
                 pl1.getTowers().get(i).changeToTombstone();
-                pl1.getTowers().get(i).setTombstoneRound(this.round-1);
             }
+
         }
         for (int i = 0; i < pl2.getTowers().size(); i++) {
+            if (!pl2.getTowers().get(i).getStatus() && pl2.getTowers().get(i).getWhenDied() == 0) {
+                pl2.getTowers().get(i).setWhenDied(turnCounter);
+            }
             if (!pl2.getTowers().get(i).getStatus()) {
                 pl2.getTowers().get(i).changeToTombstone();
-                pl2.getTowers().get(i).setTombstoneRound(this.round-1);
             }
         }
     }
 
-    public void removeTombstones() {
-        for (int i = 0; i < pl1.getTowers().size(); i++) {
-            if (!pl1.getTowers().get(i).getStatus() && pl1.getTowers().get(i).getTombstoneRound() + 1 == this.round) {
-                pl1.getTowers().remove(i);
-            }
-        }
-        for (int i = 0; i < pl2.getTowers().size(); i++) {
-            if (!pl2.getTowers().get(i).getStatus() && pl2.getTowers().get(i).getTombstoneRound() + 1 == this.round) {
-                pl2.getTowers().remove(i);
-            }
-        }
-    }
 
     /*
     * Törli a halott egységeket a listából

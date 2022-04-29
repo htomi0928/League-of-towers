@@ -265,9 +265,45 @@ public class OptionPanel extends JPanel {
         }
 
         /*
-        * Ha az első játékos saját tornyára kattint
-         */
-        if ("1tower".equals(todo)) {
+        * Ha az első játékos tornyára kattint valaki
+        * - Ha már rom
+        * - Ha még áll
+        */
+        if ("1tower".equals(todo) && !gl.get1pCastle().returnTower(x, y).getStatus()) {
+            GridLayout gridLayout = new GridLayout(3, 3);
+            Tower t = gl.get1pCastle().returnTower(x, y);
+            if (gl.getTurn() == 1 && t.getWhenDied() + 2 <= gl.turnCounter) {
+                gridLayout = new GridLayout(6, 3);
+            }
+            this.setLayout(gridLayout);
+            this.add(new JLabel(""));
+            this.add(new JLabel("<html><div style='text-align: center;'>1st Player Clear Tower</div></html>"));
+            this.add(new JLabel(""));
+            this.add(new JLabel(""));
+            this.add(new JLabel("Money: "));
+            moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
+            this.add(moneyLabel);
+            this.add(new JLabel(""));
+            this.add(new JLabel("<html><div style='text-align: center;'>Leomlott torony<br>50</div></html>"));
+            this.add(new JLabel(""));
+            
+            if (gl.getTurn() == 1 && t.getWhenDied() + 2 <= gl.turnCounter) {
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                JButton button = new JButton("<html><div style='text-align: center;'>Torony eltakarítása</div></html>");
+                button.addActionListener(new ButtonListener("towercleaner", gl.get1pCastle().returnTowerCoord(x, y)));
+                rounded(button);
+                this.add(button);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+            }
+        }
+        
+        if ("1tower".equals(todo) && gl.get1pCastle().returnTower(x, y).getStatus()) {
             GridLayout gridLayout = new GridLayout(3, 3);
             if (gl.getTurn() == 1 && gl.get1pCastle().returnTower(x, y).getLevel() < 3 && gl.get1pCastle().returnTower(x, y).getStatus()) {
                 gridLayout = new GridLayout(8, 3);
@@ -320,12 +356,48 @@ public class OptionPanel extends JPanel {
                 this.add(new JLabel(""));
                 this.add(new JLabel(""));
             }
-
-            /*
-        * Ha az második játékos saját tornyára kattint
-             */
         }
-        if ("2tower".equals(todo)) {
+        
+        /*
+        * Ha az második játékos tornyára kattint valaki
+        * - Ha már rom
+        * - Ha még áll
+        */
+        if ("2tower".equals(todo) && !gl.get2pCastle().returnTower(x, y).getStatus()) {
+            GridLayout gridLayout = new GridLayout(3, 3);
+            Tower t = gl.get2pCastle().returnTower(x, y);
+            if (gl.getTurn() == 2 && t.getWhenDied() + 2 <= gl.turnCounter) {
+                gridLayout = new GridLayout(6, 3);
+            }
+            this.setLayout(gridLayout);
+            this.add(new JLabel(""));
+            this.add(new JLabel("<html><div style='text-align: center;'>2st Player Clear Tower</div></html>"));
+            this.add(new JLabel(""));
+            this.add(new JLabel(""));
+            this.add(new JLabel("Money: "));
+            moneyLabel = new JLabel(Integer.toString(gl.get1pCastle().getMoney()) + "$");
+            this.add(moneyLabel);
+            this.add(new JLabel(""));
+            this.add(new JLabel("<html><div style='text-align: center;'>Leomlott torony<br>50</div></html>"));
+            this.add(new JLabel(""));
+            if (gl.getTurn() == 1 && t.getWhenDied() + 2 <= gl.turnCounter) {
+
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                JButton button = new JButton("<html><div style='text-align: center;'>Torony eltakarítása</div></html>");
+                button.addActionListener(new ButtonListener("towercleaner", gl.get2pCastle().returnTowerCoord(x, y)));
+                rounded(button);
+                this.add(button);
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+                this.add(new JLabel(""));
+            }
+        }
+        
+        if ("2tower".equals(todo) && gl.get2pCastle().returnTower(x, y).getStatus()) {
             Tower t = gl.get2pCastle().returnTower(x, y);
             board.setCircleX(t.getXc());
             board.setCircleR(t.getDistance());
@@ -583,11 +655,26 @@ public class OptionPanel extends JPanel {
                 if ("sell".equals(lab)) {
                     if (gl.getTurn() == 1) {
                         gl.get1pCastle().addMoney(gl.get1pCastle().getTowers().get(numOfTower).getSellCost());
-                        gl.get1pCastle().sellTower(numOfTower);
+                        gl.get1pCastle().removeTower(numOfTower);
                     }
                     if (gl.getTurn() == 2) {
                         gl.get2pCastle().addMoney(gl.get2pCastle().getTowers().get(numOfTower).getSellCost());
-                        gl.get2pCastle().sellTower(numOfTower);
+                        gl.get2pCastle().removeTower(numOfTower);
+                    }
+                    OptionPanel.this.change("nothing", OptionPanel.this.x, OptionPanel.this.y);
+                }
+                if ("towercleaner".equals(lab)) {
+                    if (gl.getTurn() == 1) {
+                        if (gl.get1pCastle().getMoney() >= 50) {
+                            gl.get1pCastle().removeTower(numOfTower);
+                            gl.get1pCastle().pay(50);
+                        }
+                    }
+                    if (gl.getTurn() == 2) {
+                        if (gl.get2pCastle().getMoney() >= 50) {
+                            gl.get2pCastle().removeTower(numOfTower);
+                            gl.get2pCastle().pay(50);
+                        }
                     }
                     OptionPanel.this.change("nothing", OptionPanel.this.x, OptionPanel.this.y);
                 }
