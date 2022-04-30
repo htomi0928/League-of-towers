@@ -14,7 +14,6 @@ import javax.swing.ImageIcon;
  */
 public class FighterZombie extends AttackUnits {
 
-    private int enemyDamage; //A sebzés, amit az ellenséges csapatoktra ad le
 
     public FighterZombie(int x, int y) {
         super(x, y);
@@ -23,10 +22,9 @@ public class FighterZombie extends AttackUnits {
         this.maxhp = 100;
         this.speed = 5;
         this.damage = 70;
-        this.enemyDamage = 50;
         this.cost = 150;
         this.target = "Castle";
-        this.type = "Harcoló zombi";
+        this.type = "fight";
         this.img = new ImageIcon("src/res/zombi2.png").getImage();
     }
 

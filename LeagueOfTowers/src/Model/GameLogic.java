@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 import javax.swing.Timer;
 import static View.MainWindow.board;
+import javax.swing.JOptionPane;
 
 /*
 * A játék logikájárt felelős osztály
@@ -149,7 +150,7 @@ public class GameLogic {
                     damage(a);
                     //System.out.println("damage");
                     checkKamikazeZombies();
-
+                    checkFighterZombies();
                     //
                     removeDeadUnits();
                     checkTombstones();
@@ -559,6 +560,51 @@ public class GameLogic {
             }
         }
     }
+    
+    public void checkFighterZombies() throws InvalidInputException {
+        for (int i = 0; i < pl1.getUnits().size(); i++) {
+            AttackUnits u = pl1.getUnits().get(i);
+            if ("fight".equals(u.getType())) {
+                int numOfEnemies = 0;
+                while (numOfEnemies < pl2.getUnits().size() && !(u.getXc() == pl2.getUnits().get(numOfEnemies).getXc() && u.getYc() == pl2.getUnits().get(numOfEnemies).getYc())) {
+                    numOfEnemies += 1;
+                }
+                if (numOfEnemies < pl2.getUnits().size()) {
+                    pl2.getUnits().get(numOfEnemies).loseHp(50);
+                }
+            }
+        }
+        for (int i = 0; i < pl2.getUnits().size(); i++) {
+            AttackUnits u = pl2.getUnits().get(i);
+            if ("fight".equals(u.getType())) {
+                int numOfEnemies = 0;
+                while (numOfEnemies < pl1.getUnits().size() && !(u.getXc() == pl1.getUnits().get(numOfEnemies).getXc() && u.getYc() == pl1.getUnits().get(numOfEnemies).getYc())) {
+                    numOfEnemies += 1;
+                }
+                if (numOfEnemies < pl1.getUnits().size()) {
+                    pl1.getUnits().get(numOfEnemies).loseHp(50);
+                }
+            }
+        }
+    }
+    
+    public String CheckEndOfTheGame() {
+        if (pl1.getHp() <= 0 && pl2.getHp() <= 0) {
+            timer.stop();
+            return "pl1pl2";
+        }
+        if (pl1.getHp() <= 0) {
+            timer.stop();
+            return "pl1";
+        }
+        if (pl2.getHp() <= 0) {
+            timer.stop();
+            return "pl2";
+        }
+        return null;
+    }
+    
+    
 
     public void checkTombstones() {
         for (int i = 0; i < pl1.getTowers().size(); i++) {

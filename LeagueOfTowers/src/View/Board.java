@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static View.MainWindow.gl;
+import javax.swing.JOptionPane;
 
 
 /*
@@ -207,5 +208,6 @@ public class Board extends JPanel {
     public void setDrawCircle(boolean drawCircle) {
         this.drawCircle = drawCircle;
     }
-
+    
+   
 }
