@@ -45,7 +45,7 @@ public class MapEditorBoard extends JPanel {
 
 
                 try {
-                    opanel.change();
+                    opanel.change(x, y);
 
                 } catch (Exception ex) {
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);

@@ -6,6 +6,7 @@ import Model.Tower;
 import Model.Zombie;
 import Model.BigZombie;
 import Model.AmphibianZombie;
+import Model.FighterZombie;
 import Model.GameLogic;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -100,7 +101,27 @@ public class GameLogicTester {
         assertEquals("Castle is in (3, 9), unit is in (22, 9Y)", 9, gl.get2pCastle().getUnits().get(0).getYc());
     }
     
+    @Test
+    public void DealDamageToCastleTest() throws IOException, InvalidInputException {
+        GameLogic gl = new GameLogic();
+        assertEquals("Castle has 1000 hp", gl.get1pCastle().getHp(), 1000);
+        gl.get2pCastle().addUnit(new Zombie(gl.get1pCastle().getXc(), gl.get1pCastle().getYc()));
+        gl.dealDamageToCastle();
+        assertEquals("Castle has 950 hp", gl.get1pCastle().getHp(), 950);
+        assertEquals("There is no Zombie", gl.get2pCastle().getUnits().size(), 0);
+    }
     
+    @Test
+    public void FighterZombieTest() throws IOException, InvalidInputException {
+        GameLogic gl = new GameLogic();
+        gl.get2pCastle().addUnit(new FighterZombie(5, 5));
+        gl.get1pCastle().addUnit(new FighterZombie(5, 5));
+        assertEquals("Fighter Zombie1 has 100 hp", gl.get1pCastle().getUnits().get(0).getHp(), 100);
+        assertEquals("Fighter Zombie2 has 100 hp", gl.get2pCastle().getUnits().get(0).getHp(), 100);
+        gl.checkFighterZombies();
+        assertEquals("Fighter Zombie1 has 50 hp after attack", gl.get1pCastle().getUnits().get(0).getHp(), 50);
+        assertEquals("Fighter Zombie2 has 50 hp after attack", gl.get2pCastle().getUnits().get(0).getHp(), 50);
+    }
     
 }
 

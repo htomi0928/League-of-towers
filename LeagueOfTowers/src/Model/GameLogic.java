@@ -736,4 +736,8 @@ public class GameLogic {
         pl2.clearBarracks();
         this.obsticles = new ArrayList();
     }
+    
+    public void addObstickle(int x, int y) {
+        obsticles.add(new Obsticle(x, y));
+    }
 }

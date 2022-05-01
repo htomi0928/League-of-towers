@@ -41,7 +41,7 @@ public class CastleTester {
         assertEquals("Castle has 1 unit when we add 1", 1, castle.getUnits().size());
         assertEquals("Castle has 1 barrack when we add 1", 1, castle.getBarracks().size());
         
-        castle.sellTower(0);
+        castle.removeTower(0);
         assertEquals("Castle has 0 tower when we delete 1", 0, castle.getTowers().size());
         
     }

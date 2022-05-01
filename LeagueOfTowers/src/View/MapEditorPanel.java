@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import static View.MainWindow.gl;
 import Model.Tower;
 import static View.Board.tile_size;
+import static View.Board.width;
 import static View.Board.height;
 import java.io.IOException;
 import Model.Tower1;
@@ -29,6 +30,7 @@ import Model.Castle;
 import java.util.ArrayList;
 import Model.Position;
 import static View.MainWindow.board;
+import static View.MainWindow.meb;
 import javax.swing.ImageIcon;
 import javax.swing.plaf.basic.BasicOptionPaneUI;
 
@@ -36,10 +38,10 @@ import javax.swing.plaf.basic.BasicOptionPaneUI;
 * Az oldalsó panel
  */
 public class MapEditorPanel extends JPanel {
-    
+
     public static void rounded(JButton button) {
         //Round the button with radius = 15
-        button.setBorder(new RoundBtn(40)); 
+        button.setBorder(new RoundBtn(40));
         button.setOpaque(true);
         button.setFocusPainted(true);
         button.setBorderPainted(true);
@@ -50,6 +52,7 @@ public class MapEditorPanel extends JPanel {
     private JLabel moneyLabel;
     public int x;
     public int y;
+    public boolean StartTheGame;
 
     public MapEditorPanel() {
 
@@ -57,6 +60,7 @@ public class MapEditorPanel extends JPanel {
         setPreferredSize(dim);
         setMaximumSize(dim);
         setSize(dim);
+        StartTheGame = false;
 
         GridLayout gridLayout = new GridLayout(3, 3);
         setLayout(gridLayout);
@@ -65,57 +69,60 @@ public class MapEditorPanel extends JPanel {
         add(new JLabel(""));
         add(new JLabel(""));
         JButton jb = new JButton("Play");
-        jb.addActionListener(new ButtonListener("play", 0));
+        jb.addActionListener(new ButtonListener("play", 0, 0));
         add(jb);
         add(new JLabel(""));
         add(new JLabel(""));
         add(new JLabel(""));
         add(new JLabel(""));
         this.setBackground(new Color(200, 200, 200));
-        
-        
+
     }
-    
+
 
     /*
     * Ez a függvény befolyásolja az oldalsó panel kinézetét
      */
-    public void change() throws IOException, InterruptedException {
+    public void change(int x, int y) throws IOException, InterruptedException {
         this.removeAll();
-        GridLayout gridLayout = new GridLayout(3, 7);
+        GridLayout gridLayout = new GridLayout(3, 3);
+        if (x >= 0 && x < width && y >= 0 && y < height && gl.canPlace(x, y)) {
+            gridLayout = new GridLayout(7, 3);
+            add(new JLabel(""));
+            add(new JLabel(""));
+            add(new JLabel(""));
+            add(new JLabel(""));
+            JButton obsb = new JButton("Obstickle");
+            obsb.addActionListener(new ButtonListener("obst", x, y));
+            add(obsb);
+            add(new JLabel(""));
+            add(new JLabel(""));
+            add(new JLabel(""));
+            add(new JLabel(""));
+            add(new JLabel(""));
+            JButton bab = new JButton("Barrack");
+            bab.addActionListener(new ButtonListener("bab", x, y));
+            add(bab);
+            add(new JLabel(""));
+        }
         setLayout(gridLayout);
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        JButton obsb = new JButton("Obstickle");
-        obsb.addActionListener(new ButtonListener("obst", 0));
-        add(obsb);
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        JButton bab = new JButton("Barrack");
-        bab.addActionListener(new ButtonListener("bab", 0));
-        add(bab);
-        add(new JLabel(""));
+
         add(new JLabel(""));
         add(new JLabel(""));
         add(new JLabel(""));
         add(new JLabel(""));
         JButton jb = new JButton("Play");
-        jb.addActionListener(new ButtonListener("play", 0));
+        jb.addActionListener(new ButtonListener("play", x, y));
         add(jb);
         add(new JLabel(""));
         add(new JLabel(""));
         add(new JLabel(""));
         add(new JLabel(""));
         this.setBackground(new Color(200, 200, 200));
-        
+
         this.revalidate();
         this.repaint();
-        board.repaint();
+        meb.repaint();
     }
 
     /*
@@ -124,20 +131,37 @@ public class MapEditorPanel extends JPanel {
     private class ButtonListener implements ActionListener {
 
         String lab;
-        int numOfTower;
+        int x;
+        int y;
 
-        public ButtonListener(String lab, int numOfTower) {
+        public ButtonListener(String lab, int x, int y) {
             this.lab = lab;
-            this.numOfTower = numOfTower;
+            this.x = x;
+            this.y = y;
         }
 
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
 
-                //Tornyok gombjainak kezelése
+                //Játék indítása
                 if ("play".equals(lab)) {
+                    StartTheGame = true;
                 }
+                if ("obst".equals(lab)) {
+                    gl.addObstickle(x, y);
+                    meb.repaint();
+                }
+                if ("bab".equals(lab)) {
+                    if (x <= width/2) {
+                        gl.get1pCastle().addBarrack(new Barrack(x, y));
+                    }
+                    else {
+                        gl.get2pCastle().addBarrack(new Barrack(x, y));
+                    }
+                    meb.repaint();
+                }
+                
             } catch (Exception e) {
             }
         }
