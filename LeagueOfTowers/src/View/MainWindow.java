@@ -149,7 +149,6 @@ public class MainWindow {
         frame.setVisible(true);
 
         bm = new BackgroundMusic("../LeagueOfTowers/src/res/bgmusic.mp3");
-        //bm.start();
 
     }
 

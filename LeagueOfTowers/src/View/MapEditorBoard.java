@@ -37,9 +37,6 @@ public class MapEditorBoard extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                //System.out.println(e.getX() / tile_size + "," + e.getY() / tile_size);
-                //System.out.println(getSize().width + "," + getSize().height);
-
                 x = e.getX() / tile_size;
                 y = e.getY() / tile_size;
 
@@ -116,11 +113,6 @@ public class MapEditorBoard extends JPanel {
          */
         gr.setColor(new Color(0, 0, 0));
         gr.drawRect(x * tile_size, y * tile_size, tile_size, tile_size);
-
-        /*
-        gr.fillRect(n * tile_size - 4 * tile_size, m * tile_size / 2 - tile_size / 2, tile_size, tile_size);
-        gr.fillRect(3 * tile_size, m * tile_size / 2 - tile_size / 2, tile_size, tile_size);
-         */
     }
 
     public void drawHealthbar(int x, int y, int currentHp, int maxHp, Graphics2D gr) {

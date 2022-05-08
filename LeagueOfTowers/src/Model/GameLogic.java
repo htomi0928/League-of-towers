@@ -74,7 +74,6 @@ public class GameLogic {
         for (int i = 0; i < obsticleCount - 1; i++) {
             int x = rand.nextInt(3) - 1;
             int y = rand.nextInt(3) - 1;
-            //System.out.println(obsticleX + " : " + x + " ; " + obsticleY + " : " + y);
             if (!(x == 0 && y == 0) && obsticleX + x > 0 && obsticleX + x < (width / 2) && obsticleY + y > 0 && obsticleY + y < height && canPlace(obsticleX + x, obsticleY + y)) {
                 obsticleX += x;
                 obsticleY += y;
@@ -102,7 +101,6 @@ public class GameLogic {
                 int yp = pl1.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                //System.out.println("distance: " + distance + ", d: " + radius);
                 if (distance <= radius && pl1.getUnits().get(j).getSpeed() > round && pl2.getTowers().get(i).getStatus()) {
                     try {
                         pl1.getUnits().get(j).loseHp(pl2.getTowers().get(i).getDamage());
@@ -123,7 +121,6 @@ public class GameLogic {
                 int yp = pl2.getUnits().get(j).getYc();
 
                 double distance = Math.sqrt(Math.pow(xp - xc, 2) + Math.pow(yp - yc, 2));
-                //System.out.println("distance: " + distance + ", x:" + xp + ", y: " + yp);
                 if (distance <= radius && pl2.getUnits().get(j).getSpeed() > round && pl1.getTowers().get(i).getStatus()) {
                     try {
                         pl2.getUnits().get(j).loseHp(pl1.getTowers().get(i).getDamage());
@@ -470,16 +467,6 @@ public class GameLogic {
             AttackUnits u = this.get2pCastle().getUnits().get(i);
             if (u.getSpeed() > round && !(pl2.getUnits().get(i).getXc() == pl1.getXc() && pl2.getUnits().get(i).getYc() == pl1.getYc())) {
                 Position target = this.wayToCastleP1(u.getXc(), u.getYc(), u.getType()).get(0);
-                //System.out.println(u.getXc() + " " + u.getYc());
-                //System.out.println(target.getX() + " " + target.getY());
-                /*
-                for (int j = 0; j < tile_size; j++) {
-                    this.get2pCastle().getUnits().get(i).wayX = (target.getX() - u.getXc()) * j;
-                    this.get2pCastle().getUnits().get(i).wayY = (target.getY() - u.getYc()) * j;
-                    //wait(100);
-                }
-                 */
-                //delay(100L);
                 this.get2pCastle().getUnits().get(i).wayX = 0;
                 this.get2pCastle().getUnits().get(i).wayY = 0;
                 this.get2pCastle().getUnits().get(i).setPosition(target.getX(), target.getY());

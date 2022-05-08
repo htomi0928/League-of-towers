@@ -38,6 +38,12 @@ import javax.swing.plaf.basic.BasicOptionPaneUI;
 * Az oldalsó panel
  */
 public class MapEditorPanel extends JPanel {
+    
+    public void separator(int l) {
+        for (int i = 0; i < l; i++) {
+            add(new JLabel(""));
+        }
+    }
 
     public static void rounded(JButton button) {
         //Round the button with radius = 15
@@ -46,7 +52,6 @@ public class MapEditorPanel extends JPanel {
         button.setFocusPainted(true);
         button.setBorderPainted(true);
         button.setContentAreaFilled(false);
-//        setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
     }
 
     private JLabel moneyLabel;
@@ -64,17 +69,11 @@ public class MapEditorPanel extends JPanel {
 
         GridLayout gridLayout = new GridLayout(3, 3);
         setLayout(gridLayout);
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
+        separator(4);
         JButton jb = new JButton("Play");
         jb.addActionListener(new ButtonListener("play", 0, 0));
         add(jb);
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
+        separator(4);
         this.setBackground(new Color(200, 200, 200));
 
     }
@@ -88,36 +87,23 @@ public class MapEditorPanel extends JPanel {
         GridLayout gridLayout = new GridLayout(3, 3);
         if (x >= 0 && x < width && y >= 0 && y < height && gl.canPlace(x, y)) {
             gridLayout = new GridLayout(7, 3);
-            add(new JLabel(""));
-            add(new JLabel(""));
-            add(new JLabel(""));
-            add(new JLabel(""));
+            separator(4);
             JButton obsb = new JButton("Obstickle");
             obsb.addActionListener(new ButtonListener("obst", x, y));
             add(obsb);
-            add(new JLabel(""));
-            add(new JLabel(""));
-            add(new JLabel(""));
-            add(new JLabel(""));
-            add(new JLabel(""));
+            separator(5);
             JButton bab = new JButton("Barrack");
             bab.addActionListener(new ButtonListener("bab", x, y));
             add(bab);
-            add(new JLabel(""));
+            separator(1);
         }
         setLayout(gridLayout);
 
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
+        separator(4);
         JButton jb = new JButton("Play");
         jb.addActionListener(new ButtonListener("play", x, y));
         add(jb);
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
-        add(new JLabel(""));
+        separator(4);
         this.setBackground(new Color(200, 200, 200));
 
         this.revalidate();
